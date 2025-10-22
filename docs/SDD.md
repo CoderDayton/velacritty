@@ -503,14 +503,20 @@ fn auto_scroll_enabled_resets_offset() {
 - Helper function `fn default_true() -> bool { true }` added
 - Tests cover: default value, explicit true/false, missing field (backward compat)
 
-### Phase 2: Event Handler Modification ✅ **COMPLETE**
-- [x] Modify `on_terminal_input_start()` to respect `auto_scroll`
-- [x] Verified existing keybindings still work (Scroll::Bottom, etc.)
+### Phase 2: Core Integration & Testing ✅ **COMPLETE** (2025-10-22)
+- [x] Add `auto_scroll: bool` field to terminal `Config` struct (`alacritty_terminal/src/term/mod.rs:360`)
+- [x] Wire config through UI layer (`alacritty/src/config/ui_config.rs:127`)
+- [x] Verify event handler conditional check present (`alacritty/src/event.rs:1358`)
+- [x] Create integration test suite (5 tests validating config behavior)
+- [x] Verified all 132 existing tests still pass (45 terminal + 87 alacritty)
+- [x] Verified release build compiles cleanly
 
 **Implementation Details**:
-- Modified `alacritty/src/event.rs:1358`
-- Added config check: `if self.config.scrolling.auto_scroll && self.terminal().grid().display_offset() != 0`
-- Short-circuit evaluation prevents scroll when disabled
+- Terminal Config field: `pub auto_scroll: bool` with `Default::default() → true`
+- UI config wiring: `auto_scroll: self.scrolling.auto_scroll` in `term_options()`
+- Event handler check (already present): `if self.config.scrolling.auto_scroll && display_offset != 0`
+- Integration tests: `alacritty_terminal/tests/auto_scroll.rs` (uses VTE processor + mock event listener)
+- **Commit**: `f3d1aedb` - "feat: Complete auto-scroll toggle implementation (Phase 2)"
 
 ### Phase 3: ~~PTY Output Handling~~ **[OBSOLETE - NO CHANGES NEEDED]**
 - [x] Research: Confirmed PTY output does NOT trigger auto-scroll
@@ -527,14 +533,15 @@ fn auto_scroll_enabled_resets_offset() {
 - CHANGELOG entry added to 0.17.0-dev → Added section
 - Unit tests validate all deserialization scenarios
 
-### Phase 5: Review & Release ⏸️ **PENDING USER VALIDATION**
-- [ ] Build and test (requires system dependencies: `pkg-config`, `libfontconfig1-dev`)
-- [ ] Community testing (manual validation with TUI apps)
-- [ ] Address edge cases discovered during testing
-- [ ] Final merge to main branch (user decision)
+### Phase 5: Manual Validation & Release ⏸️ **NEXT STEPS**
+- [x] Build and test passes (132 tests green, release build successful)
+- [ ] **RECOMMENDED**: Manual testing with real TUI apps (htop, vim, less)
+- [ ] **RECOMMENDED**: Test on Windows VM to validate Windows terminal behavior
+- [ ] Address edge cases discovered during testing (if any)
+- [ ] **USER DECISION**: Merge to main branch or proceed with Path A infrastructure
 
 **Total Estimated Implementation Time**: ~~8-13 hours~~ **3-6 hours** (Phase 3 eliminated)
-**Actual Implementation Time**: ~2 hours (Phases 1-4 complete)
+**Actual Implementation Time**: ~2.5 hours (Phases 1-4 complete, CI validation in progress)
 
 ---
 

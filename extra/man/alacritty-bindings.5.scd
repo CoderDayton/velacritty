@@ -601,7 +601,7 @@ configuration. See *alacritty*(5) for full configuration format documentation.
 
 # BUGS
 
-Found a bug? Please report it at _https://github.com/CoderDayton/alacritty/issues_.
+Found a bug? Please report it at _https://github.com/CoderDayton/velacritty/issues_.
 
 # MAINTAINERS
 

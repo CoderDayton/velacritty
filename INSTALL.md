@@ -10,7 +10,7 @@ If you're just interested in the Velacritty binary and you don't need the
 build it directly through cargo:
 
 ```sh
-git clone https://github.com/CoderDayton/alacritty.git velacritty
+git clone https://github.com/CoderDayton/velacritty.git velacritty
 cd velacritty
 cargo build --release
 ```
@@ -62,7 +62,7 @@ Please refer to the [Dependencies](#dependencies) section.
 Before compiling Velacritty, you'll have to first clone the source code:
 
 ```sh
-git clone https://github.com/CoderDayton/alacritty.git velacritty
+git clone https://github.com/CoderDayton/velacritty.git velacritty
 cd velacritty
 ```
 

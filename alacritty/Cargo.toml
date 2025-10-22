@@ -5,8 +5,8 @@ authors = ["Christian Duerr <contact@christianduerr.com>", "Joe Wilm <joe@jwilm.
 license = "Apache-2.0"
 description = "A fast, cross-platform, OpenGL terminal emulator (Velacritty fork of Alacritty)"
 readme = "README.md"
-homepage = "https://github.com/CoderDayton/alacritty"
-repository = "https://github.com/CoderDayton/alacritty"
+homepage = "https://github.com/CoderDayton/velacritty"
+repository = "https://github.com/CoderDayton/velacritty"
 edition.workspace = true
 rust-version.workspace = true
 

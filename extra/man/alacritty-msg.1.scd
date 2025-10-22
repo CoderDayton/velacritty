@@ -97,7 +97,7 @@ making it possible to control the terminal without directly accessing it.
 
 # BUGS
 
-Found a bug? Please report it at _https://github.com/CoderDayton/alacritty/issues_.
+Found a bug? Please report it at _https://github.com/CoderDayton/velacritty/issues_.
 
 # MAINTAINERS
 

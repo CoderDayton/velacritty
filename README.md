@@ -44,7 +44,7 @@ Velacritty can be built from source using Cargo (Rust's package manager).
 
 ```bash
 # Clone the repository
-git clone https://github.com/CoderDayton/alacritty.git velacritty
+git clone https://github.com/CoderDayton/velacritty.git velacritty
 cd velacritty
 
 # Build with cargo
@@ -169,10 +169,10 @@ See [NOTICE](NOTICE) file for complete attribution details.
 
 ## Resources
 
-- **Repository:** https://github.com/CoderDayton/alacritty
+- **Repository:** https://github.com/CoderDayton/velacritty
 - **Original Alacritty:** https://github.com/alacritty/alacritty
 - **Alacritty Website:** https://alacritty.org
-- **Issue Tracker:** https://github.com/CoderDayton/alacritty/issues
+- **Issue Tracker:** https://github.com/CoderDayton/velacritty/issues
 
 ---
 

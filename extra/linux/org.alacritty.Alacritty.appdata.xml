@@ -43,8 +43,8 @@
     </screenshot>
   </screenshots>
 
-  <url type="homepage">https://github.com/CoderDayton/alacritty</url>
-  <url type="bugtracker">https://github.com/CoderDayton/alacritty/issues</url>
+  <url type="homepage">https://github.com/CoderDayton/velacritty</url>
+  <url type="bugtracker">https://github.com/CoderDayton/velacritty/issues</url>
 
   <launchable type="desktop-id">Alacritty.desktop</launchable>
 

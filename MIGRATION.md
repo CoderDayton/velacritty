@@ -215,7 +215,7 @@ After migrating, verify the following:
 If you encounter migration issues:
 
 1. **Check this guide first** — most issues are covered here
-2. **Search existing issues:** [GitHub Issues](https://github.com/CoderDayton/alacritty/issues)
+2. **Search existing issues:** [GitHub Issues](https://github.com/CoderDayton/velacritty/issues)
 3. **Report new issues:** Include:
    - Operating system and version
    - Window manager/compositor (if applicable)

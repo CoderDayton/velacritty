@@ -4,8 +4,8 @@ version = "0.2.4-dev"
 authors = ["Christian Duerr <contact@christianduerr.com>", "Dayton Dunbar <daytonpooper@Yahoo.com>"]
 license = "MIT OR Apache-2.0"
 description = "Velacritty configuration abstractions (fork of Alacritty)"
-homepage = "https://github.com/CoderDayton/alacritty"
-repository = "https://github.com/CoderDayton/alacritty"
+homepage = "https://github.com/CoderDayton/velacritty"
+repository = "https://github.com/CoderDayton/velacritty"
 edition.workspace = true
 rust-version.workspace = true
 

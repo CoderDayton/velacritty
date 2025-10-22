@@ -19,9 +19,9 @@ Table of Contents:
 ## Feature Requests
 
 Feature requests should be reported in the
-[Velacritty issue tracker](https://github.com/CoderDayton/alacritty/issues). To reduce the number of
+[Velacritty issue tracker](https://github.com/CoderDayton/velacritty/issues). To reduce the number of
 duplicates, please make sure to check the existing
-[enhancement](https://github.com/CoderDayton/alacritty/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3Aenhancement)
+[enhancement](https://github.com/CoderDayton/velacritty/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3Aenhancement)
 issues.
 
 If your feature request would benefit the broader terminal emulator ecosystem and aligns with Alacritty's philosophy, consider proposing it to [upstream Alacritty](https://github.com/alacritty/alacritty/issues) as well.
@@ -29,7 +29,7 @@ If your feature request would benefit the broader terminal emulator ecosystem an
 ## Bug Reports
 
 Bug reports should be reported in the
-[Velacritty issue tracker](https://github.com/CoderDayton/alacritty/issues).
+[Velacritty issue tracker](https://github.com/CoderDayton/velacritty/issues).
 
 **For bugs that exist in upstream Alacritty:** Please report them to the [Alacritty issue tracker](https://github.com/alacritty/alacritty/issues) so the entire community can benefit from the fix.
 
@@ -38,12 +38,12 @@ introduced the regression helps out a lot.
 
 ## Patches / Pull Requests
 
-All patches have to be sent on GitHub as [pull requests](https://github.com/CoderDayton/alacritty/pulls).
+All patches have to be sent on GitHub as [pull requests](https://github.com/CoderDayton/velacritty/pulls).
 
 If you are looking for a place to start contributing to Velacritty, take a look at the
-[help wanted](https://github.com/CoderDayton/alacritty/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
+[help wanted](https://github.com/CoderDayton/velacritty/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
 and
-[good first issue](https://github.com/CoderDayton/alacritty/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22)
+[good first issue](https://github.com/CoderDayton/velacritty/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22)
 issues.
 
 You can find the minimum supported Rust version in Velacritty's manifest file
@@ -126,7 +126,7 @@ Velacritty periodically syncs with upstream Alacritty to incorporate bug fixes, 
 ## Contact
 
 If there are any outstanding questions about contributing to Velacritty, they can be asked on the
-[Velacritty issue tracker](https://github.com/CoderDayton/alacritty/issues).
+[Velacritty issue tracker](https://github.com/CoderDayton/velacritty/issues).
 
 For questions about the original Alacritty codebase, you can also consult:
 - [Alacritty issue tracker](https://github.com/alacritty/alacritty/issues)

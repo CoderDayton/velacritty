@@ -21,14 +21,14 @@ use winit::event_loop::{ActiveEventLoop, EventLoopProxy};
 use winit::raw_window_handle::HasDisplayHandle;
 use winit::window::WindowId;
 
-use alacritty_terminal::event::Event as TerminalEvent;
-use alacritty_terminal::event_loop::{EventLoop as PtyEventLoop, Msg, Notifier};
-use alacritty_terminal::grid::{Dimensions, Scroll};
-use alacritty_terminal::index::Direction;
-use alacritty_terminal::sync::FairMutex;
-use alacritty_terminal::term::test::TermSize;
-use alacritty_terminal::term::{Term, TermMode};
-use alacritty_terminal::tty;
+use velacritty_terminal::event::Event as TerminalEvent;
+use velacritty_terminal::event_loop::{EventLoop as PtyEventLoop, Msg, Notifier};
+use velacritty_terminal::grid::{Dimensions, Scroll};
+use velacritty_terminal::index::Direction;
+use velacritty_terminal::sync::FairMutex;
+use velacritty_terminal::term::test::TermSize;
+use velacritty_terminal::term::{Term, TermMode};
+use velacritty_terminal::tty;
 
 use crate::cli::{ParsedOptions, WindowOptions};
 use crate::clipboard::Clipboard;
@@ -191,7 +191,12 @@ impl WindowContext {
         // wrapped in a clonable mutex since both the I/O loop and display need to
         // access it.
         let terminal = Term::new(config.term_options(), &display.size_info, event_proxy.clone());
-        let terminal = Arc::new(FairMutex::new(terminal));
+        let mut terminal_lock = terminal;
+        
+        // Sync initial auto_scroll config to grid (critical for startup behavior).
+        terminal_lock.grid_mut().set_auto_scroll_enabled(config.scrolling.auto_scroll);
+        
+        let terminal = Arc::new(FairMutex::new(terminal_lock));
 
         // Create the PTY.
         //

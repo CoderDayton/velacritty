@@ -1,18 +1,26 @@
-# Cargo Installation
+# Installation Guide for Velacritty
 
-If you're just interested in the Alacritty binary and you don't need the
+> **Note:** Velacritty is a fork of [Alacritty](https://github.com/alacritty/alacritty) and inherits its build system and dependencies.
+
+## Cargo Installation
+
+If you're just interested in the Velacritty binary and you don't need the
 [terminfo file](#terminfo), [desktop entry](#desktop-entry),
 [manual page](#manual-page) or [shell completions](#shell-completions), you can
-install it directly through cargo:
+build it directly through cargo:
 
 ```sh
-cargo install alacritty
+git clone https://github.com/CoderDayton/velacritty.git velacritty
+cd velacritty
+cargo build --release
 ```
+
+The binary will be available at `target/release/alacritty`.
 
 Note that you will still need to install the dependencies for your OS of choice.
 Please refer to the [Dependencies](#dependencies) section.
 
-# Manual Installation
+## Manual Installation
 
 1. [Prerequisites](#prerequisites)
     1. [Source Code](#clone-the-source-code)
@@ -51,11 +59,11 @@ Please refer to the [Dependencies](#dependencies) section.
 
 ### Clone the source code
 
-Before compiling Alacritty, you'll have to first clone the source code:
+Before compiling Velacritty, you'll have to first clone the source code:
 
 ```sh
-git clone https://github.com/alacritty/alacritty.git
-cd alacritty
+git clone https://github.com/CoderDayton/velacritty.git velacritty
+cd velacritty
 ```
 
 ### Install the Rust compiler with `rustup`
@@ -71,7 +79,7 @@ cd alacritty
 
 ### Dependencies
 
-These are the minimum dependencies required to build Alacritty, please note
+These are the minimum dependencies required to build Velacritty, please note
 that with some setups additional dependencies might be desired.
 
 If you're running Wayland with an Nvidia GPU, you'll likely want the EGL
@@ -80,7 +88,7 @@ drivers installed too (these are called `libegl1-mesa-dev` on Ubuntu).
 #### Debian/Ubuntu
 
 If you'd like to build a local version manually, you need a few extra libraries
-to build Alacritty. Here's an apt command that should install all of them. If
+to build Velacritty. Here's an apt command that should install all of them. If
 something is still found to be missing, please open an issue.
 
 ```sh
@@ -89,7 +97,7 @@ apt install cmake g++ pkg-config libfontconfig1-dev libxcb-xfixes0-dev libxkbcom
 
 #### Arch Linux
 
-On Arch Linux, you need a few extra libraries to build Alacritty. Here's a
+On Arch Linux, you need a few extra libraries to build Velacritty. Here's a
 `pacman` command that should install all of them. If something is still found
 to be missing, please open an issue.
 
@@ -99,7 +107,7 @@ pacman -S cmake freetype2 fontconfig pkg-config make libxcb libxkbcommon python
 
 #### Fedora
 
-On Fedora, you need a few extra libraries to build Alacritty. Here's a `dnf`
+On Fedora, you need a few extra libraries to build Velacritty. Here's a `dnf`
 command that should install all of them. If something is still found to be
 missing, please open an issue.
 
@@ -109,7 +117,7 @@ dnf install cmake freetype-devel fontconfig-devel libxcb-devel libxkbcommon-deve
 
 #### CentOS/RHEL 7
 
-On CentOS/RHEL 7, you need a few extra libraries to build Alacritty. Here's a `yum`
+On CentOS/RHEL 7, you need a few extra libraries to build Velacritty. Here's a `yum`
 command that should install all of them. If something is still found to be
 missing, please open an issue.
 
@@ -120,7 +128,7 @@ yum group install "Development Tools"
 
 #### RHEL 8
 
-On RHEL 8, like RHEL 7, you need a few extra libraries to build Alacritty. Here's a `dnf`
+On RHEL 8, like RHEL 7, you need a few extra libraries to build Velacritty. Here's a `dnf`
 command that should install all of them. If something is still found to be
 missing, please open an issue.
 
@@ -131,7 +139,7 @@ dnf group install "Development Tools"
 
 #### openSUSE
 
-On openSUSE, you need a few extra libraries to build Alacritty. Here's
+On openSUSE, you need a few extra libraries to build Velacritty. Here's
 a `zypper` command that should install all of them. If something is
 still found to be missing, please open an issue.
 
@@ -146,7 +154,7 @@ Compiles out of the box for 14.2
 #### Void Linux
 
 On [Void Linux](https://voidlinux.org), install following packages before
-compiling Alacritty:
+compiling Velacritty:
 
 ```sh
 xbps-install cmake freetype-devel expat-devel fontconfig-devel libxcb-devel pkg-config python3
@@ -154,7 +162,7 @@ xbps-install cmake freetype-devel expat-devel fontconfig-devel libxcb-devel pkg-
 
 #### FreeBSD
 
-On FreeBSD, you need a few extra libraries to build Alacritty. Here's a `pkg`
+On FreeBSD, you need a few extra libraries to build Velacritty. Here's a `pkg`
 command that should install all of them. If something is still found to be
 missing, please open an issue.
 
@@ -165,7 +173,7 @@ pkg install cmake freetype2 fontconfig pkgconf python3
 #### OpenBSD
 
 On OpenBSD 6.5, you need [Xenocara](https://xenocara.org) and Rust to build
-Alacritty, plus Python 3 to build its XCB dependency. If something is still
+Velacritty, plus Python 3 to build its XCB dependency. If something is still
 found to be missing, please open an issue.
 
 ```sh
@@ -174,13 +182,13 @@ pkg_add rust python
 
 Select the package for Python 3 (e.g. `python-3.6.8p0`) when prompted.
 
-The default user limits in OpenBSD are insufficient to build Alacritty. A
+The default user limits in OpenBSD are insufficient to build Velacritty. A
 `datasize-cur` of at least 3GB is recommended (see [login.conf](https://man.openbsd.org/login.conf)).
 
 #### Solus
 
 On [Solus](https://solus-project.com/), you need a few extra libraries to build
-Alacritty. Here's a `eopkg` command that should install all of them. If
+Velacritty. Here's a `eopkg` command that should install all of them. If
 something is still found to be missing, please open an issue.
 
 ```sh
@@ -196,11 +204,11 @@ dependencies on [NixOS](https://nixos.org).
 nix-shell -A alacritty '<nixpkgs>'
 ```
 
+> **Note:** Replace `alacritty` with `velacritty` once this project is packaged for Nixpkgs (currently uses Alacritty's dependencies).
+
 #### Gentoo
 
-On Gentoo, you need a few extra libraries to build Alacritty. The following
-command should install all of them. If something is still found to be missing,
-please open an issue.
+On Gentoo, you can use the Alacritty package dependencies as a starting point:
 
 ```sh
 emerge --onlydeps x11-terms/alacritty
@@ -208,7 +216,7 @@ emerge --onlydeps x11-terms/alacritty
 
 #### Clear Linux
 
-On Clear Linux, you need a few extra libraries to build Alacritty. Here's a
+On Clear Linux, you need a few extra libraries to build Velacritty. Here's a
 `swupd` command that should install all of them. If something is still found
 to be missing, please open an issue.
 
@@ -225,9 +233,11 @@ dependencies on [GNU Guix](https://guix.gnu.org/).
 guix environment alacritty
 ```
 
+> **Note:** This uses Alacritty's dependencies; Velacritty requires the same packages.
+
 #### Alpine Linux
 
-On Alpine Linux, you need a few extra libraries to build Alacritty. Here's an
+On Alpine Linux, you need a few extra libraries to build Velacritty. Here's an
 `apk` command that should install all of them. If something is still found to
 be missing, please open an issue.
 
@@ -242,7 +252,7 @@ installed as well as [Clang 3.9 or greater](http://releases.llvm.org/download.ht
 
 #### Other
 
-If you build Alacritty on another distribution, we would love some help
+If you build Velacritty on another distribution, we would love some help
 filling in this section of the README.
 
 ## Building
@@ -253,7 +263,7 @@ filling in this section of the README.
 cargo build --release
 ```
 
-On Linux/BSD, if it is desired to build Alacritty without support for either the
+On Linux/BSD, if it is desired to build Velacritty without support for either the
 X11 or Wayland rendering backend the following commands can be used.
 
 ```sh
@@ -266,12 +276,16 @@ cargo build --release --no-default-features --features=x11
 
 If all goes well, this should place a binary at `target/release/alacritty`.
 
+> **Note:** The binary is still named `alacritty` for compatibility. Future versions may rename it to `velacritty`.
+
 ### macOS
 
 ```sh
 make app
 cp -r target/release/osx/Alacritty.app /Applications/
 ```
+
+> **Note:** The macOS app bundle is currently named `Alacritty.app`. Future versions will rename it to `Velacritty.app`.
 
 #### Universal Binary
 
@@ -285,15 +299,17 @@ make app-universal
 
 ## Post Build
 
-There are some extra things you might want to set up after installing Alacritty.
-All the post build instruction assume you're still inside the Alacritty
+There are some extra things you might want to set up after installing Velacritty.
+All the post build instruction assume you're still inside the Velacritty
 repository.
 
 ### Terminfo
 
-To make sure Alacritty works correctly, either the `alacritty` or
+To make sure Velacritty works correctly, either the `alacritty` or
 `alacritty-direct` terminfo must be used. The `alacritty` terminfo will be
 picked up automatically if it is installed.
+
+> **Note:** Velacritty currently uses the same terminfo as Alacritty for compatibility.
 
 If the following command returns without any errors, the `alacritty` terminfo is
 already installed:
@@ -312,7 +328,7 @@ sudo tic -xe alacritty,alacritty-direct extra/alacritty.info
 ### Desktop Entry
 
 Many Linux and BSD distributions support desktop entries for adding applications
-to system menus. This will install the desktop entry for Alacritty:
+to system menus. This will install the desktop entry for Velacritty:
 
 ```sh
 sudo cp target/release/alacritty /usr/local/bin # or anywhere else in $PATH
@@ -321,7 +337,9 @@ sudo desktop-file-install extra/linux/Alacritty.desktop
 sudo update-desktop-database
 ```
 
-If you are having problems with Alacritty's logo, you can replace it with
+> **Note:** Desktop integration files will be renamed to use Velacritty branding in future versions.
+
+If you are having problems with the logo, you can replace it with
 prerendered PNGs and simplified SVGs available in the `extra/logo/compat`
 directory.
 
@@ -338,9 +356,11 @@ scdoc < extra/man/alacritty.5.scd | gzip -c | sudo tee /usr/local/share/man/man5
 scdoc < extra/man/alacritty-bindings.5.scd | gzip -c | sudo tee /usr/local/share/man/man5/alacritty-bindings.5.gz > /dev/null
 ```
 
+> **Note:** Man pages will be updated to reference Velacritty in future versions.
+
 ### Shell completions
 
-To get automatic completions for Alacritty's flags and arguments you can install the provided shell completions.
+To get automatic completions for command-line flags and arguments you can install the provided shell completions.
 
 #### Zsh
 
@@ -365,7 +385,7 @@ cp extra/completions/_alacritty ${ZDOTDIR:-~}/.zsh_functions/_alacritty
 To install the completions for bash, you can `source` the `extra/completions/alacritty.bash` file
 in your `~/.bashrc` file.
 
-If you do not plan to delete the source folder of alacritty, you can run
+If you do not plan to delete the source folder, you can run
 
 ```sh
 echo "source $(pwd)/extra/completions/alacritty.bash" >> ~/.bashrc

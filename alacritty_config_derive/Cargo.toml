@@ -1,11 +1,11 @@
 [package]
-name = "alacritty_config_derive"
+name = "velacritty_config_derive"
 version = "0.2.6-dev"
-authors = ["Christian Duerr <contact@christianduerr.com>"]
+authors = ["Christian Duerr <contact@christianduerr.com>", "Dayton Dunbar <daytonpooper@Yahoo.com>"]
 license = "MIT OR Apache-2.0"
-description = "Failure resistant deserialization derive"
-homepage = "https://alacritty.org"
-repository = "https://github.com/alacritty/alacritty"
+description = "Failure resistant deserialization derive (Velacritty fork)"
+homepage = "https://github.com/CoderDayton/velacritty"
+repository = "https://github.com/CoderDayton/velacritty"
 edition.workspace = true
 rust-version.workspace = true
 
@@ -17,7 +17,7 @@ proc-macro2 = "1.0.24"
 quote = "1.0.7"
 syn = { version = "2.0.16", features = ["derive", "parsing", "proc-macro", "printing"], default-features = false }
 
-[dev-dependencies.alacritty_config]
+[dev-dependencies.velacritty_config]
 path = "../alacritty_config"
 version = "0.2.4-dev"
 

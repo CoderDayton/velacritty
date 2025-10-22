@@ -1,24 +1,29 @@
 [package]
-name = "alacritty"
+name = "velacritty"
 version = "0.17.0-dev"
-authors = ["Christian Duerr <contact@christianduerr.com>", "Joe Wilm <joe@jwilm.com>"]
+authors = ["Christian Duerr <contact@christianduerr.com>", "Joe Wilm <joe@jwilm.com>", "Dayton Dunbar <daytonpooper@Yahoo.com>"]
 license = "Apache-2.0"
-description = "A fast, cross-platform, OpenGL terminal emulator"
+description = "A fast, cross-platform, OpenGL terminal emulator (Velacritty fork of Alacritty)"
 readme = "README.md"
-homepage = "https://alacritty.org"
-repository = "https://github.com/alacritty/alacritty"
+homepage = "https://github.com/CoderDayton/velacritty"
+repository = "https://github.com/CoderDayton/velacritty"
 edition.workspace = true
 rust-version.workspace = true
 
-[dependencies.alacritty_terminal]
+# Binary name preserved for backward compatibility with Alacritty configs
+[[bin]]
+name = "alacritty"
+path = "src/main.rs"
+
+[dependencies.velacritty_terminal]
 path = "../alacritty_terminal"
 version = "0.25.2-dev"
 
-[dependencies.alacritty_config_derive]
+[dependencies.velacritty_config_derive]
 path = "../alacritty_config_derive"
 version = "0.2.6-dev"
 
-[dependencies.alacritty_config]
+[dependencies.velacritty_config]
 path = "../alacritty_config"
 version = "0.2.4-dev"
 

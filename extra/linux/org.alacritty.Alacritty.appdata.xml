@@ -3,23 +3,27 @@
 <component type="desktop-application">
   <id>org.alacritty.Alacritty</id>
 
-  <developer_name>Christian Duerr</developer_name>
-  <developer id="org.alacritty">
-    <name>Christian Duerr</name>
+  <developer_name>Dayton Dunbar (Velacritty fork)</developer_name>
+  <developer id="com.github.coderdayton">
+    <name>Dayton Dunbar</name>
   </developer>
 
-  <name>Alacritty</name>
+  <name>Velacritty</name>
 
   <project_license>Apache-2.0</project_license>
   <metadata_license>MIT</metadata_license>
 
-  <summary>A cross-platform, OpenGL terminal emulator</summary>
+  <summary>A cross-platform, OpenGL terminal emulator (Velacritty fork)</summary>
   <description>
     <p>
-      Alacritty is a modern terminal emulator that comes with sensible defaults,
+      Velacritty is a fork of Alacritty, a modern terminal emulator that comes with sensible defaults,
       but allows for extensive configuration. By integrating with other
       applications, rather than reimplementing their functionality, it manages
       to provide a flexible set of features with high performance.
+    </p>
+    <p>
+      This fork adds enhanced visual improvements and user experience features while maintaining
+      full compatibility with Alacritty configurations.
     </p>
     <ul>
       <li>Wayland native</li>
@@ -39,8 +43,8 @@
     </screenshot>
   </screenshots>
 
-  <url type="homepage">https://github.com/alacritty/alacritty</url>
-  <url type="bugtracker">https://github.com/alacritty/alacritty/issues</url>
+  <url type="homepage">https://github.com/CoderDayton/velacritty</url>
+  <url type="bugtracker">https://github.com/CoderDayton/velacritty/issues</url>
 
   <launchable type="desktop-id">Alacritty.desktop</launchable>
 

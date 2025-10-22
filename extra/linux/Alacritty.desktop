@@ -6,9 +6,9 @@ Icon=Alacritty
 Terminal=false
 Categories=System;TerminalEmulator;
 
-Name=Alacritty
+Name=Velacritty
 GenericName=Terminal
-Comment=A fast, cross-platform, OpenGL terminal emulator
+Comment=A fast, cross-platform, OpenGL terminal emulator (Velacritty fork of Alacritty)
 StartupNotify=true
 StartupWMClass=Alacritty
 Actions=New;

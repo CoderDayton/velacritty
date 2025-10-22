@@ -26,14 +26,14 @@ use winit::keyboard::ModifiersState;
 use winit::platform::macos::ActiveEventLoopExtMacOS;
 use winit::window::CursorIcon;
 
-use alacritty_terminal::event::EventListener;
-use alacritty_terminal::grid::{Dimensions, Scroll};
-use alacritty_terminal::index::{Boundary, Column, Direction, Point, Side};
-use alacritty_terminal::selection::SelectionType;
-use alacritty_terminal::term::search::Match;
-use alacritty_terminal::term::{ClipboardType, Term, TermMode};
-use alacritty_terminal::vi_mode::ViMotion;
-use alacritty_terminal::vte::ansi::{ClearMode, Handler};
+use velacritty_terminal::event::EventListener;
+use velacritty_terminal::grid::{Dimensions, Scroll};
+use velacritty_terminal::index::{Boundary, Column, Direction, Point, Side};
+use velacritty_terminal::selection::SelectionType;
+use velacritty_terminal::term::search::Match;
+use velacritty_terminal::term::{ClipboardType, Term, TermMode};
+use velacritty_terminal::vi_mode::ViMotion;
+use velacritty_terminal::vte::ansi::{ClearMode, Handler};
 
 use crate::clipboard::Clipboard;
 #[cfg(target_os = "macos")]
@@ -397,6 +397,15 @@ impl<T: EventListener> Execute<T> for Action {
                 // Move to beginning twice, to always jump across linewraps.
                 term.vi_motion(ViMotion::FirstOccupied);
                 term.vi_motion(ViMotion::FirstOccupied);
+                ctx.mark_dirty();
+            },
+            Action::ToggleAutoScroll => {
+                let new_value = !ctx.display().auto_scroll_enabled;
+                ctx.display().auto_scroll_enabled = new_value;
+                
+                // Sync flag to terminal grid for viewport auto-scroll control.
+                ctx.terminal_mut().grid_mut().set_auto_scroll_enabled(new_value);
+                
                 ctx.mark_dirty();
             },
             Action::ClearHistory => ctx.terminal_mut().clear_screen(ClearMode::Saved),
@@ -1146,7 +1155,7 @@ mod tests {
     use winit::keyboard::Key;
     use winit::window::WindowId;
 
-    use alacritty_terminal::event::Event as TerminalEvent;
+    use velacritty_terminal::event::Event as TerminalEvent;
 
     use crate::config::Binding;
     use crate::message_bar::MessageBuffer;

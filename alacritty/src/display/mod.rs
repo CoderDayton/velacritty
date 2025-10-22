@@ -26,15 +26,15 @@ use winit::window::CursorIcon;
 use crossfont::{Rasterize, Rasterizer, Size as FontSize};
 use unicode_width::UnicodeWidthChar;
 
-use alacritty_terminal::event::{EventListener, OnResize, WindowSize};
-use alacritty_terminal::grid::Dimensions as TermDimensions;
-use alacritty_terminal::index::{Column, Direction, Line, Point};
-use alacritty_terminal::selection::Selection;
-use alacritty_terminal::term::cell::Flags;
-use alacritty_terminal::term::{
+use velacritty_terminal::event::{EventListener, OnResize, WindowSize};
+use velacritty_terminal::grid::Dimensions as TermDimensions;
+use velacritty_terminal::index::{Column, Direction, Line, Point};
+use velacritty_terminal::selection::Selection;
+use velacritty_terminal::term::cell::Flags;
+use velacritty_terminal::term::{
     self, LineDamageBounds, MIN_COLUMNS, MIN_SCREEN_LINES, Term, TermDamage, TermMode,
 };
-use alacritty_terminal::vte::ansi::{CursorShape, NamedColor};
+use velacritty_terminal::vte::ansi::{CursorShape, NamedColor};
 
 use crate::config::UiConfig;
 use crate::config::debug::RendererPreference;
@@ -385,6 +385,9 @@ pub struct Display {
     /// Font size used by the window.
     pub font_size: FontSize,
 
+    /// Runtime override for automatic scrolling on terminal output.
+    pub auto_scroll_enabled: bool,
+
     // Mouse point position when highlighting hints.
     hint_mouse_point: Option<Point>,
 
@@ -528,6 +531,7 @@ impl Display {
             hint_state,
             size_info,
             font_size,
+            auto_scroll_enabled: config.scrolling.auto_scroll,
             window,
             pending_renderer_update: Default::default(),
             vi_highlighted_hint_age: Default::default(),

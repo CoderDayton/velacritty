@@ -2,11 +2,11 @@ ALACRITTY-BINDINGS(5)
 
 # NAME
 
-alacritty-bindings - Default configuration file bindings.
+alacritty-bindings - Default configuration file bindings (Velacritty).
 
 # SYNOPSIS
 
-This page documents all key and mouse bindings for the default Alacritty
+This page documents all key and mouse bindings for the default Alacritty/Velacritty
 configuration. See *alacritty*(5) for full configuration format documentation.
 
 # MOUSE BINDINGS
@@ -66,6 +66,10 @@ configuration. See *alacritty*(5) for full configuration format documentation.
 :  _"Shift"_
 :  _"~Alt"_
 :  _"ScrollToBottom"_
+|  _"A"_
+:  _"Shift|Control"_
+:[
+:  _"ToggleAutoScroll"_
 
 ## Vi Mode
 
@@ -601,9 +605,13 @@ configuration. See *alacritty*(5) for full configuration format documentation.
 
 # BUGS
 
-Found a bug? Please report it at _https://github.com/alacritty/alacritty/issues_.
+Found a bug? Please report it at _https://github.com/CoderDayton/velacritty/issues_.
 
 # MAINTAINERS
+
+- Dayton Dunbar <daytonpooper@Yahoo.com> (Velacritty fork)
+
+# ORIGINAL AUTHORS
 
 - Christian Duerr <contact@christianduerr.com>
 - Kirill Chibisov <contact@kchibisov.com>

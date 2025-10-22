@@ -13,10 +13,10 @@ use winit::keyboard::{
 };
 use winit::platform::scancode::PhysicalKeyExtScancode;
 
-use alacritty_config_derive::{ConfigDeserialize, SerdeReplace};
+use velacritty_config_derive::{ConfigDeserialize, SerdeReplace};
 
-use alacritty_terminal::term::TermMode;
-use alacritty_terminal::vi_mode::ViMotion;
+use velacritty_terminal::term::TermMode;
+use velacritty_terminal::vi_mode::ViMotion;
 
 use crate::config::ui_config::{Hint, Program, StringVisitor};
 
@@ -163,22 +163,22 @@ pub enum Action {
     /// Clear the display buffer(s) to remove history.
     ClearHistory,
 
-    /// Hide the Alacritty window.
+    /// Hide the Velacritty window.
     Hide,
 
-    /// Hide all windows other than Alacritty on macOS.
+    /// Hide all windows other than Velacritty on macOS.
     HideOtherApplications,
 
-    /// Minimize the Alacritty window.
+    /// Minimize the Velacritty window.
     Minimize,
 
-    /// Quit Alacritty.
+    /// Quit Velacritty.
     Quit,
 
     /// Clear warning and error notices.
     ClearLogNotice,
 
-    /// Spawn a new instance of Alacritty.
+    /// Spawn a new instance of Velacritty.
     SpawnNewInstance,
 
     /// Select next tab.
@@ -217,7 +217,7 @@ pub enum Action {
     /// Select the last tab.
     SelectLastTab,
 
-    /// Create a new Alacritty window.
+    /// Create a new Velacritty window.
     CreateNewWindow,
 
     /// Create new window in a tab.
@@ -237,6 +237,9 @@ pub enum Action {
 
     /// Toggle vi mode.
     ToggleViMode,
+
+    /// Toggle automatic scrolling on terminal output.
+    ToggleAutoScroll,
 
     /// Allow receiving char input.
     ReceiveChar,
@@ -452,6 +455,8 @@ pub fn default_key_bindings() -> Vec<KeyBinding> {
         // Vi mode.
         Space, ModifiersState::SHIFT | ModifiersState::CONTROL, ~BindingMode::SEARCH; Action::ToggleViMode;
         Space, ModifiersState::SHIFT | ModifiersState::CONTROL, +BindingMode::VI, ~BindingMode::SEARCH; Action::ScrollToBottom;
+        // Auto-scroll toggle.
+        "a", ModifiersState::SHIFT | ModifiersState::CONTROL; Action::ToggleAutoScroll;
         Escape,                             +BindingMode::VI, ~BindingMode::SEARCH; Action::ClearSelection;
         "i",                                +BindingMode::VI, ~BindingMode::SEARCH; Action::ToggleViMode;
         "i",                                +BindingMode::VI, ~BindingMode::SEARCH; Action::ScrollToBottom;

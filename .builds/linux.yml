@@ -11,7 +11,7 @@ packages:
   - scdoc
 
 sources:
-  - https://github.com/alacritty/alacritty
+  - https://github.com/CoderDayton/alacritty
 
 environment:
   PATH: /home/build/.cargo/bin:/usr/bin/
@@ -32,6 +32,10 @@ tasks:
   - test: |
       cd alacritty
       cargo test
+  - platform-tests: |
+      cd alacritty
+      echo "Testing Linux-specific CLI help text..."
+      cargo test --bin alacritty cli::tests::help_text_tests::config_file_help_text_documents_platform_specific_paths -- --nocapture
   - oldstable: |
       cd alacritty
       oldstable=$(cat Cargo.toml | grep "rust-version" | sed 's/.*"\(.*\)".*/\1/')

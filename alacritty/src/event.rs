@@ -30,19 +30,20 @@ use winit::event::{
     ElementState, Event as WinitEvent, Ime, Modifiers, MouseButton, StartCause,
     Touch as TouchEvent, WindowEvent,
 };
+use winit::dpi::PhysicalSize;
 use winit::event_loop::{ActiveEventLoop, ControlFlow, DeviceEvents, EventLoop, EventLoopProxy};
 use winit::raw_window_handle::HasDisplayHandle;
 use winit::window::WindowId;
 
-use alacritty_terminal::event::{Event as TerminalEvent, EventListener, Notify};
-use alacritty_terminal::event_loop::Notifier;
-use alacritty_terminal::grid::{BidirectionalIterator, Dimensions, Scroll};
-use alacritty_terminal::index::{Boundary, Column, Direction, Line, Point, Side};
-use alacritty_terminal::selection::{Selection, SelectionType};
-use alacritty_terminal::term::cell::Flags;
-use alacritty_terminal::term::search::{Match, RegexSearch};
-use alacritty_terminal::term::{self, ClipboardType, Term, TermMode};
-use alacritty_terminal::vte::ansi::NamedColor;
+use velacritty_terminal::event::{Event as TerminalEvent, EventListener, Notify};
+use velacritty_terminal::event_loop::Notifier;
+use velacritty_terminal::grid::{BidirectionalIterator, Dimensions, Scroll};
+use velacritty_terminal::index::{Boundary, Column, Direction, Line, Point, Side};
+use velacritty_terminal::selection::{Selection, SelectionType};
+use velacritty_terminal::term::cell::Flags;
+use velacritty_terminal::term::search::{Match, RegexSearch};
+use velacritty_terminal::term::{self, ClipboardType, Term, TermMode};
+use velacritty_terminal::vte::ansi::NamedColor;
 
 #[cfg(unix)]
 use crate::cli::{IpcConfig, ParsedOptions};
@@ -79,6 +80,10 @@ const TOUCH_ZOOM_FACTOR: f32 = 0.01;
 
 /// Cooldown between invocations of the bell command.
 const BELL_CMD_COOLDOWN: Duration = Duration::from_millis(100);
+
+/// Debounce duration for resize events (16ms ≈ 60fps).
+/// Prevents overwhelming the renderer during rapid resize operations.
+const RESIZE_DEBOUNCE_DURATION: Duration = Duration::from_millis(16);
 
 /// The event processor.
 ///
@@ -551,6 +556,7 @@ pub enum EventType {
     BlinkCursorTimeout,
     SearchNext,
     Frame,
+    Resize(PhysicalSize<u32>),
 }
 
 impl From<TerminalEvent> for EventType {
@@ -1355,7 +1361,15 @@ impl<'a, N: Notify + 'a, T: EventListener> input::ActionContext<T> for ActionCon
         self.on_typing_start();
         self.clear_selection();
 
-        if self.terminal().grid().display_offset() != 0 {
+        let display_offset = self.terminal().grid().display_offset();
+        log::debug!(
+            "on_terminal_input_start: auto_scroll_enabled={}, display_offset={}",
+            self.display.auto_scroll_enabled,
+            display_offset
+        );
+
+        if self.display.auto_scroll_enabled && display_offset != 0 {
+            log::debug!("Scrolling to bottom (auto_scroll active)");
             self.scroll(Scroll::Bottom);
         }
     }
@@ -1930,6 +1944,10 @@ impl input::Processor<EventProxy, ActionContext<'_, Notifier, EventProxy>> {
                 },
                 #[cfg(unix)]
                 EventType::IpcConfig(_) | EventType::IpcGetConfig(..) => (),
+                EventType::Resize(size) => {
+                    // Apply the debounced resize operation.
+                    self.ctx.display.pending_update.set_dimensions(size);
+                },
                 EventType::Message(_)
                 | EventType::ConfigReload(_)
                 | EventType::CreateWindow(_)
@@ -1963,7 +1981,18 @@ impl input::Processor<EventProxy, ActionContext<'_, Notifier, EventProxy>> {
                             return;
                         }
 
-                        self.ctx.display.pending_update.set_dimensions(size);
+                        // Debounce resize events to prevent overwhelming the renderer.
+                        // This is especially critical in WSL/X11 environments where rapid
+                        // resize events can cause race conditions between the compositor,
+                        // WSLg, and the OpenGL renderer.
+                        let timer_id = TimerId::new(Topic::ResizeDebounce, self.ctx.window().id());
+                        
+                        // Cancel any pending resize timer.
+                        self.ctx.scheduler.unschedule(timer_id);
+                        
+                        // Schedule the actual resize operation after debounce period.
+                        let event = Event::new(EventType::Resize(size), self.ctx.window().id());
+                        self.ctx.scheduler.schedule(event, RESIZE_DEBOUNCE_DURATION, false, timer_id);
                     },
                     WindowEvent::KeyboardInput { event, is_synthetic: false, .. } => {
                         self.key_input(event);

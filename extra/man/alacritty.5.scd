@@ -2,16 +2,16 @@ ALACRITTY(5)
 
 # NAME
 
-Alacritty - TOML configuration file format.
+Alacritty (Velacritty) - TOML configuration file format.
 
 # SYNTAX
 
-Alacritty's configuration file uses the TOML format. The format's specification
+Velacritty's configuration file uses the TOML format (fully compatible with Alacritty configs). The format's specification
 can be found at _https://toml.io/en/v1.0.0_.
 
 # LOCATION
 
-Alacritty doesn't create the config file for you, but it looks for one in the
+Velacritty doesn't create the config file for you, but it looks for one in the
 following locations on UNIX systems:
 
 . _$XDG_CONFIG_HOME/alacritty/alacritty.toml_
@@ -231,6 +231,14 @@ Limited to _100000_.
 	Number of line scrolled for every input scroll increment.
 
 	Default: _3_
+
+*auto_scroll* = _true_ | _false_
+
+	Automatically scroll to the bottom when typing. When disabled, the terminal
+	will not scroll to the bottom automatically when you start typing while
+	viewing the scrollback buffer.
+
+	Default: _true_
 
 # FONT
 
@@ -1067,9 +1075,13 @@ relied upon.
 
 # BUGS
 
-Found a bug? Please report it at _https://github.com/alacritty/alacritty/issues_.
+Found a bug? Please report it at _https://github.com/CoderDayton/velacritty/issues_.
 
 # MAINTAINERS
+
+- Dayton Dunbar <daytonpooper@Yahoo.com> (Velacritty fork)
+
+# ORIGINAL AUTHORS
 
 - Christian Duerr <contact@christianduerr.com>
 - Kirill Chibisov <contact@kchibisov.com>

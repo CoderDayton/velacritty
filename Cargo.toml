@@ -5,6 +5,8 @@ members = [
     "alacritty_config",
     "alacritty_config_derive",
 ]
+# Note: Directory names remain unchanged for structural stability.
+# Cargo package names are updated to velacritty* within each Cargo.toml.
 resolver = "2"
 
 [workspace.package]

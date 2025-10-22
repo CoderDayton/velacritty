@@ -1,1 +1,10 @@
 target
+
+# Test and development artifacts
+test_resize.sh
+verify_fix.sh
+analyze_test_results.sh
+quick_smoke_test.sh
+*.log
+build.log
+resize_test.log

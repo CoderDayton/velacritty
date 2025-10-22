@@ -2,12 +2,12 @@ ALACRITTY-MSG(1)
 
 # NAME
 
-alacritty-msg - Send messages to Alacritty.
+alacritty-msg - Send messages to Alacritty/Velacritty.
 
 # SYNOPSIS
 
-This command communicates with running Alacritty instances through a socket,
-making it possible to control Alacritty without directly accessing it.
+This command communicates with running Alacritty/Velacritty instances through a socket,
+making it possible to control the terminal without directly accessing it.
 
 # OPTIONS
 
@@ -97,9 +97,13 @@ making it possible to control Alacritty without directly accessing it.
 
 # BUGS
 
-Found a bug? Please report it at _https://github.com/alacritty/alacritty/issues_.
+Found a bug? Please report it at _https://github.com/CoderDayton/alacritty/issues_.
 
 # MAINTAINERS
+
+- Dayton Mills <CoderDayton@proton.me> (Velacritty fork)
+
+# ORIGINAL AUTHORS
 
 - Christian Duerr <contact@christianduerr.com>
 - Kirill Chibisov <contact@kchibisov.com>

@@ -2,11 +2,11 @@ ALACRITTY-BINDINGS(5)
 
 # NAME
 
-alacritty-bindings - Default configuration file bindings.
+alacritty-bindings - Default configuration file bindings (Velacritty).
 
 # SYNOPSIS
 
-This page documents all key and mouse bindings for the default Alacritty
+This page documents all key and mouse bindings for the default Alacritty/Velacritty
 configuration. See *alacritty*(5) for full configuration format documentation.
 
 # MOUSE BINDINGS
@@ -601,9 +601,13 @@ configuration. See *alacritty*(5) for full configuration format documentation.
 
 # BUGS
 
-Found a bug? Please report it at _https://github.com/alacritty/alacritty/issues_.
+Found a bug? Please report it at _https://github.com/CoderDayton/alacritty/issues_.
 
 # MAINTAINERS
+
+- Dayton Mills <CoderDayton@proton.me> (Velacritty fork)
+
+# ORIGINAL AUTHORS
 
 - Christian Duerr <contact@christianduerr.com>
 - Kirill Chibisov <contact@kchibisov.com>

@@ -2,11 +2,11 @@ ALACRITTY(1)
 
 # NAME
 
-Alacritty - A fast, cross-platform, OpenGL terminal emulator.
+Alacritty (Velacritty) - A fast, cross-platform, OpenGL terminal emulator.
 
 # SYNOPSIS
 
-Alacritty is a modern terminal emulator that comes with sensible defaults, but
+Velacritty is a fork of Alacritty with enhanced visual improvements. It is a modern terminal emulator that comes with sensible defaults, but
 allows for extensive configuration. By integrating with other applications,
 rather than reimplementing their functionality, it manages to provide a flexible
 set of features with high performance.
@@ -142,9 +142,13 @@ set of features with high performance.
 
 # BUGS
 
-Found a bug? Please report it at _https://github.com/alacritty/alacritty/issues_.
+Found a bug? Please report it at _https://github.com/CoderDayton/alacritty/issues_.
 
 # MAINTAINERS
+
+- Dayton Mills <CoderDayton@proton.me> (Velacritty fork)
+
+# ORIGINAL AUTHORS
 
 - Christian Duerr <contact@christianduerr.com>
 - Kirill Chibisov <contact@kchibisov.com>

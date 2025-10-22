@@ -1355,7 +1355,7 @@ impl<'a, N: Notify + 'a, T: EventListener> input::ActionContext<T> for ActionCon
         self.on_typing_start();
         self.clear_selection();
 
-        if self.terminal().grid().display_offset() != 0 {
+        if self.config.scrolling.auto_scroll && self.terminal().grid().display_offset() != 0 {
             self.scroll(Scroll::Bottom);
         }
     }

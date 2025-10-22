@@ -232,6 +232,14 @@ Limited to _100000_.
 
 	Default: _3_
 
+*auto_scroll* = _true_ | _false_
+
+	Automatically scroll to the bottom when typing. When disabled, the terminal
+	will not scroll to the bottom automatically when you start typing while
+	viewing the scrollback buffer.
+
+	Default: _true_
+
 # FONT
 
 This section documents the *[font]* table of the configuration file.

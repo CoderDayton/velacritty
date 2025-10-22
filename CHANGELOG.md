@@ -10,6 +10,10 @@ Notable changes to the `alacritty_terminal` crate are documented in its
 
 ## 0.17.0-dev
 
+### Added
+
+- Config option `scrolling.auto_scroll` to control automatic scrolling on input
+
 ### Changed
 
 - Don't highlight hints on hover when the mouse cursor is hidden

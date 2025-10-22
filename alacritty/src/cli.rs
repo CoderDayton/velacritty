@@ -555,4 +555,34 @@ mod tests {
             assert_eq!(generated, completion);
         }
     }
+
+    #[test]
+    fn default_name_matches_cli_help_and_config_defaults() {
+        use crate::config::window::{Class, Identity, DEFAULT_NAME};
+
+        // PART 1: Verify the constant itself
+        assert_eq!(DEFAULT_NAME, "Velacritty", 
+            "DEFAULT_NAME constant must be 'Velacritty'");
+
+        // PART 2: Verify Identity::default() uses DEFAULT_NAME for title
+        let default_identity = Identity::default();
+        assert_eq!(default_identity.title, DEFAULT_NAME,
+            "Identity::default().title must use DEFAULT_NAME constant");
+
+        // PART 3: Verify Class::default() uses DEFAULT_NAME for both general and instance
+        let default_class = Class::default();
+        assert_eq!(default_class.general, DEFAULT_NAME,
+            "Class::default().general must use DEFAULT_NAME constant");
+        assert_eq!(default_class.instance, DEFAULT_NAME,
+            "Class::default().instance must use DEFAULT_NAME constant");
+
+        // PART 4: Verify CLI help text contains DEFAULT_NAME as documented default
+        let mut help_output = Vec::new();
+        Options::command().write_long_help(&mut help_output).unwrap();
+        let help_text = String::from_utf8_lossy(&help_output);
+        
+        // Check that both --title and --class mention "Velacritty" as default
+        assert!(help_text.contains("[default: Velacritty]"),
+            "CLI help text must document 'Velacritty' as the default for title/class");
+    }
 }

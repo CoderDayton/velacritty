@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Alacritty are documented in this file.
+All notable changes to Velacritty (fork of Alacritty) are documented in this file.
 The sections should follow the order `Packaging`, `Added`, `Changed`, `Fixed` and `Removed`.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
@@ -8,19 +8,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 Notable changes to the `alacritty_terminal` crate are documented in its
 [CHANGELOG](./alacritty_terminal/CHANGELOG.md).
 
+> **Note:** For changes inherited from upstream Alacritty, see the [original Alacritty changelog](https://github.com/alacritty/alacritty/blob/master/CHANGELOG.md). This file documents Velacritty-specific changes and breaking changes from the fork.
+
 ## 0.17.0-dev
+
+### Packaging
+
+- **BREAKING:** Default window title and class changed from "Alacritty" to "Velacritty"
+  - Users with window manager rules (i3, sway, Hyprland, etc.) must update class matching
+  - See [MIGRATION.md](MIGRATION.md) for detailed migration instructions
+  - Workaround: Set `window.title` and `window.class` in config to keep "Alacritty" branding
 
 ### Added
 
 - Config option `scrolling.auto_scroll` to control automatic scrolling on input
+- [MIGRATION.md](MIGRATION.md) documentation for Alacritty → Velacritty transition
 
 ### Changed
 
+- Default window title: "Alacritty" → "Velacritty"
+- Default window class: "Alacritty" → "Velacritty"
 - Don't highlight hints on hover when the mouse cursor is hidden
+- Author metadata: Corrected to "Dayton Dunbar <daytonpooper@Yahoo.com>"
 
 ### Fixed
 
 - Slowdowns over time on macOS 26
+- Inconsistency between CLI help text and runtime window title/class defaults
 
 ## 0.16.0
 

@@ -16,6 +16,8 @@ Velacritty is a modern terminal emulator that builds upon the solid foundation o
 
 **Development Status:** Beta — actively used and continuously improved
 
+> **⚠️ Migrating from Alacritty?** Window title/class defaults have changed to "Velacritty". If you use window manager rules, see [MIGRATION.md](MIGRATION.md) for update instructions.
+
 ---
 
 ## Attribution
@@ -94,7 +96,22 @@ Velacritty uses the same configuration format as Alacritty. Configuration files 
 **Windows:**
 * `%APPDATA%\alacritty\alacritty.toml`
 
-> **Note:** Future versions of Velacritty may support `velacritty` config paths while maintaining backward compatibility with Alacritty configs.
+> **Note:** Velacritty reads from existing Alacritty config paths for seamless compatibility. Future versions may support `velacritty` config paths while maintaining backward compatibility.
+
+### Default Behavior Changes
+
+Velacritty identifies itself with its own branding by default:
+- **Window title:** "Velacritty" (instead of "Alacritty")
+- **Window class:** "Velacritty" (instead of "Alacritty")
+
+If you use window manager rules (i3, sway, Hyprland, etc.), you'll need to update them to match the new class name. See [MIGRATION.md](MIGRATION.md) for detailed instructions.
+
+To keep the original "Alacritty" branding, add this to your config:
+```toml
+[window]
+title = "Alacritty"
+class = { general = "Alacritty", instance = "Alacritty" }
+```
 
 For configuration documentation, see the man pages (`man 5 alacritty`) or consult the [Alacritty configuration documentation](https://alacritty.org/config-alacritty.html).
 
@@ -116,7 +133,7 @@ Velacritty is a fork of Alacritty that aims to add enhanced visual features whil
 
 **_Can I use my existing Alacritty config?_**
 
-Yes! Velacritty currently uses the same configuration format and file paths as Alacritty, so your existing config should work seamlessly.
+Yes! Velacritty uses the same configuration format and file paths as Alacritty (`~/.config/alacritty/alacritty.toml`), so your existing config will work seamlessly. Note that the default window title and class are now "Velacritty" instead of "Alacritty" — if you use window manager rules, see [MIGRATION.md](MIGRATION.md) for update instructions.
 
 **_Is it as fast as Alacritty?_**
 

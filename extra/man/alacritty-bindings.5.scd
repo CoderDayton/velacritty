@@ -66,6 +66,10 @@ configuration. See *alacritty*(5) for full configuration format documentation.
 :  _"Shift"_
 :  _"~Alt"_
 :  _"ScrollToBottom"_
+|  _"A"_
+:  _"Shift|Control"_
+:[
+:  _"ToggleAutoScroll"_
 
 ## Vi Mode
 

@@ -135,6 +135,11 @@ pub struct Grid<T> {
 
     /// Maximum number of lines in history.
     max_scroll_limit: usize,
+
+    /// Controls whether viewport auto-scrolls to bottom on new output.
+    /// When false, viewport stays locked even when at bottom (pure manual control).
+    #[cfg_attr(feature = "serde", serde(skip))]
+    auto_scroll_enabled: bool,
 }
 
 impl<T: GridCell + Default + PartialEq> Grid<T> {
@@ -145,6 +150,7 @@ impl<T: GridCell + Default + PartialEq> Grid<T> {
             display_offset: 0,
             saved_cursor: Cursor::default(),
             cursor: Cursor::default(),
+            auto_scroll_enabled: true,
             lines,
             columns,
         }
@@ -264,7 +270,8 @@ impl<T: GridCell + Default + PartialEq> Grid<T> {
         }
 
         // Update display offset when not pinned to active area.
-        if self.display_offset != 0 {
+        // When auto_scroll is disabled, ALWAYS update offset (even at bottom).
+        if self.display_offset != 0 || !self.auto_scroll_enabled {
             self.display_offset = min(self.display_offset + positions, self.max_scroll_limit);
         }
 
@@ -431,6 +438,16 @@ impl<T> Grid<T> {
     #[inline]
     pub fn display_offset(&self) -> usize {
         self.display_offset
+    }
+
+    #[inline]
+    pub fn auto_scroll_enabled(&self) -> bool {
+        self.auto_scroll_enabled
+    }
+
+    #[inline]
+    pub fn set_auto_scroll_enabled(&mut self, enabled: bool) {
+        self.auto_scroll_enabled = enabled;
     }
 
     #[inline]

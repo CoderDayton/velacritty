@@ -385,6 +385,9 @@ pub struct Display {
     /// Font size used by the window.
     pub font_size: FontSize,
 
+    /// Runtime override for automatic scrolling on terminal output.
+    pub auto_scroll_enabled: bool,
+
     // Mouse point position when highlighting hints.
     hint_mouse_point: Option<Point>,
 
@@ -528,6 +531,7 @@ impl Display {
             hint_state,
             size_info,
             font_size,
+            auto_scroll_enabled: config.scrolling.auto_scroll,
             window,
             pending_renderer_update: Default::default(),
             vi_highlighted_hint_age: Default::default(),

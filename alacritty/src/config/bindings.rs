@@ -238,6 +238,9 @@ pub enum Action {
     /// Toggle vi mode.
     ToggleViMode,
 
+    /// Toggle automatic scrolling on terminal output.
+    ToggleAutoScroll,
+
     /// Allow receiving char input.
     ReceiveChar,
 
@@ -452,6 +455,8 @@ pub fn default_key_bindings() -> Vec<KeyBinding> {
         // Vi mode.
         Space, ModifiersState::SHIFT | ModifiersState::CONTROL, ~BindingMode::SEARCH; Action::ToggleViMode;
         Space, ModifiersState::SHIFT | ModifiersState::CONTROL, +BindingMode::VI, ~BindingMode::SEARCH; Action::ScrollToBottom;
+        // Auto-scroll toggle.
+        "a", ModifiersState::SHIFT | ModifiersState::CONTROL; Action::ToggleAutoScroll;
         Escape,                             +BindingMode::VI, ~BindingMode::SEARCH; Action::ClearSelection;
         "i",                                +BindingMode::VI, ~BindingMode::SEARCH; Action::ToggleViMode;
         "i",                                +BindingMode::VI, ~BindingMode::SEARCH; Action::ScrollToBottom;

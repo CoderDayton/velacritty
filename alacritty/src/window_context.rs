@@ -191,7 +191,12 @@ impl WindowContext {
         // wrapped in a clonable mutex since both the I/O loop and display need to
         // access it.
         let terminal = Term::new(config.term_options(), &display.size_info, event_proxy.clone());
-        let terminal = Arc::new(FairMutex::new(terminal));
+        let mut terminal_lock = terminal;
+        
+        // Sync initial auto_scroll config to grid (critical for startup behavior).
+        terminal_lock.grid_mut().set_auto_scroll_enabled(config.scrolling.auto_scroll);
+        
+        let terminal = Arc::new(FairMutex::new(terminal_lock));
 
         // Create the PTY.
         //

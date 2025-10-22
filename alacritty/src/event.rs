@@ -1361,7 +1361,15 @@ impl<'a, N: Notify + 'a, T: EventListener> input::ActionContext<T> for ActionCon
         self.on_typing_start();
         self.clear_selection();
 
-        if self.config.scrolling.auto_scroll && self.terminal().grid().display_offset() != 0 {
+        let display_offset = self.terminal().grid().display_offset();
+        log::debug!(
+            "on_terminal_input_start: auto_scroll_enabled={}, display_offset={}",
+            self.display.auto_scroll_enabled,
+            display_offset
+        );
+
+        if self.display.auto_scroll_enabled && display_offset != 0 {
+            log::debug!("Scrolling to bottom (auto_scroll active)");
             self.scroll(Scroll::Bottom);
         }
     }

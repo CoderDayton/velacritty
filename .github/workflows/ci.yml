@@ -9,20 +9,35 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            platform_name: Linux
+          - os: windows-latest
+            platform_name: Windows
+          - os: macos-latest
+            platform_name: macOS
 
     runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v4
+      
       - name: Stable
         run: cargo test
+      
+      - name: CLI Platform-Specific Tests (${{ matrix.platform_name }})
+        run: |
+          cargo test --bin alacritty cli::tests::help_text_tests::config_file_help_text_documents_platform_specific_paths -- --nocapture
+      
       - name: Stable (no default features)
         run: cargo test -p alacritty_terminal --no-default-features
+      
       - name: Oldstable
         run: |
           rustup default $(cat Cargo.toml | grep "rust-version" | sed 's/.*"\(.*\)".*/\1/')
           cargo test
+      
       - name: Clippy
         run: |
           rustup component add clippy
@@ -35,3 +50,16 @@ jobs:
         run: rustup update && rustup target add x86_64-apple-darwin
       - name: Build
         run: cargo build --target=x86_64-apple-darwin
+  
+  # Ensure all platform builds complete successfully before marking CI as passed
+  ci-success:
+    name: CI Success
+    needs: [build, check-macos-x86_64]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mark CI as successful
+        run: |
+          echo "✅ All platform tests passed!"
+          echo "- Linux: Platform-specific path tests verified"
+          echo "- macOS: Platform-specific path tests verified"
+          echo "- Windows: Platform-specific path tests verified"

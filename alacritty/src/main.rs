@@ -139,7 +139,7 @@ fn alacritty(mut options: Options) -> Result<(), Box<dyn Error>> {
     let log_file = logging::initialize(&options, window_event_loop.create_proxy())
         .expect("Unable to initialize logger");
 
-    info!("Welcome to Alacritty");
+    info!("Welcome to Velacritty");
     info!("Version {}", env!("VERSION"));
 
     #[cfg(all(feature = "x11", not(any(target_os = "macos", windows))))]

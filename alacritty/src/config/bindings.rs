@@ -163,22 +163,22 @@ pub enum Action {
     /// Clear the display buffer(s) to remove history.
     ClearHistory,
 
-    /// Hide the Alacritty window.
+    /// Hide the Velacritty window.
     Hide,
 
-    /// Hide all windows other than Alacritty on macOS.
+    /// Hide all windows other than Velacritty on macOS.
     HideOtherApplications,
 
-    /// Minimize the Alacritty window.
+    /// Minimize the Velacritty window.
     Minimize,
 
-    /// Quit Alacritty.
+    /// Quit Velacritty.
     Quit,
 
     /// Clear warning and error notices.
     ClearLogNotice,
 
-    /// Spawn a new instance of Alacritty.
+    /// Spawn a new instance of Velacritty.
     SpawnNewInstance,
 
     /// Select next tab.
@@ -217,7 +217,7 @@ pub enum Action {
     /// Select the last tab.
     SelectLastTab,
 
-    /// Create a new Alacritty window.
+    /// Create a new Velacritty window.
     CreateNewWindow,
 
     /// Create new window in a tab.

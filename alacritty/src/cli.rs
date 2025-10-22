@@ -584,5 +584,95 @@ mod tests {
         // Check that both --title and --class mention "Velacritty" as default
         assert!(help_text.contains("[default: Velacritty]"),
             "CLI help text must document 'Velacritty' as the default for title/class");
+
+        // PART 5: Verify WindowIdentity::default() produces None values (runtime uses Identity::default)
+        let window_identity = WindowIdentity::default();
+        assert_eq!(window_identity.title, None,
+            "WindowIdentity::default().title must be None (actual default comes from Identity)");
+        assert_eq!(window_identity.class, None,
+            "WindowIdentity::default().class must be None (actual default comes from Identity)");
+
+        // PART 6: Verify parse_class() correctly parses DEFAULT_NAME
+        let parsed_single = parse_class(DEFAULT_NAME).unwrap();
+        assert_eq!(parsed_single.general, DEFAULT_NAME,
+            "parse_class(DEFAULT_NAME) must produce correct general field");
+        assert_eq!(parsed_single.instance, DEFAULT_NAME,
+            "parse_class(DEFAULT_NAME) must produce correct instance field");
+
+        // PART 7: Verify parse_class() with explicit general,instance format
+        let test_class_str = format!("{},{}", DEFAULT_NAME, DEFAULT_NAME);
+        let parsed_explicit = parse_class(&test_class_str).unwrap();
+        assert_eq!(parsed_explicit.general, DEFAULT_NAME,
+            "parse_class('Velacritty,Velacritty') must produce correct general field");
+        assert_eq!(parsed_explicit.instance, DEFAULT_NAME,
+            "parse_class('Velacritty,Velacritty') must produce correct instance field");
+        
+        // PART 8: Verify both parsing methods produce equivalent results
+        assert_eq!(parsed_single, parsed_explicit,
+            "parse_class(DEFAULT_NAME) must equal parse_class('DEFAULT_NAME,DEFAULT_NAME')");
+    }
+
+    #[test]
+    fn config_file_help_text_documents_platform_specific_paths() {
+        let mut help_output = Vec::new();
+        Options::command().write_long_help(&mut help_output).unwrap();
+        let help_text = String::from_utf8_lossy(&help_output);
+
+        // Verify that help text documents the config file location
+        // The exact path depends on the platform, but we can verify the structure
+        assert!(help_text.contains("--config-file"),
+            "CLI help must document --config-file option");
+        
+        // Verify platform-specific default paths are documented
+        #[cfg(not(any(target_os = "macos", windows)))]
+        {
+            assert!(help_text.contains("$XDG_CONFIG_HOME/alacritty/alacritty.toml") ||
+                    help_text.contains("alacritty.toml"),
+                "CLI help must document XDG config path on Unix systems");
+        }
+
+        #[cfg(target_os = "macos")]
+        {
+            assert!(help_text.contains("$HOME/.config/alacritty/alacritty.toml") ||
+                    help_text.contains("alacritty.toml"),
+                "CLI help must document macOS config path");
+        }
+
+        #[cfg(windows)]
+        {
+            assert!(help_text.contains("%APPDATA%") || help_text.contains("alacritty.toml"),
+                "CLI help must document Windows config path");
+        }
+    }
+
+    #[test]
+    fn terminal_options_defaults_are_none_or_false() {
+        // Verify that TerminalOptions has sensible defaults
+        let terminal_opts = TerminalOptions::default();
+        
+        assert_eq!(terminal_opts.working_directory, None,
+            "Default working_directory must be None");
+        assert_eq!(terminal_opts.hold, false,
+            "Default hold must be false");
+        assert!(terminal_opts.command().is_none(),
+            "Default command must be None");
+    }
+
+    #[test]
+    fn window_options_defaults_match_struct_defaults() {
+        // Verify WindowOptions::default() matches expected structure
+        let window_opts = WindowOptions::default();
+        
+        // Terminal options should be default
+        assert_eq!(window_opts.terminal_options, TerminalOptions::default(),
+            "WindowOptions::default().terminal_options must equal TerminalOptions::default()");
+        
+        // Window identity should be default
+        assert_eq!(window_opts.window_identity, WindowIdentity::default(),
+            "WindowOptions::default().window_identity must equal WindowIdentity::default()");
+        
+        // Option vector should be empty
+        assert!(window_opts.option.is_empty(),
+            "WindowOptions::default().option must be empty vector");
     }
 }

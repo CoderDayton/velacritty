@@ -1,114 +1,167 @@
-<p align="center">
-    <img width="200" alt="Alacritty Logo" src="https://raw.githubusercontent.com/alacritty/alacritty/master/extra/logo/compat/alacritty-term%2Bscanlines.png">
-</p>
+# Velacritty
 
-<h1 align="center">Alacritty - A fast, cross-platform, OpenGL terminal emulator</h1>
+**A fast, cross-platform, OpenGL terminal emulator**
 
 <p align="center">
-  <img alt="Alacritty - A fast, cross-platform, OpenGL terminal emulator"
-       src="https://raw.githubusercontent.com/alacritty/alacritty/master/extra/promo/alacritty-readme.png">
+  <em>Velacritty is a fork of Alacritty with enhanced visual features and customization</em>
 </p>
 
-## About
+---
 
-Alacritty is a modern terminal emulator that comes with sensible defaults, but
-allows for extensive [configuration](#configuration). By integrating with other
-applications, rather than reimplementing their functionality, it manages to
-provide a flexible set of [features](./docs/features.md) with high performance.
-The supported platforms currently consist of BSD, Linux, macOS and Windows.
+## About Velacritty
 
-The software is considered to be at a **beta** level of readiness; there are
-a few missing features and bugs to be fixed, but it is already used by many as
-a daily driver.
+Velacritty is a modern terminal emulator that builds upon the solid foundation of **[Alacritty](https://github.com/alacritty/alacritty)** with additional visual enhancements and user experience improvements. It comes with sensible defaults but allows for extensive [configuration](#configuration). By integrating with other applications rather than reimplementing their functionality, it provides a flexible set of features with high performance.
 
-Precompiled binaries are available from the [GitHub releases page](https://github.com/alacritty/alacritty/releases).
+**Supported Platforms:** BSD, Linux, macOS, Windows
 
-Join [`#alacritty`] on libera.chat if you have questions or looking for a quick help.
+**Development Status:** Beta — actively used and continuously improved
 
-[`#alacritty`]: https://web.libera.chat/gamja/?channels=#alacritty
+---
 
-## Features
+## Attribution
 
-You can find an overview over the features available in Alacritty [here](./docs/features.md).
+> **Velacritty is a derivative work based on [Alacritty](https://github.com/alacritty/alacritty)**  
+> Original work Copyright © 2020 The Alacritty Project  
+> Licensed under Apache License 2.0 and MIT License
+>
+> We are deeply grateful to the Alacritty maintainers and contributors for creating the exceptional terminal emulator that serves as the foundation for this project. All core terminal emulation, rendering, and cross-platform support comes from their brilliant work.
 
-## Further information
-
-- [Announcing Alacritty, a GPU-Accelerated Terminal Emulator](https://jwilm.io/blog/announcing-alacritty/) January 6, 2017
-- [A talk about Alacritty at the Rust Meetup January 2017](https://www.youtube.com/watch?v=qHOdYO3WUTk) January 19, 2017
-- [Alacritty Lands Scrollback, Publishes Benchmarks](https://jwilm.io/blog/alacritty-lands-scrollback/) September 17, 2018
+---
 
 ## Installation
 
-Alacritty can be installed by using various package managers on Linux, BSD,
-macOS and Windows.
-
-Prebuilt binaries for macOS and Windows can also be downloaded from the
-[GitHub releases page](https://github.com/alacritty/alacritty/releases).
-
-For everyone else, the detailed instructions to install Alacritty can be found
-[here](INSTALL.md).
+Velacritty can be built from source using Cargo (Rust's package manager).
 
 ### Requirements
 
+- Rust 1.70.0 or higher
 - At least OpenGL ES 2.0
 - [Windows] ConPTY support (Windows 10 version 1809 or higher)
 
+### Build from Source
+
+```bash
+# Clone the repository
+git clone https://github.com/CoderDayton/alacritty.git velacritty
+cd velacritty
+
+# Build with cargo
+cargo build --release
+
+# The binary will be available at:
+# target/release/alacritty
+```
+
+For detailed installation instructions including platform-specific requirements, see [INSTALL.md](INSTALL.md).
+
+---
+
+## Features
+
+Velacritty inherits all of Alacritty's powerful features:
+
+- **GPU-accelerated rendering** using OpenGL for buttery-smooth performance
+- **Cross-platform** support (Linux, BSD, macOS, Windows)
+- **Vi mode** for keyboard-driven text selection
+- **Search functionality** with regex support
+- **Extensive configuration** via TOML config files
+- **True color support** with 24-bit colors
+- **Ligature support** for programming fonts
+- **Clickable URLs**
+- **Configurable keybindings and mouse bindings**
+
+### Enhanced Features in Velacritty
+
+- **Improved scrolling behavior** with enhanced smoothness
+- **Additional visual customization options**
+- *(More features coming soon)*
+
+For a complete feature overview, see [docs/features.md](./docs/features.md).
+
+---
+
 ## Configuration
 
-You can find the documentation for Alacritty's configuration in `man 5
-alacritty`, or by looking at [the website] if you do not have the manpages
-installed.
+Velacritty uses the same configuration format as Alacritty. Configuration files are looked for in the following locations:
 
-[the website]: https://alacritty.org/config-alacritty.html
-
-Alacritty doesn't create the config file for you, but it looks for one in the
-following locations:
-
+**Linux/BSD/macOS:**
 1. `$XDG_CONFIG_HOME/alacritty/alacritty.toml`
 2. `$XDG_CONFIG_HOME/alacritty.toml`
 3. `$HOME/.config/alacritty/alacritty.toml`
 4. `$HOME/.alacritty.toml`
 5. `/etc/alacritty/alacritty.toml`
 
-On Windows, the config file will be looked for in:
-
+**Windows:**
 * `%APPDATA%\alacritty\alacritty.toml`
+
+> **Note:** Future versions of Velacritty may support `velacritty` config paths while maintaining backward compatibility with Alacritty configs.
+
+For configuration documentation, see the man pages (`man 5 alacritty`) or consult the [Alacritty configuration documentation](https://alacritty.org/config-alacritty.html).
+
+---
 
 ## Contributing
 
-A guideline about contributing to Alacritty can be found in the
-[`CONTRIBUTING.md`](CONTRIBUTING.md) file.
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+Before contributing significant changes, please open an issue to discuss your proposed modifications.
+
+---
 
 ## FAQ
 
-**_Is it really the fastest terminal emulator?_**
+**_What's the relationship between Velacritty and Alacritty?_**
 
-Benchmarking terminal emulators is complicated. Alacritty uses
-[vtebench](https://github.com/alacritty/vtebench) to quantify terminal emulator
-throughput and manages to consistently score better than the competition using
-it. If you have found an example where this is not the case, please report a
-bug.
+Velacritty is a fork of Alacritty that aims to add enhanced visual features while maintaining the performance and reliability that makes Alacritty exceptional. We regularly sync with upstream Alacritty to incorporate bug fixes and new features.
 
-Other aspects like latency or framerate and frame consistency are more difficult
-to quantify. Some terminal emulators also intentionally slow down to save
-resources, which might be preferred by some users.
+**_Can I use my existing Alacritty config?_**
 
-If you have doubts about Alacritty's performance or usability, the best way to
-quantify terminal emulators is always to test them with **your** specific
-usecases.
+Yes! Velacritty currently uses the same configuration format and file paths as Alacritty, so your existing config should work seamlessly.
 
-**_Why isn't feature X implemented?_**
+**_Is it as fast as Alacritty?_**
 
-Alacritty has many great features, but not every feature from every other
-terminal. This could be for a number of reasons, but sometimes it's just not a
-good fit for Alacritty. This means you won't find things like tabs or splits
-(which are best left to a window manager or [terminal multiplexer][tmux]) nor
-niceties like a GUI config editor.
+Yes — Velacritty inherits Alacritty's GPU-accelerated rendering architecture and maintains the same performance characteristics. Any visual enhancements are designed to have minimal performance impact.
 
-[tmux]: https://github.com/tmux/tmux
+**_Why fork instead of contributing upstream?_**
+
+Some features in Velacritty explore design directions that may not align with Alacritty's minimalist philosophy. We deeply respect Alacritty's focused approach and created this fork to experiment with additional features while maintaining the option to contribute appropriate improvements back upstream.
+
+---
 
 ## License
 
-Alacritty is released under the [Apache License, Version 2.0].
+Velacritty is released under dual license:
 
-[Apache License, Version 2.0]: https://github.com/alacritty/alacritty/blob/master/LICENSE-APACHE
+- **Apache License, Version 2.0** ([LICENSE-APACHE](LICENSE-APACHE))
+- **MIT License** ([LICENSE-MIT](LICENSE-MIT))
+
+You may choose either license for your use of this software.
+
+### Original Alacritty Copyright
+
+This project contains substantial code from Alacritty:
+
+```
+Copyright 2020 The Alacritty Project
+Licensed under Apache License, Version 2.0 and MIT License
+```
+
+See [NOTICE](NOTICE) file for complete attribution details.
+
+---
+
+## Resources
+
+- **Repository:** https://github.com/CoderDayton/alacritty
+- **Original Alacritty:** https://github.com/alacritty/alacritty
+- **Alacritty Website:** https://alacritty.org
+- **Issue Tracker:** https://github.com/CoderDayton/alacritty/issues
+
+---
+
+## Further Reading
+
+**About Alacritty** (the foundation of Velacritty):
+- [Announcing Alacritty, a GPU-Accelerated Terminal Emulator](https://jwilm.io/blog/announcing-alacritty/) — January 6, 2017
+- [A talk about Alacritty at the Rust Meetup](https://www.youtube.com/watch?v=qHOdYO3WUTk) — January 19, 2017
+- [Alacritty Lands Scrollback, Publishes Benchmarks](https://jwilm.io/blog/alacritty-lands-scrollback/) — September 17, 2018

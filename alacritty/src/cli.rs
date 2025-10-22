@@ -427,252 +427,272 @@ impl DerefMut for ParsedOptions {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[cfg(target_os = "linux")]
-    use std::fs::File;
-    #[cfg(target_os = "linux")]
-    use std::io::Read;
-
-    #[cfg(target_os = "linux")]
-    use clap::CommandFactory;
-    #[cfg(target_os = "linux")]
-    use clap_complete::Shell;
     use toml::Table;
 
-    #[test]
-    fn dynamic_title_ignoring_options_by_default() {
-        let mut config = UiConfig::default();
-        let old_dynamic_title = config.window.dynamic_title;
+    /// Tests for configuration overrides and title behavior.
+    mod config_tests {
+        use super::*;
 
-        Options::default().override_config(&mut config);
+        #[test]
+        fn dynamic_title_ignoring_options_by_default() {
+            let mut config = UiConfig::default();
+            let old_dynamic_title = config.window.dynamic_title;
 
-        assert_eq!(old_dynamic_title, config.window.dynamic_title);
+            Options::default().override_config(&mut config);
+
+            assert_eq!(old_dynamic_title, config.window.dynamic_title);
+        }
+
+        #[test]
+        fn dynamic_title_not_overridden_by_config() {
+            let mut config = UiConfig::default();
+
+            config.window.identity.title = "foo".to_owned();
+            Options::default().override_config(&mut config);
+
+            assert!(config.window.dynamic_title);
+        }
     }
 
-    #[test]
-    fn dynamic_title_not_overridden_by_config() {
-        let mut config = UiConfig::default();
+    /// Tests for TOML option parsing and value conversion.
+    mod parsing_tests {
+        use super::*;
 
-        config.window.identity.title = "foo".to_owned();
-        Options::default().override_config(&mut config);
+        #[test]
+        fn valid_option_as_value() {
+            // Test with a single field.
+            let value: Value = toml::from_str("field=true").unwrap();
 
-        assert!(config.window.dynamic_title);
+            let mut table = Table::new();
+            table.insert(String::from("field"), Value::Boolean(true));
+
+            assert_eq!(value, Value::Table(table));
+
+            // Test with nested fields
+            let value: Value = toml::from_str("parent.field=true").unwrap();
+
+            let mut parent_table = Table::new();
+            parent_table.insert(String::from("field"), Value::Boolean(true));
+            let mut table = Table::new();
+            table.insert(String::from("parent"), Value::Table(parent_table));
+
+            assert_eq!(value, Value::Table(table));
+        }
+
+        #[test]
+        fn invalid_option_as_value() {
+            let value = toml::from_str::<Value>("}");
+            assert!(value.is_err());
+        }
+
+        #[test]
+        fn float_option_as_value() {
+            let value: Value = toml::from_str("float=3.4").unwrap();
+
+            let mut expected = Table::new();
+            expected.insert(String::from("float"), Value::Float(3.4));
+
+            assert_eq!(value, Value::Table(expected));
+        }
+
+        #[test]
+        fn parse_instance_class() {
+            let class = parse_class("one").unwrap();
+            assert_eq!(class.general, "one");
+            assert_eq!(class.instance, "one");
+        }
+
+        #[test]
+        fn parse_general_class() {
+            let class = parse_class("one,two").unwrap();
+            assert_eq!(class.general, "one");
+            assert_eq!(class.instance, "two");
+        }
+
+        #[test]
+        fn parse_invalid_class() {
+            let class = parse_class("one,two,three");
+            assert!(class.is_err());
+        }
+
+        #[test]
+        fn valid_decimal() {
+            let value = parse_hex_or_decimal("10485773");
+            assert_eq!(value, Some(10485773));
+        }
+
+        #[test]
+        fn valid_hex_to_decimal() {
+            let value = parse_hex_or_decimal("0xa0000d");
+            assert_eq!(value, Some(10485773));
+        }
+
+        #[test]
+        fn invalid_hex_to_decimal() {
+            let value = parse_hex_or_decimal("0xa0xx0d");
+            assert_eq!(value, None);
+        }
     }
 
-    #[test]
-    fn valid_option_as_value() {
-        // Test with a single field.
-        let value: Value = toml::from_str("field=true").unwrap();
-
-        let mut table = Table::new();
-        table.insert(String::from("field"), Value::Boolean(true));
-
-        assert_eq!(value, Value::Table(table));
-
-        // Test with nested fields
-        let value: Value = toml::from_str("parent.field=true").unwrap();
-
-        let mut parent_table = Table::new();
-        parent_table.insert(String::from("field"), Value::Boolean(true));
-        let mut table = Table::new();
-        table.insert(String::from("parent"), Value::Table(parent_table));
-
-        assert_eq!(value, Value::Table(table));
-    }
-
-    #[test]
-    fn invalid_option_as_value() {
-        let value = toml::from_str::<Value>("}");
-        assert!(value.is_err());
-    }
-
-    #[test]
-    fn float_option_as_value() {
-        let value: Value = toml::from_str("float=3.4").unwrap();
-
-        let mut expected = Table::new();
-        expected.insert(String::from("float"), Value::Float(3.4));
-
-        assert_eq!(value, Value::Table(expected));
-    }
-
-    #[test]
-    fn parse_instance_class() {
-        let class = parse_class("one").unwrap();
-        assert_eq!(class.general, "one");
-        assert_eq!(class.instance, "one");
-    }
-
-    #[test]
-    fn parse_general_class() {
-        let class = parse_class("one,two").unwrap();
-        assert_eq!(class.general, "one");
-        assert_eq!(class.instance, "two");
-    }
-
-    #[test]
-    fn parse_invalid_class() {
-        let class = parse_class("one,two,three");
-        assert!(class.is_err());
-    }
-
-    #[test]
-    fn valid_decimal() {
-        let value = parse_hex_or_decimal("10485773");
-        assert_eq!(value, Some(10485773));
-    }
-
-    #[test]
-    fn valid_hex_to_decimal() {
-        let value = parse_hex_or_decimal("0xa0000d");
-        assert_eq!(value, Some(10485773));
-    }
-
-    #[test]
-    fn invalid_hex_to_decimal() {
-        let value = parse_hex_or_decimal("0xa0xx0d");
-        assert_eq!(value, None);
-    }
-
+    /// Tests for shell completion generation (Linux only).
     #[cfg(target_os = "linux")]
-    #[test]
-    fn completions() {
-        let mut clap = Options::command();
+    mod completion_tests {
+        use super::*;
+        use std::fs::File;
+        use std::io::Read;
+        use clap::CommandFactory;
+        use clap_complete::Shell;
 
-        for (shell, file) in &[
-            (Shell::Bash, "alacritty.bash"),
-            (Shell::Fish, "alacritty.fish"),
-            (Shell::Zsh, "_alacritty"),
-        ] {
-            let mut generated = Vec::new();
-            clap_complete::generate(*shell, &mut clap, "alacritty", &mut generated);
-            let generated = String::from_utf8_lossy(&generated);
+        #[test]
+        fn completions() {
+            let mut clap = Options::command();
 
-            let mut completion = String::new();
-            let mut file = File::open(format!("../extra/completions/{file}")).unwrap();
-            file.read_to_string(&mut completion).unwrap();
+            for (shell, file) in &[
+                (Shell::Bash, "alacritty.bash"),
+                (Shell::Fish, "alacritty.fish"),
+                (Shell::Zsh, "_alacritty"),
+            ] {
+                let mut generated = Vec::new();
+                clap_complete::generate(*shell, &mut clap, "alacritty", &mut generated);
+                let generated = String::from_utf8_lossy(&generated);
 
-            assert_eq!(generated, completion);
+                let mut completion = String::new();
+                let mut file = File::open(format!("../extra/completions/{file}")).unwrap();
+                file.read_to_string(&mut completion).unwrap();
+
+                assert_eq!(generated, completion);
+            }
         }
     }
 
-    #[test]
-    fn default_name_matches_cli_help_and_config_defaults() {
+    /// Tests for default values and consistency across CLI, config, and runtime behavior.
+    mod default_tests {
+        use super::*;
         use crate::config::window::{Class, Identity, DEFAULT_NAME};
+        use clap::CommandFactory;
 
-        // PART 1: Verify the constant itself
-        assert_eq!(DEFAULT_NAME, "Velacritty", 
-            "DEFAULT_NAME constant must be 'Velacritty'");
+        #[test]
+        fn default_name_matches_cli_help_and_config_defaults() {
+            // PART 1: Verify the constant itself
+            assert_eq!(DEFAULT_NAME, "Velacritty", 
+                "DEFAULT_NAME constant must be 'Velacritty'");
 
-        // PART 2: Verify Identity::default() uses DEFAULT_NAME for title
-        let default_identity = Identity::default();
-        assert_eq!(default_identity.title, DEFAULT_NAME,
-            "Identity::default().title must use DEFAULT_NAME constant");
+            // PART 2: Verify Identity::default() uses DEFAULT_NAME for title
+            let default_identity = Identity::default();
+            assert_eq!(default_identity.title, DEFAULT_NAME,
+                "Identity::default().title must use DEFAULT_NAME constant");
 
-        // PART 3: Verify Class::default() uses DEFAULT_NAME for both general and instance
-        let default_class = Class::default();
-        assert_eq!(default_class.general, DEFAULT_NAME,
-            "Class::default().general must use DEFAULT_NAME constant");
-        assert_eq!(default_class.instance, DEFAULT_NAME,
-            "Class::default().instance must use DEFAULT_NAME constant");
+            // PART 3: Verify Class::default() uses DEFAULT_NAME for both general and instance
+            let default_class = Class::default();
+            assert_eq!(default_class.general, DEFAULT_NAME,
+                "Class::default().general must use DEFAULT_NAME constant");
+            assert_eq!(default_class.instance, DEFAULT_NAME,
+                "Class::default().instance must use DEFAULT_NAME constant");
 
-        // PART 4: Verify CLI help text contains DEFAULT_NAME as documented default
-        let mut help_output = Vec::new();
-        Options::command().write_long_help(&mut help_output).unwrap();
-        let help_text = String::from_utf8_lossy(&help_output);
-        
-        // Check that both --title and --class mention "Velacritty" as default
-        assert!(help_text.contains("[default: Velacritty]"),
-            "CLI help text must document 'Velacritty' as the default for title/class");
+            // PART 4: Verify CLI help text contains DEFAULT_NAME as documented default
+            let mut help_output = Vec::new();
+            Options::command().write_long_help(&mut help_output).unwrap();
+            let help_text = String::from_utf8_lossy(&help_output);
+            
+            // Check that both --title and --class mention "Velacritty" as default
+            assert!(help_text.contains("[default: Velacritty]"),
+                "CLI help text must document 'Velacritty' as the default for title/class");
 
-        // PART 5: Verify WindowIdentity::default() produces None values (runtime uses Identity::default)
-        let window_identity = WindowIdentity::default();
-        assert_eq!(window_identity.title, None,
-            "WindowIdentity::default().title must be None (actual default comes from Identity)");
-        assert_eq!(window_identity.class, None,
-            "WindowIdentity::default().class must be None (actual default comes from Identity)");
+            // PART 5: Verify WindowIdentity::default() produces None values (runtime uses Identity::default)
+            let window_identity = WindowIdentity::default();
+            assert_eq!(window_identity.title, None,
+                "WindowIdentity::default().title must be None (actual default comes from Identity)");
+            assert_eq!(window_identity.class, None,
+                "WindowIdentity::default().class must be None (actual default comes from Identity)");
 
-        // PART 6: Verify parse_class() correctly parses DEFAULT_NAME
-        let parsed_single = parse_class(DEFAULT_NAME).unwrap();
-        assert_eq!(parsed_single.general, DEFAULT_NAME,
-            "parse_class(DEFAULT_NAME) must produce correct general field");
-        assert_eq!(parsed_single.instance, DEFAULT_NAME,
-            "parse_class(DEFAULT_NAME) must produce correct instance field");
+            // PART 6: Verify parse_class() correctly parses DEFAULT_NAME
+            let parsed_single = parse_class(DEFAULT_NAME).unwrap();
+            assert_eq!(parsed_single.general, DEFAULT_NAME,
+                "parse_class(DEFAULT_NAME) must produce correct general field");
+            assert_eq!(parsed_single.instance, DEFAULT_NAME,
+                "parse_class(DEFAULT_NAME) must produce correct instance field");
 
-        // PART 7: Verify parse_class() with explicit general,instance format
-        let test_class_str = format!("{},{}", DEFAULT_NAME, DEFAULT_NAME);
-        let parsed_explicit = parse_class(&test_class_str).unwrap();
-        assert_eq!(parsed_explicit.general, DEFAULT_NAME,
-            "parse_class('Velacritty,Velacritty') must produce correct general field");
-        assert_eq!(parsed_explicit.instance, DEFAULT_NAME,
-            "parse_class('Velacritty,Velacritty') must produce correct instance field");
-        
-        // PART 8: Verify both parsing methods produce equivalent results
-        assert_eq!(parsed_single, parsed_explicit,
-            "parse_class(DEFAULT_NAME) must equal parse_class('DEFAULT_NAME,DEFAULT_NAME')");
-    }
-
-    #[test]
-    fn config_file_help_text_documents_platform_specific_paths() {
-        let mut help_output = Vec::new();
-        Options::command().write_long_help(&mut help_output).unwrap();
-        let help_text = String::from_utf8_lossy(&help_output);
-
-        // Verify that help text documents the config file location
-        // The exact path depends on the platform, but we can verify the structure
-        assert!(help_text.contains("--config-file"),
-            "CLI help must document --config-file option");
-        
-        // Verify platform-specific default paths are documented
-        #[cfg(not(any(target_os = "macos", windows)))]
-        {
-            assert!(help_text.contains("$XDG_CONFIG_HOME/alacritty/alacritty.toml") ||
-                    help_text.contains("alacritty.toml"),
-                "CLI help must document XDG config path on Unix systems");
+            // PART 7: Verify parse_class() with explicit general,instance format
+            let test_class_str = format!("{},{}", DEFAULT_NAME, DEFAULT_NAME);
+            let parsed_explicit = parse_class(&test_class_str).unwrap();
+            assert_eq!(parsed_explicit.general, DEFAULT_NAME,
+                "parse_class('Velacritty,Velacritty') must produce correct general field");
+            assert_eq!(parsed_explicit.instance, DEFAULT_NAME,
+                "parse_class('Velacritty,Velacritty') must produce correct instance field");
+            
+            // PART 8: Verify both parsing methods produce equivalent results
+            assert_eq!(parsed_single, parsed_explicit,
+                "parse_class(DEFAULT_NAME) must equal parse_class('DEFAULT_NAME,DEFAULT_NAME')");
         }
 
-        #[cfg(target_os = "macos")]
-        {
-            assert!(help_text.contains("$HOME/.config/alacritty/alacritty.toml") ||
-                    help_text.contains("alacritty.toml"),
-                "CLI help must document macOS config path");
+        #[test]
+        fn terminal_options_defaults_are_none_or_false() {
+            // Verify that TerminalOptions has sensible defaults
+            let terminal_opts = TerminalOptions::default();
+            
+            assert_eq!(terminal_opts.working_directory, None,
+                "Default working_directory must be None");
+            assert_eq!(terminal_opts.hold, false,
+                "Default hold must be false");
+            assert!(terminal_opts.command().is_none(),
+                "Default command must be None");
         }
 
-        #[cfg(windows)]
-        {
-            assert!(help_text.contains("%APPDATA%") || help_text.contains("alacritty.toml"),
-                "CLI help must document Windows config path");
+        #[test]
+        fn window_options_defaults_match_struct_defaults() {
+            // Verify WindowOptions::default() matches expected structure
+            let window_opts = WindowOptions::default();
+            
+            // Terminal options should be default
+            assert_eq!(window_opts.terminal_options, TerminalOptions::default(),
+                "WindowOptions::default().terminal_options must equal TerminalOptions::default()");
+            
+            // Window identity should be default
+            assert_eq!(window_opts.window_identity, WindowIdentity::default(),
+                "WindowOptions::default().window_identity must equal WindowIdentity::default()");
+            
+            // Option vector should be empty
+            assert!(window_opts.option.is_empty(),
+                "WindowOptions::default().option must be empty vector");
         }
     }
 
-    #[test]
-    fn terminal_options_defaults_are_none_or_false() {
-        // Verify that TerminalOptions has sensible defaults
-        let terminal_opts = TerminalOptions::default();
-        
-        assert_eq!(terminal_opts.working_directory, None,
-            "Default working_directory must be None");
-        assert_eq!(terminal_opts.hold, false,
-            "Default hold must be false");
-        assert!(terminal_opts.command().is_none(),
-            "Default command must be None");
-    }
+    /// Tests for CLI help text documentation and platform-specific paths.
+    mod help_text_tests {
+        use super::*;
+        use clap::CommandFactory;
 
-    #[test]
-    fn window_options_defaults_match_struct_defaults() {
-        // Verify WindowOptions::default() matches expected structure
-        let window_opts = WindowOptions::default();
-        
-        // Terminal options should be default
-        assert_eq!(window_opts.terminal_options, TerminalOptions::default(),
-            "WindowOptions::default().terminal_options must equal TerminalOptions::default()");
-        
-        // Window identity should be default
-        assert_eq!(window_opts.window_identity, WindowIdentity::default(),
-            "WindowOptions::default().window_identity must equal WindowIdentity::default()");
-        
-        // Option vector should be empty
-        assert!(window_opts.option.is_empty(),
-            "WindowOptions::default().option must be empty vector");
+        #[test]
+        fn config_file_help_text_documents_platform_specific_paths() {
+            let mut help_output = Vec::new();
+            Options::command().write_long_help(&mut help_output).unwrap();
+            let help_text = String::from_utf8_lossy(&help_output);
+
+            // Verify that help text documents the config file location
+            // The exact path depends on the platform, but we can verify the structure
+            assert!(help_text.contains("--config-file"),
+                "CLI help must document --config-file option");
+            
+            // Verify platform-specific default paths are documented
+            #[cfg(not(any(target_os = "macos", windows)))]
+            {
+                assert!(help_text.contains("$XDG_CONFIG_HOME/alacritty/alacritty.toml") ||
+                        help_text.contains("alacritty.toml"),
+                    "CLI help must document XDG config path on Unix systems");
+            }
+
+            #[cfg(target_os = "macos")]
+            {
+                assert!(help_text.contains("$HOME/.config/alacritty/alacritty.toml") ||
+                        help_text.contains("alacritty.toml"),
+                    "CLI help must document macOS config path");
+            }
+
+            #[cfg(windows)]
+            {
+                assert!(help_text.contains("%APPDATA%") || help_text.contains("alacritty.toml"),
+                    "CLI help must document Windows config path");
+            }
+        }
     }
 }

@@ -17,7 +17,7 @@ use crate::config::ui_config::Program;
 use crate::config::window::{Class, Identity};
 use crate::logging::LOG_TARGET_IPC_CONFIG;
 
-/// CLI options for the main Alacritty executable.
+/// CLI options for the main Velacritty executable.
 #[derive(Parser, Default, Debug)]
 #[clap(author, about, version = env!("VERSION"))]
 pub struct Options {
@@ -29,7 +29,7 @@ pub struct Options {
     #[clap(long, conflicts_with("daemon"))]
     pub ref_test: bool,
 
-    /// X11 window ID to embed Alacritty within (decimal or hexadecimal with "0x" prefix).
+    /// X11 window ID to embed Velacritty within (decimal or hexadecimal with "0x" prefix).
     #[clap(long)]
     pub embed: Option<String>,
 
@@ -209,11 +209,11 @@ impl From<TerminalOptions> for PtyOptions {
 /// Window specific cli options which can be passed to new windows via IPC.
 #[derive(Serialize, Deserialize, Args, Default, Debug, Clone, PartialEq, Eq)]
 pub struct WindowIdentity {
-    /// Defines the window title [default: Alacritty].
+    /// Defines the window title [default: Velacritty].
     #[clap(short = 'T', short_alias('t'), long)]
     pub title: Option<String>,
 
-    /// Defines window class/app_id on X11/Wayland [default: Alacritty].
+    /// Defines window class/app_id on X11/Wayland [default: Velacritty].
     #[clap(long, value_name = "general> | <general>,<instance", value_parser = parse_class)]
     pub class: Option<Class>,
 }
@@ -238,7 +238,7 @@ pub enum Subcommands {
     Migrate(MigrateOptions),
 }
 
-/// Send a message to the Alacritty socket.
+/// Send a message to the Velacritty socket.
 #[cfg(unix)]
 #[derive(Args, Debug)]
 pub struct MessageOptions {
@@ -255,13 +255,13 @@ pub struct MessageOptions {
 #[cfg(unix)]
 #[derive(Subcommand, Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub enum SocketMessage {
-    /// Create a new window in the same Alacritty process.
+    /// Create a new window in the same Velacritty process.
     CreateWindow(WindowOptions),
 
-    /// Update the Alacritty configuration.
+    /// Update the Velacritty configuration.
     Config(IpcConfig),
 
-    /// Read runtime Alacritty configuration.
+    /// Read runtime Velacritty configuration.
     GetConfig(IpcGetConfig),
 }
 

@@ -632,7 +632,7 @@ mod tests {
             
             assert_eq!(terminal_opts.working_directory, None,
                 "Default working_directory must be None");
-            assert_eq!(terminal_opts.hold, false,
+            assert!(!terminal_opts.hold,
                 "Default hold must be false");
             assert!(terminal_opts.command().is_none(),
                 "Default command must be None");

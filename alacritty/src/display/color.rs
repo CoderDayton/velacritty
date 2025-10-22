@@ -6,9 +6,9 @@ use log::trace;
 use serde::de::{Error as SerdeError, Visitor};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
-use alacritty_config_derive::SerdeReplace;
-use alacritty_terminal::term::color::COUNT;
-use alacritty_terminal::vte::ansi::{NamedColor, Rgb as VteRgb};
+use velacritty_config_derive::SerdeReplace;
+use velacritty_terminal::term::color::COUNT;
+use velacritty_terminal::vte::ansi::{NamedColor, Rgb as VteRgb};
 
 use crate::config::color::Colors;
 

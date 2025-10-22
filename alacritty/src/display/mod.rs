@@ -26,15 +26,15 @@ use winit::window::CursorIcon;
 use crossfont::{Rasterize, Rasterizer, Size as FontSize};
 use unicode_width::UnicodeWidthChar;
 
-use alacritty_terminal::event::{EventListener, OnResize, WindowSize};
-use alacritty_terminal::grid::Dimensions as TermDimensions;
-use alacritty_terminal::index::{Column, Direction, Line, Point};
-use alacritty_terminal::selection::Selection;
-use alacritty_terminal::term::cell::Flags;
-use alacritty_terminal::term::{
+use velacritty_terminal::event::{EventListener, OnResize, WindowSize};
+use velacritty_terminal::grid::Dimensions as TermDimensions;
+use velacritty_terminal::index::{Column, Direction, Line, Point};
+use velacritty_terminal::selection::Selection;
+use velacritty_terminal::term::cell::Flags;
+use velacritty_terminal::term::{
     self, LineDamageBounds, MIN_COLUMNS, MIN_SCREEN_LINES, Term, TermDamage, TermMode,
 };
-use alacritty_terminal::vte::ansi::{CursorShape, NamedColor};
+use velacritty_terminal::vte::ansi::{CursorShape, NamedColor};
 
 use crate::config::UiConfig;
 use crate::config::debug::RendererPreference;

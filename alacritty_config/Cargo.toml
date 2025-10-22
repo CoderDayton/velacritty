@@ -1,11 +1,11 @@
 [package]
-name = "alacritty_config"
+name = "velacritty_config"
 version = "0.2.4-dev"
-authors = ["Christian Duerr <contact@christianduerr.com>"]
+authors = ["Christian Duerr <contact@christianduerr.com>", "Dayton Mills <CoderDayton@proton.me>"]
 license = "MIT OR Apache-2.0"
-description = "Alacritty configuration abstractions"
-homepage = "https://alacritty.org"
-repository = "https://github.com/alacritty/alacritty"
+description = "Velacritty configuration abstractions (fork of Alacritty)"
+homepage = "https://github.com/CoderDayton/alacritty"
+repository = "https://github.com/CoderDayton/alacritty"
 edition.workspace = true
 rust-version.workspace = true
 
@@ -15,5 +15,5 @@ serde = "1.0.163"
 toml.workspace = true
 
 [dev-dependencies]
-alacritty_config_derive = { version = "0.2.6-dev", path = "../alacritty_config_derive" }
+velacritty_config_derive = { version = "0.2.6-dev", path = "../alacritty_config_derive" }
 serde = { version = "1.0.163", features = ["derive"] }

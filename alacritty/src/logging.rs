@@ -26,7 +26,7 @@ pub const LOG_TARGET_IPC_CONFIG: &str = "alacritty_log_window_config";
 const ALACRITTY_LOG_ENV: &str = "ALACRITTY_LOG";
 
 /// Logging target for config error messages.
-pub const LOG_TARGET_CONFIG: &str = "alacritty_config_derive";
+pub const LOG_TARGET_CONFIG: &str = "velacritty_config_derive";
 
 /// Logging target for winit events.
 pub const LOG_TARGET_WINIT: &str = "alacritty_winit_event";
@@ -51,8 +51,8 @@ const ALLOWED_TARGETS: &[&str] = &[
     LOG_TARGET_IPC_CONFIG,
     LOG_TARGET_CONFIG,
     LOG_TARGET_WINIT,
-    "alacritty_config_derive",
-    "alacritty_terminal",
+    "velacritty_config_derive",
+    "velacritty_terminal",
     "alacritty",
     "crossfont",
 ];

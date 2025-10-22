@@ -1,7 +1,7 @@
 use serde::Serialize;
 
-use alacritty_config_derive::ConfigDeserialize;
-use alacritty_terminal::term::SEMANTIC_ESCAPE_CHARS;
+use velacritty_config_derive::ConfigDeserialize;
+use velacritty_terminal::term::SEMANTIC_ESCAPE_CHARS;
 
 #[derive(ConfigDeserialize, Serialize, Clone, Debug, PartialEq, Eq)]
 pub struct Selection {

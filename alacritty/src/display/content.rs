@@ -3,14 +3,14 @@ use std::num::NonZeroU32;
 use std::ops::Deref;
 use std::{cmp, mem};
 
-use alacritty_terminal::event::EventListener;
-use alacritty_terminal::grid::{Dimensions, Indexed};
-use alacritty_terminal::index::{Column, Line, Point};
-use alacritty_terminal::selection::SelectionRange;
-use alacritty_terminal::term::cell::{Cell, Flags, Hyperlink};
-use alacritty_terminal::term::search::{Match, RegexSearch};
-use alacritty_terminal::term::{self, RenderableContent as TerminalContent, Term, TermMode};
-use alacritty_terminal::vte::ansi::{Color, CursorShape, NamedColor};
+use velacritty_terminal::event::EventListener;
+use velacritty_terminal::grid::{Dimensions, Indexed};
+use velacritty_terminal::index::{Column, Line, Point};
+use velacritty_terminal::selection::SelectionRange;
+use velacritty_terminal::term::cell::{Cell, Flags, Hyperlink};
+use velacritty_terminal::term::search::{Match, RegexSearch};
+use velacritty_terminal::term::{self, RenderableContent as TerminalContent, Term, TermMode};
+use velacritty_terminal::vte::ansi::{Color, CursorShape, NamedColor};
 
 use crate::config::UiConfig;
 use crate::display::color::{CellRgb, DIM_FACTOR, List, Rgb};

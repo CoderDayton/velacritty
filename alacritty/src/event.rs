@@ -34,15 +34,15 @@ use winit::event_loop::{ActiveEventLoop, ControlFlow, DeviceEvents, EventLoop, E
 use winit::raw_window_handle::HasDisplayHandle;
 use winit::window::WindowId;
 
-use alacritty_terminal::event::{Event as TerminalEvent, EventListener, Notify};
-use alacritty_terminal::event_loop::Notifier;
-use alacritty_terminal::grid::{BidirectionalIterator, Dimensions, Scroll};
-use alacritty_terminal::index::{Boundary, Column, Direction, Line, Point, Side};
-use alacritty_terminal::selection::{Selection, SelectionType};
-use alacritty_terminal::term::cell::Flags;
-use alacritty_terminal::term::search::{Match, RegexSearch};
-use alacritty_terminal::term::{self, ClipboardType, Term, TermMode};
-use alacritty_terminal::vte::ansi::NamedColor;
+use velacritty_terminal::event::{Event as TerminalEvent, EventListener, Notify};
+use velacritty_terminal::event_loop::Notifier;
+use velacritty_terminal::grid::{BidirectionalIterator, Dimensions, Scroll};
+use velacritty_terminal::index::{Boundary, Column, Direction, Line, Point, Side};
+use velacritty_terminal::selection::{Selection, SelectionType};
+use velacritty_terminal::term::cell::Flags;
+use velacritty_terminal::term::search::{Match, RegexSearch};
+use velacritty_terminal::term::{self, ClipboardType, Term, TermMode};
+use velacritty_terminal::vte::ansi::NamedColor;
 
 #[cfg(unix)]
 use crate::cli::{IpcConfig, ParsedOptions};

@@ -1,12 +1,12 @@
 [package]
-name = "alacritty_terminal"
+name = "velacritty_terminal"
 version = "0.25.2-dev"
-authors = ["Christian Duerr <contact@christianduerr.com>", "Joe Wilm <joe@jwilm.com>"]
+authors = ["Christian Duerr <contact@christianduerr.com>", "Joe Wilm <joe@jwilm.com>", "Dayton Mills <CoderDayton@proton.me>"]
 license = "Apache-2.0"
-description = "Library for writing terminal emulators"
+description = "Library for writing terminal emulators (Velacritty fork)"
 readme = "../README.md"
-homepage = "https://alacritty.org"
-repository = "https://github.com/alacritty/alacritty"
+homepage = "https://github.com/CoderDayton/alacritty"
+repository = "https://github.com/CoderDayton/alacritty"
 edition.workspace = true
 rust-version.workspace = true
 

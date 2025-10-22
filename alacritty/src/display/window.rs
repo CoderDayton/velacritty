@@ -38,7 +38,7 @@ use winit::window::{
     WindowAttributes, WindowId,
 };
 
-use alacritty_terminal::index::Point;
+use velacritty_terminal::index::Point;
 
 use crate::cli::WindowOptions;
 use crate::config::UiConfig;

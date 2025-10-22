@@ -12,11 +12,11 @@ use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use unicode_width::UnicodeWidthChar;
 use winit::keyboard::{Key, ModifiersState};
 
-use alacritty_config::SerdeReplace;
-use alacritty_config_derive::{ConfigDeserialize, SerdeReplace};
-use alacritty_terminal::term::Config as TermConfig;
-use alacritty_terminal::term::search::RegexSearch;
-use alacritty_terminal::tty::{Options as PtyOptions, Shell};
+use velacritty_config::SerdeReplace;
+use velacritty_config_derive::{ConfigDeserialize, SerdeReplace};
+use velacritty_terminal::term::Config as TermConfig;
+use velacritty_terminal::term::search::RegexSearch;
+use velacritty_terminal::tty::{Options as PtyOptions, Shell};
 
 use crate::config::LOG_TARGET_CONFIG;
 use crate::config::bell::BellConfig;
@@ -83,7 +83,7 @@ pub struct UiConfig {
     /// Regex hints for interacting with terminal content.
     pub hints: Hints,
 
-    /// Config for the alacritty_terminal itself.
+    /// Config for the velacritty_terminal itself.
     pub terminal: Terminal,
 
     /// Keyboard configuration.
@@ -682,7 +682,7 @@ impl serde::de::Visitor<'_> for StringVisitor {
 mod tests {
     use super::*;
 
-    use alacritty_terminal::term::test::mock_term;
+    use velacritty_terminal::term::test::mock_term;
 
     use crate::display::hint::visible_regex_match_iter;
 

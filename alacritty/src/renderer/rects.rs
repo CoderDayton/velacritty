@@ -5,9 +5,9 @@ use ahash::RandomState;
 use crossfont::Metrics;
 use log::info;
 
-use alacritty_terminal::grid::Dimensions;
-use alacritty_terminal::index::{Column, Point};
-use alacritty_terminal::term::cell::Flags;
+use velacritty_terminal::grid::Dimensions;
+use velacritty_terminal::index::{Column, Point};
+use velacritty_terminal::term::cell::Flags;
 
 use crate::display::SizeInfo;
 use crate::display::color::Rgb;

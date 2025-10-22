@@ -1,8 +1,8 @@
 use serde::{Deserialize, Deserializer, Serialize, de};
 use toml::Value;
 
-use alacritty_config_derive::{ConfigDeserialize, SerdeReplace};
-use alacritty_terminal::term::Osc52;
+use velacritty_config_derive::{ConfigDeserialize, SerdeReplace};
+use velacritty_terminal::term::Osc52;
 
 use crate::config::ui_config::{Program, StringVisitor};
 

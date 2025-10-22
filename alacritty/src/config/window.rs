@@ -13,8 +13,8 @@ use velacritty_config_derive::{ConfigDeserialize, SerdeReplace};
 use crate::config::LOG_TARGET_CONFIG;
 use crate::config::ui_config::{Delta, Percentage};
 
-/// Default Alacritty name, used for window title and class.
-pub const DEFAULT_NAME: &str = "Alacritty";
+/// Default Velacritty name, used for window title and class.
+pub const DEFAULT_NAME: &str = "Velacritty";
 
 #[derive(ConfigDeserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct WindowConfig {

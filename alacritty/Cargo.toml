@@ -1,7 +1,7 @@
 [package]
 name = "velacritty"
 version = "0.17.0-dev"
-authors = ["Christian Duerr <contact@christianduerr.com>", "Joe Wilm <joe@jwilm.com>", "Dayton Mills <CoderDayton@proton.me>"]
+authors = ["Christian Duerr <contact@christianduerr.com>", "Joe Wilm <joe@jwilm.com>", "Dayton Dunbar <daytonpooper@Yahoo.com>"]
 license = "Apache-2.0"
 description = "A fast, cross-platform, OpenGL terminal emulator (Velacritty fork of Alacritty)"
 readme = "README.md"

@@ -3,9 +3,9 @@
 <component type="desktop-application">
   <id>org.alacritty.Alacritty</id>
 
-  <developer_name>Dayton Mills (Velacritty fork)</developer_name>
+  <developer_name>Dayton Dunbar (Velacritty fork)</developer_name>
   <developer id="com.github.coderdayton">
-    <name>Dayton Mills</name>
+    <name>Dayton Dunbar</name>
   </developer>
 
   <name>Velacritty</name>

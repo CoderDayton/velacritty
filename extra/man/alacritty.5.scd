@@ -1079,7 +1079,7 @@ Found a bug? Please report it at _https://github.com/CoderDayton/alacritty/issue
 
 # MAINTAINERS
 
-- Dayton Mills <CoderDayton@proton.me> (Velacritty fork)
+- Dayton Dunbar <daytonpooper@Yahoo.com> (Velacritty fork)
 
 # ORIGINAL AUTHORS
 

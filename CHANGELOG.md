@@ -35,6 +35,10 @@ Notable changes to the `alacritty_terminal` crate are documented in its
 
 - Slowdowns over time on macOS 26
 - Inconsistency between CLI help text and runtime window title/class defaults
+- **WSL2 resize crash** with `Broken pipe (os error 32)` during rapid window resizing
+  - Implemented three-phase resilience: event debouncing (16ms), transient PTY error handling (EPIPE/EBADF/EIO), and damage tracker overflow protection
+  - Root causes: WSLg compositor disruptions and state synchronization races between resize events and damage tracking
+  - See [docs/WSL2_RESIZE_FIX.md](../docs/WSL2_RESIZE_FIX.md) for technical details
 
 ## 0.16.0
 

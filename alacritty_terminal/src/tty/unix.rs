@@ -411,7 +411,19 @@ impl OnResize for Pty {
         let res = unsafe { libc::ioctl(self.file.as_raw_fd(), libc::TIOCSWINSZ, &win as *const _) };
 
         if res < 0 {
-            die!("ioctl TIOCSWINSZ failed: {}", Error::last_os_error());
+            let err = Error::last_os_error();
+            // In WSL/X11 environments, rapid resize events can cause transient EPIPE/EBADF
+            // errors when the compositor disrupts the PTY connection. These are recoverable
+            // and should not terminate the process.
+            match err.raw_os_error() {
+                Some(libc::EPIPE) | Some(libc::EBADF) | Some(libc::EIO) => {
+                    error!("Transient ioctl TIOCSWINSZ error (likely WSL/compositor issue): {} - continuing", err);
+                },
+                _ => {
+                    // For truly fatal errors (EINVAL, ENOTTY, etc.), still terminate
+                    die!("ioctl TIOCSWINSZ failed: {}", err);
+                }
+            }
         }
     }
 }

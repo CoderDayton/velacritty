@@ -37,7 +37,8 @@ jobs:
           cargo test --bin alacritty cli::tests::help_text_tests::config_file_help_text_documents_platform_specific_paths -- --nocapture
       
       - name: Stable (no default features)
-        run: cargo test -p alacritty_terminal --no-default-features
+        working-directory: alacritty_terminal
+        run: cargo test --no-default-features
       
       - name: Oldstable
         run: |

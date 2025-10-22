@@ -351,6 +351,13 @@ pub struct Config {
 
     /// OSC52 support mode.
     pub osc52: Osc52,
+
+    /// Automatically scroll to bottom when new output arrives.
+    ///
+    /// When disabled, the viewport remains at the current scroll position
+    /// while content updates in the background. This is useful for reviewing
+    /// scrollback history while TUI applications are running.
+    pub auto_scroll: bool,
 }
 
 impl Default for Config {
@@ -362,6 +369,7 @@ impl Default for Config {
             vi_mode_cursor_style: Default::default(),
             kitty_keyboard: Default::default(),
             osc52: Default::default(),
+            auto_scroll: true,
         }
     }
 }

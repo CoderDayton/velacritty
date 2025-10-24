@@ -23,7 +23,7 @@ echo "📦 Generating Velacritty icons..."
 # ============================================================================
 if command -v inkscape &>/dev/null; then
     echo "  ✓ Using Inkscape"
-    
+
     for size in "${SIZES[@]}"; do
         # Main icon
         inkscape \
@@ -32,7 +32,7 @@ if command -v inkscape &>/dev/null; then
             --export-height="$size" \
             "$LOGO_DIR/velacritty-term.svg" \
             -o "$COMPAT_DIR/velacritty-term_${size}x${size}.png"
-        
+
         # Scanlines variant
         inkscape \
             --export-type=png \
@@ -40,7 +40,7 @@ if command -v inkscape &>/dev/null; then
             --export-height="$size" \
             "$LOGO_DIR/velacritty-term+scanlines.svg" \
             -o "$COMPAT_DIR/velacritty-term+scanlines_${size}x${size}.png"
-        
+
         echo "    Generated ${size}×${size} PNGs"
     done
 
@@ -49,20 +49,20 @@ if command -v inkscape &>/dev/null; then
 # ============================================================================
 elif command -v convert &>/dev/null; then
     echo "  ✓ Using ImageMagick"
-    
+
     for size in "${SIZES[@]}"; do
         convert \
             -density 96 \
             -resize "${size}x${size}" \
             "$LOGO_DIR/velacritty-term.svg" \
             "$COMPAT_DIR/velacritty-term_${size}x${size}.png"
-        
+
         convert \
             -density 96 \
             -resize "${size}x${size}" \
             "$LOGO_DIR/velacritty-term+scanlines.svg" \
             "$COMPAT_DIR/velacritty-term+scanlines_${size}x${size}.png"
-        
+
         echo "    Generated ${size}×${size} PNGs"
     done
 
@@ -71,18 +71,18 @@ elif command -v convert &>/dev/null; then
 # ============================================================================
 elif command -v rsvg-convert &>/dev/null; then
     echo "  ✓ Using rsvg-convert (librsvg2)"
-    
+
     for size in "${SIZES[@]}"; do
         rsvg-convert \
             -w "$size" -h "$size" \
             "$LOGO_DIR/velacritty-term.svg" \
             -o "$COMPAT_DIR/velacritty-term_${size}x${size}.png"
-        
+
         rsvg-convert \
             -w "$size" -h "$size" \
             "$LOGO_DIR/velacritty-term+scanlines.svg" \
             -o "$COMPAT_DIR/velacritty-term+scanlines_${size}x${size}.png"
-        
+
         echo "    Generated ${size}×${size} PNGs"
     done
 

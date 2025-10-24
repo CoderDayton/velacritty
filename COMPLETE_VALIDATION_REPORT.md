@@ -279,4 +279,3 @@ No blockers identified.
 3. Create migration guide for users upgrading from Alacritty
 4. Tag release on git
 5. Push to upstream
-

@@ -46,22 +46,22 @@ windows:
   steps:
     - name: Build
       run: cargo build --release
-    
+
     - name: Upload portable executable
       run: |
         cp ./target/release/velacritty.exe ./Velacritty-${GITHUB_REF##*/}-portable.exe
         ./.github/workflows/upload_asset.sh \
           ./Velacritty-${GITHUB_REF##*/}-portable.exe $GITHUB_TOKEN
-    
+
     - name: Install WiX
       run: dotnet tool install --global wix --version 4.0.5
-    
+
     - name: Create msi installer
       run: |
         wix extension add WixToolset.UI.wixext/4.0.5 WixToolset.Util.wixext/4.0.5
         wix build -arch "x64" -ext WixToolset.UI.wixext -ext WixToolset.Util.wixext \
         -out "./Velacritty-${GITHUB_REF##*/}-installer.msi" "alacritty/windows/wix/alacritty.wxs"
-    
+
     - name: Upload msi installer
       run: |
         ./.github/workflows/upload_asset.sh \
@@ -71,21 +71,21 @@ windows:
 **WiX Installer Configuration** (`alacritty/windows/wix/alacritty.wxs`):
 
 ```xml
-<Package Name="Velacritty" 
+<Package Name="Velacritty"
          UpgradeCode="87c21c74-dbd5-4584-89d5-46d9cd0c40a7"
          Version="0.17.0-dev"
          Manufacturer="Dayton Dunbar">
-  
-  <MajorUpgrade AllowSameVersionUpgrades="yes" 
+
+  <MajorUpgrade AllowSameVersionUpgrades="yes"
                 DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-  
+
   <Feature Id="ProductFeature" Title="ConsoleApp" Level="1">
     <ComponentRef Id="AlacrittyExe" />
     <ComponentRef Id="AlacrittyShortcut" />
     <ComponentRef Id="ModifyPathEnv" />
     <ComponentRef Id="ContextMenu" />
   </Feature>
-  
+
   <!-- Installs to: C:\Program Files\Velacritty\ -->
   <!-- Adds to PATH environment variable -->
   <!-- Creates Start Menu shortcut -->
@@ -281,7 +281,7 @@ on:
   schedule:
     # Run every Monday and Thursday at 07:00 UTC
     - cron: '0 7 * * 1,4'
-  
+
   # Allow manual triggering
   workflow_dispatch:
 
@@ -289,14 +289,14 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     name: Sync main branch with upstream
-    
+
     steps:
       - name: Checkout main
         uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0  # Full history for merge
-      
+
       - name: Pull upstream changes
         id: sync
         uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
@@ -304,13 +304,13 @@ jobs:
           upstream_repository: alacritty/alacritty
           upstream_branch: master
           target_branch: main
-          
+
           # Create PR for review instead of direct push
           git_pull_args: --no-commit
           git_push_args: --force-with-lease
-          
+
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Create Pull Request
         if: steps.sync.outputs.has_new_commits == 'true'
         uses: peter-evans/create-pull-request@v5
@@ -320,29 +320,29 @@ jobs:
           title: '⬆️ Sync with upstream alacritty/alacritty'
           body: |
             ## Upstream Sync
-            
+
             This PR merges recent changes from `alacritty/alacritty:master`.
-            
+
             **Upstream Commits**:
             ${{ steps.sync.outputs.new_commits }}
-            
+
             **Review Checklist**:
             - [ ] No conflicts with Velacritty-specific features (auto-scroll, etc.)
             - [ ] No breaking changes to configuration schema
             - [ ] CI passes on all platforms
             - [ ] Performance benchmarks unaffected
-            
+
             **Merge Strategy**:
             - ✅ Bug fixes: Merge immediately
             - ✅ Performance improvements: Merge after testing
             - ⚠️ Breaking changes: Evaluate impact on fork
             - ❌ Controversial features: Reject if conflicts with fork philosophy
-            
+
             ---
             *Automated sync by upstream-sync workflow*
           branch: upstream-sync/${{ github.run_number }}
           labels: upstream-sync,dependencies
-      
+
       - name: Notify on failure
         if: failure()
         uses: actions/github-script@v7
@@ -398,11 +398,11 @@ on:
 jobs:
   macos:
     # Builds: Velacritty-v0.17.0.dmg (Universal binary: ARM64 + x86_64)
-  
+
   windows:
     # Builds: Velacritty-v0.17.0-portable.exe
     # Builds: Velacritty-v0.17.0-installer.msi
-  
+
   linux:
     # Uploads: man pages, completions, desktop file, alacritty.info
 ```
@@ -425,37 +425,37 @@ jobs:
   create-release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Full history for changelog
-      
+
       - name: Extract version from tag
         id: version
         run: |
           echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-      
+
       - name: Generate changelog
         id: changelog
         run: |
           # Extract section from CHANGELOG.md for this version
           VERSION="${{ steps.version.outputs.version }}"
-          
+
           # Find content between [VERSION] and next version header
           CHANGELOG=$(awk "/## \[$VERSION\]/,/## \[/" alacritty/CHANGELOG.md | \
                       sed '1d;$d' | \
                       sed 's/^/  /')
-          
+
           # Fallback if section not found
           if [ -z "$CHANGELOG" ]; then
             CHANGELOG="See full changes in [CHANGELOG.md](https://github.com/CoderDayton/velacritty/blob/main/alacritty/CHANGELOG.md)"
           fi
-          
+
           echo "changelog<<EOF" >> $GITHUB_OUTPUT
           echo "$CHANGELOG" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
-      
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
@@ -463,76 +463,76 @@ jobs:
           prerelease: ${{ contains(github.ref, '-rc') || contains(github.ref, '-dev') }}
           body: |
             # Velacritty ${{ steps.version.outputs.version }}
-            
+
             ## What's Changed
             ${{ steps.changelog.outputs.changelog }}
-            
+
             ## Downloads
-            
+
             ### Windows
             - **Installer (Recommended)**: `Velacritty-v${{ steps.version.outputs.version }}-installer.msi`
               - Auto-installs to Program Files
               - Adds to PATH
               - Creates Start Menu shortcut
               - Adds context menu integration
-            
+
             - **Portable**: `Velacritty-v${{ steps.version.outputs.version }}-portable.exe`
               - No installation required
               - Run directly from any folder
-            
+
             ### macOS
             - **Universal Binary**: `Velacritty-v${{ steps.version.outputs.version }}.dmg`
               - Supports Apple Silicon (M1/M2/M3) and Intel Macs
               - Drag and drop to Applications
-            
+
             ### Linux
             - **Binaries**: Build from source or use package managers
             - **Assets**: Man pages, shell completions, desktop file included
-            
+
             ## Installation
-            
+
             ### Windows (MSI Installer)
             ```powershell
             # Download installer, then:
             .\Velacritty-v${{ steps.version.outputs.version }}-installer.msi
             ```
-            
+
             ### macOS
             ```bash
             # Download DMG, then:
             open Velacritty-v${{ steps.version.outputs.version }}.dmg
             # Drag Velacritty.app to Applications folder
             ```
-            
+
             ### Linux (Cargo)
             ```bash
             cargo install --git https://github.com/CoderDayton/velacritty --tag v${{ steps.version.outputs.version }}
             ```
-            
+
             ## Configuration
-            
+
             Config file location:
             - **Linux**: `~/.config/alacritty/alacritty.toml`
             - **macOS**: `~/.config/alacritty/alacritty.toml`
             - **Windows**: `%APPDATA%\alacritty\alacritty.toml`
-            
+
             ## Upgrade Notes
-            
+
             - ✅ Config files are backward compatible
             - ✅ Windows MSI installer automatically upgrades previous versions
             - ✅ User settings in `%APPDATA%` (Windows) are preserved
-            
+
             ## Checksums
-            
+
             See `checksums.txt` asset for SHA256 hashes.
-            
+
             ---
-            
+
             **Full Changelog**: https://github.com/CoderDayton/velacritty/blob/v${{ steps.version.outputs.version }}/alacritty/CHANGELOG.md
-          
+
           generate_release_notes: false  # Use custom body above
           token: ${{ secrets.GITHUB_TOKEN }}
-  
+
   # Existing jobs (macos, windows, linux) remain unchanged
 ```
 
@@ -546,26 +546,26 @@ jobs:
     name: Generate Checksums
     runs-on: ubuntu-latest
     needs: [macos, windows, linux]
-    
+
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v3
         with:
           path: ./release-assets
-      
+
       - name: Generate SHA256 checksums
         run: |
           cd release-assets
           find . -type f \( -name "*.exe" -o -name "*.msi" -o -name "*.dmg" \) \
             -exec sha256sum {} \; > ../checksums.txt
-          
+
           # Format for readability
           cd ..
           echo "# Velacritty ${GITHUB_REF#refs/tags/} - SHA256 Checksums" > checksums.txt.tmp
           echo "" >> checksums.txt.tmp
           cat checksums.txt >> checksums.txt.tmp
           mv checksums.txt.tmp checksums.txt
-      
+
       - name: Upload checksums
         run: |
           ./.github/workflows/upload_asset.sh ./checksums.txt $GITHUB_TOKEN
@@ -580,13 +580,13 @@ jobs:
   run: |
     # Decode certificate from secrets
     echo "${{ secrets.WINDOWS_SIGNING_CERT }}" | base64 -d > cert.pfx
-    
+
     # Sign MSI and EXE
     signtool sign /f cert.pfx /p "${{ secrets.CERT_PASSWORD }}" \
       /t http://timestamp.digicert.com \
       /fd SHA256 \
       Velacritty-*.msi Velacritty-*-portable.exe
-    
+
     rm cert.pfx
 ```
 
@@ -598,11 +598,11 @@ jobs:
     # Import signing certificate
     echo "${{ secrets.MACOS_CERT }}" | base64 -d > cert.p12
     security import cert.p12 -P "${{ secrets.CERT_PASSWORD }}"
-    
+
     # Sign app bundle
     codesign --force --deep --sign "${{ secrets.APPLE_SIGNING_IDENTITY }}" \
       target/release/osx/Alacritty.app
-    
+
     # Notarize (requires Apple ID)
     xcrun notarytool submit Alacritty.dmg \
       --apple-id "${{ secrets.APPLE_ID }}" \
@@ -1035,16 +1035,16 @@ gh release view v0.17.0-rc1
    - AppImage (universal binary)
    - Flatpak (Flathub submission)
    - Snap (Snapcraft)
-   
+
 2. **Binary Signing**:
    - Windows code signing certificate
    - macOS Developer Program membership
-   
+
 3. **Package Manager Submissions**:
    - Chocolatey community package
    - WinGet official manifest
    - Homebrew Cask (macOS)
-   
+
 4. **Release Announcement Automation**:
    - Post to GitHub Discussions
    - Tweet from bot account
@@ -1100,7 +1100,7 @@ gh release view v0.17.0-rc1
 
 **Document Status**: ✅ Research Complete - Ready for Implementation
 
-**Next Steps**: 
+**Next Steps**:
 1. User approval for Path A implementation
 2. Create feature branch: `feat/path-a-infrastructure`
 3. Begin README rewrite (Day 1 tasks)

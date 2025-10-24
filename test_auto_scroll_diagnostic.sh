@@ -81,17 +81,17 @@ if [[ "$response" =~ ^[Yy]$ ]]; then
     echo "Launching Alacritty with debug logging..."
     echo "Watch for: 'Toggled auto_scroll: true -> false'"
     sleep 2
-    
+
     RUST_LOG=warn $ALACRITTY 2>&1 | tee "$LOG_FILE" &
     ALACRITTY_PID=$!
-    
+
     echo ""
     echo "Alacritty launched (PID: $ALACRITTY_PID)"
     echo "Log file: $LOG_FILE"
     echo ""
     echo "Press Enter when done testing..."
     read
-    
+
     if kill -0 $ALACRITTY_PID 2>/dev/null; then
         echo "Alacritty still running. Logs captured at: $LOG_FILE"
     fi

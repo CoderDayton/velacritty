@@ -1,8 +1,8 @@
 # Auto-Scroll Feature Test Results
 
-**Date**: 2025-10-22  
-**Branch**: feat/visual-improvements  
-**Commit**: 902ccbf9 (+ uncommitted changes)  
+**Date**: 2025-10-22
+**Branch**: feat/visual-improvements
+**Commit**: 902ccbf9 (+ uncommitted changes)
 
 ---
 
@@ -162,11 +162,11 @@ rg "scrolling.*auto_scroll" alacritty/src/config/
 3. **Enhanced Debugging** (if issue persists):
    ```rust
    // Add to event.rs:1364
-   log::warn!("🔍 on_terminal_input_start called: enabled={}, offset={}", 
+   log::warn!("🔍 on_terminal_input_start called: enabled={}, offset={}",
        self.display.auto_scroll_enabled, display_offset);
-   
+
    // Add to display/mod.rs:534
-   log::warn!("🔧 Display initialized with auto_scroll_enabled={}", 
+   log::warn!("🔧 Display initialized with auto_scroll_enabled={}",
        config.scrolling.auto_scroll);
    ```
 
@@ -187,7 +187,7 @@ rg "scrolling.*auto_scroll" alacritty/src/config/
 ```diff
 - Line 1467-1471: Remove TUI vs shell distinction (incorrect motivation)
 - Line 1487: "on terminal output" → "on terminal INPUT (typing)"
-- Line 1499: "on terminal output" → "on terminal INPUT (typing)"  
+- Line 1499: "on terminal output" → "on terminal INPUT (typing)"
 - Line 1571-1572: Correct test description
 ```
 

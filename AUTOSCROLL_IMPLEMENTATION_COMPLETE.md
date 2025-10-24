@@ -1,8 +1,8 @@
 # 🎯 Auto-Scroll Feature: Implementation Complete ✅
 
-**Date**: 2025-10-22  
-**Status**: ✅ **IMPLEMENTATION VERIFIED** - Ready for manual testing  
-**Branch**: feat/visual-improvements  
+**Date**: 2025-10-22
+**Status**: ✅ **IMPLEMENTATION VERIFIED** - Ready for manual testing
+**Branch**: feat/visual-improvements
 
 ---
 
@@ -177,10 +177,10 @@ RUST_LOG=trace ./target/release/alacritty 2>&1 | tee /tmp/alacritty_full.log
 ```rust
 pub struct Scrolling {
     pub multiplier: u8,
-    
+
     #[serde(default = "default_true")]
     pub auto_scroll: bool,  // ← Defaults to true
-    
+
     history: ScrollingHistory,
 }
 ```
@@ -197,7 +197,7 @@ Display {
 ```rust
 fn on_terminal_input_start(&mut self) {
     let display_offset = self.terminal().grid().display_offset();
-    
+
     // KEY LOGIC: Only snap if enabled AND scrolled up
     if self.display.auto_scroll_enabled && display_offset != 0 {
         self.scroll(Scroll::Bottom);  // ← THE SNAP-BACK
@@ -350,6 +350,6 @@ RUST_LOG=warn ./target/release/alacritty
 
 ---
 
-**Implementation Author**: Lumen (流明)  
-**Review Status**: Self-verified ✅  
+**Implementation Author**: Lumen (流明)
+**Review Status**: Self-verified ✅
 **Awaiting**: User manual testing confirmation

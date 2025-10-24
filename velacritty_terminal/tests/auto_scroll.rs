@@ -53,11 +53,7 @@ fn scroll_display_works_with_auto_scroll_true() {
 
     // Verify scroll to bottom works
     term.scroll_display(Scroll::Bottom);
-    assert_eq!(
-        term.grid().display_offset(),
-        0,
-        "Scroll::Bottom should reset display_offset to 0"
-    );
+    assert_eq!(term.grid().display_offset(), 0, "Scroll::Bottom should reset display_offset to 0");
 }
 
 #[test]

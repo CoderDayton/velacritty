@@ -1,4 +1,4 @@
-//! Alacritty - The GPU Enhanced Terminal.
+//! Velacritty - The GPU Enhanced Terminal.
 
 #![warn(rust_2018_idioms, future_incompatible)]
 #![deny(clippy::all, clippy::if_not_else, clippy::enum_glob_use)]
@@ -83,7 +83,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         #[cfg(unix)]
         Some(Subcommands::Msg(options)) => msg(options)?,
         Some(Subcommands::Migrate(options)) => migrate::migrate(options),
-        None => alacritty(options)?,
+        None => velacritty(options)?,
     }
 
     Ok(())
@@ -101,7 +101,7 @@ fn msg(mut options: MessageOptions) -> Result<(), Box<dyn Error>> {
     ipc::send_message(options.socket, options.message).map_err(|err| err.into())
 }
 
-/// Temporary files stored for Alacritty.
+/// Temporary files stored for Velacritty.
 ///
 /// This stores temporary files to automate their destruction through its `Drop` implementation.
 struct TemporaryFiles {
@@ -127,11 +127,11 @@ impl Drop for TemporaryFiles {
     }
 }
 
-/// Run main Alacritty entrypoint.
+/// Run main Velacritty entrypoint.
 ///
 /// Creates a window, the terminal state, PTY, I/O event loop, input processor,
 /// config change monitor, and runs the main display loop.
-fn alacritty(mut options: Options) -> Result<(), Box<dyn Error>> {
+fn velacritty(mut options: Options) -> Result<(), Box<dyn Error>> {
     // Setup winit event loop.
     let window_event_loop = EventLoop::<Event>::with_user_event().build()?;
 

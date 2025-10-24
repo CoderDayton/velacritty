@@ -356,22 +356,22 @@ impl From<YamlError> for Error {
 fn generate_default_config() -> Option<PathBuf> {
     // Determine config directory based on platform
     let config_dir = get_default_config_dir()?;
-    
+
     // Create the directory if it doesn't exist
     if let Err(err) = fs::create_dir_all(&config_dir) {
         error!(target: LOG_TARGET_CONFIG, "Failed to create config directory {config_dir:?}: {err}");
         return None;
     }
-    
+
     // Build path to velacritty.toml
     let config_path = config_dir.join("velacritty.toml");
-    
+
     // Write the default template
     if let Err(err) = fs::write(&config_path, DEFAULT_CONFIG_TEMPLATE) {
         error!(target: LOG_TARGET_CONFIG, "Failed to write default config to {config_path:?}: {err}");
         return None;
     }
-    
+
     info!(target: LOG_TARGET_CONFIG, "Generated default configuration at: {config_path:?}");
     Some(config_path)
 }
@@ -381,11 +381,10 @@ fn generate_default_config() -> Option<PathBuf> {
 fn get_default_config_dir() -> Option<PathBuf> {
     // Try XDG_CONFIG_HOME/velacritty first
     let xdg = xdg::BaseDirectories::with_prefix("velacritty");
-    xdg.get_config_home()
-        .or_else(|| {
-            // Fallback to $HOME/.config/velacritty
-            env::var("HOME").ok().map(|home| PathBuf::from(home).join(".config").join("velacritty"))
-        })
+    xdg.get_config_home().or_else(|| {
+        // Fallback to $HOME/.config/velacritty
+        env::var("HOME").ok().map(|home| PathBuf::from(home).join(".config").join("velacritty"))
+    })
 }
 
 #[cfg(windows)]
@@ -684,7 +683,9 @@ pub fn installed_config(suffix: &str) -> Option<PathBuf> {
 #[cfg(windows)]
 pub fn installed_config(suffix: &str) -> Option<PathBuf> {
     let file_name = format!("velacritty.{suffix}");
-    dirs::config_dir().map(|path| path.join("velacritty").join(file_name)).filter(|new| new.exists())
+    dirs::config_dir()
+        .map(|path| path.join("velacritty").join(file_name))
+        .filter(|new| new.exists())
 }
 
 #[cfg(test)]

@@ -26,11 +26,11 @@ use glutin::config::Config as GlutinConfig;
 use glutin::display::GetGlDisplay;
 use log::{debug, error, info, warn};
 use winit::application::ApplicationHandler;
+use winit::dpi::PhysicalSize;
 use winit::event::{
     ElementState, Event as WinitEvent, Ime, Modifiers, MouseButton, StartCause,
     Touch as TouchEvent, WindowEvent,
 };
-use winit::dpi::PhysicalSize;
 use winit::event_loop::{ActiveEventLoop, ControlFlow, DeviceEvents, EventLoop, EventLoopProxy};
 use winit::raw_window_handle::HasDisplayHandle;
 use winit::window::WindowId;
@@ -1986,13 +1986,18 @@ impl input::Processor<EventProxy, ActionContext<'_, Notifier, EventProxy>> {
                         // resize events can cause race conditions between the compositor,
                         // WSLg, and the OpenGL renderer.
                         let timer_id = TimerId::new(Topic::ResizeDebounce, self.ctx.window().id());
-                        
+
                         // Cancel any pending resize timer.
                         self.ctx.scheduler.unschedule(timer_id);
-                        
+
                         // Schedule the actual resize operation after debounce period.
                         let event = Event::new(EventType::Resize(size), self.ctx.window().id());
-                        self.ctx.scheduler.schedule(event, RESIZE_DEBOUNCE_DURATION, false, timer_id);
+                        self.ctx.scheduler.schedule(
+                            event,
+                            RESIZE_DEBOUNCE_DURATION,
+                            false,
+                            timer_id,
+                        );
                     },
                     WindowEvent::KeyboardInput { event, is_synthetic: false, .. } => {
                         self.key_input(event);

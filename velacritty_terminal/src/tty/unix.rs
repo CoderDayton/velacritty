@@ -417,12 +417,15 @@ impl OnResize for Pty {
             // and should not terminate the process.
             match err.raw_os_error() {
                 Some(libc::EPIPE) | Some(libc::EBADF) | Some(libc::EIO) => {
-                    error!("Transient ioctl TIOCSWINSZ error (likely WSL/compositor issue): {} - continuing", err);
+                    error!(
+                        "Transient ioctl TIOCSWINSZ error (likely WSL/compositor issue): {} - continuing",
+                        err
+                    );
                 },
                 _ => {
                     // For truly fatal errors (EINVAL, ENOTTY, etc.), still terminate
                     die!("ioctl TIOCSWINSZ failed: {}", err);
-                }
+                },
             }
         }
     }

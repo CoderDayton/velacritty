@@ -4,7 +4,9 @@ use std::time::Duration;
 use serde::{Deserialize, Serialize};
 
 use velacritty_config_derive::{ConfigDeserialize, SerdeReplace};
-use velacritty_terminal::vte::ansi::{CursorShape as VteCursorShape, CursorStyle as VteCursorStyle};
+use velacritty_terminal::vte::ansi::{
+    CursorShape as VteCursorShape, CursorStyle as VteCursorStyle,
+};
 
 use crate::config::ui_config::Percentage;
 

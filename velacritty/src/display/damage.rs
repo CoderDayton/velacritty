@@ -228,13 +228,13 @@ impl<'a> RenderDamageIterator<'a> {
         let size_info = &self.size_info;
         let y_top = size_info.height().saturating_sub(size_info.padding_y());
         let x = size_info.padding_x() + line_damage.left as u32 * size_info.cell_width();
-        
+
         // Use saturating_sub to prevent underflow during rapid resize when line numbers
         // from old terminal state are larger than current viewport allows.
         // This prevents panic in WSL2/Wayland environments during aggressive window resizing.
         let line_offset = (line_damage.line + 1) as u32 * size_info.cell_height();
         let y = y_top.saturating_sub(line_offset);
-        
+
         let width = (line_damage.right - line_damage.left + 1) as u32 * size_info.cell_width();
         Rect::new(x as i32, y as i32, width as i32, size_info.cell_height() as i32)
     }
@@ -367,12 +367,10 @@ mod tests {
         let width = 10;
         let size_info = SizeInfo::new(viewport_height, viewport_height, 5., 5., 0., 0., true);
         frame_damage.add_viewport_rect(&size_info, x, y, width, height);
-        assert_eq!(frame_damage.rects[0], Rect {
-            x,
-            y: viewport_height as i32 - y - height,
-            width,
-            height
-        });
+        assert_eq!(
+            frame_damage.rects[0],
+            Rect { x, y: viewport_height as i32 - y - height, width, height }
+        );
         assert_eq!(frame_damage.rects[0].y, viewport_y_to_damage_y(&size_info, y, height));
         assert_eq!(damage_y_to_viewport_y(&size_info, &frame_damage.rects[0]), y);
     }

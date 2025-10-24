@@ -402,10 +402,10 @@ impl<T: EventListener> Execute<T> for Action {
             Action::ToggleAutoScroll => {
                 let new_value = !ctx.display().auto_scroll_enabled;
                 ctx.display().auto_scroll_enabled = new_value;
-                
+
                 // Sync flag to terminal grid for viewport auto-scroll control.
                 ctx.terminal_mut().grid_mut().set_auto_scroll_enabled(new_value);
-                
+
                 ctx.mark_dirty();
             },
             Action::ClearHistory => ctx.terminal_mut().clear_screen(ClearMode::Saved),

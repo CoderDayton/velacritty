@@ -22,8 +22,8 @@ Velacritty is a modern terminal emulator that builds upon the solid foundation o
 
 ## Attribution
 
-> **Velacritty is a derivative work based on [Alacritty](https://github.com/alacritty/alacritty)**  
-> Original work Copyright © 2020 The Alacritty Project  
+> **Velacritty is a derivative work based on [Alacritty](https://github.com/alacritty/alacritty)**
+> Original work Copyright © 2020 The Alacritty Project
 > Licensed under Apache License 2.0 and MIT License
 >
 > We are deeply grateful to the Alacritty maintainers and contributors for creating the exceptional terminal emulator that serves as the foundation for this project. All core terminal emulation, rendering, and cross-platform support comes from their brilliant work.
@@ -87,16 +87,16 @@ For a complete feature overview, see [docs/features.md](./docs/features.md).
 Velacritty uses the same configuration format as Alacritty. Configuration files are looked for in the following locations:
 
 **Linux/BSD/macOS:**
-1. `$XDG_CONFIG_HOME/alacritty/alacritty.toml`
-2. `$XDG_CONFIG_HOME/alacritty.toml`
-3. `$HOME/.config/alacritty/alacritty.toml`
-4. `$HOME/.alacritty.toml`
-5. `/etc/alacritty/alacritty.toml`
+1. `$XDG_CONFIG_HOME/velacritty/velacritty.toml`
+2. `$XDG_CONFIG_HOME/velacritty.toml`
+3. `$HOME/.config/velacritty/velacritty.toml`
+4. `$HOME/.velacritty.toml`
+5. `/etc/velacritty/velacritty.toml`
 
 **Windows:**
-* `%APPDATA%\alacritty\alacritty.toml`
+* `%APPDATA%\velacritty\velacritty.toml`
 
-> **Note:** Velacritty reads from existing Alacritty config paths for seamless compatibility. Future versions may support `velacritty` config paths while maintaining backward compatibility.
+> **Note:** Velacritty uses its own dedicated configuration paths. To migrate from Alacritty, copy your config to the new location: `cp ~/.config/alacritty/alacritty.toml ~/.config/velacritty/velacritty.toml`
 
 ### Default Behavior Changes
 
@@ -133,7 +133,7 @@ Velacritty is a fork of Alacritty that aims to add enhanced visual features whil
 
 **_Can I use my existing Alacritty config?_**
 
-Yes! Velacritty uses the same configuration format and file paths as Alacritty (`~/.config/alacritty/alacritty.toml`), so your existing config will work seamlessly. Note that the default window title and class are now "Velacritty" instead of "Alacritty" — if you use window manager rules, see [MIGRATION.md](MIGRATION.md) for update instructions.
+Velacritty uses a configuration format compatible with Alacritty, but with its own config file paths (`~/.config/velacritty/velacritty.toml`). You can migrate your existing Alacritty config by copying it to the Velacritty location. Note that the default window title and class are now "Velacritty" instead of "Alacritty" — if you use window manager rules, see [MIGRATION.md](MIGRATION.md) for update instructions.
 
 **_Is it as fast as Alacritty?_**
 

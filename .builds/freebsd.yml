@@ -20,21 +20,21 @@ tasks:
   - rustup: |
       curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable --profile minimal
   - test: |
-      cd alacritty
+      cd velacritty
       cargo test
   - oldstable: |
-      cd alacritty
+      cd velacritty
       oldstable=$(cat Cargo.toml | grep "rust-version" | sed 's/.*"\(.*\)".*/\1/')
       rustup toolchain install --profile minimal $oldstable
       rustup default $oldstable
       cargo test
   - clippy: |
-      cd alacritty
+      cd velacritty
       rustup component add clippy
       cargo clippy --all-targets
   - feature-wayland: |
-      cd alacritty/alacritty
+      cd velacritty/velacritty
       RUSTFLAGS="-D warnings" cargo test --no-default-features --features=wayland
   - feature-x11: |
-      cd alacritty/alacritty
+      cd velacritty/velacritty
       RUSTFLAGS="-D warnings" cargo test --no-default-features --features=x11

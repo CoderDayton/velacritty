@@ -14,15 +14,15 @@ can be found at _https://toml.io/en/v1.0.0_.
 Velacritty doesn't create the config file for you, but it looks for one in the
 following locations on UNIX systems:
 
-. _$XDG_CONFIG_HOME/alacritty/alacritty.toml_
-. _$XDG_CONFIG_HOME/alacritty.toml_
-. _$HOME/.config/alacritty/alacritty.toml_
-. _$HOME/.alacritty.toml_
-. _/etc/alacritty/alacritty.toml_
+. _$XDG_CONFIG_HOME/velacritty/velacritty.toml_
+. _$XDG_CONFIG_HOME/velacritty.toml_
+. _$HOME/.config/velacritty/velacritty.toml_
+. _$HOME/.velacritty.toml_
+. _/etc/velacritty/velacritty.toml_
 
 On Windows, the config file will be looked for in:
 
-. _%APPDATA%\\alacritty\\alacritty.toml_
+. _%APPDATA%\\velacritty\\velacritty.toml_
 
 # GENERAL
 
@@ -42,9 +42,9 @@ This section documents the *[general]* table of the configuration file.
 
 	Example:
 		import = [++
-	_"~/.config/alacritty/base16-dark.toml"_,++
-	_"~/.config/alacritty/keybindings.toml"_,++
-	_"alacritty-theme/themes/gruvbox_dark.toml"_,++
+	_"~/.config/velacritty/base16-dark.toml"_,++
+	_"~/.config/velacritty/keybindings.toml"_,++
+	_"velacritty-theme/themes/gruvbox_dark.toml"_,++
 ]
 
 *working_directory* = _"<string>"_ | _"None"_

@@ -65,18 +65,18 @@ set of features with high performance.
 
 	Specify alternative configuration file.
 
-	Alacritty doesn't create the config file for you, but it looks for one in the
+	Velacritty doesn't create the config file for you, but it looks for one in the
 	following locations on UNIX systems:
 
-		. _$XDG_CONFIG_HOME/alacritty/alacritty.toml_
-		. _$XDG_CONFIG_HOME/alacritty.toml_
-		. _$HOME/.config/alacritty/alacritty.toml_
-		. _$HOME/.alacritty.toml_
-		. _/etc/alacritty/alacritty.toml_
+		. _$XDG_CONFIG_HOME/velacritty/velacritty.toml_
+		. _$XDG_CONFIG_HOME/velacritty.toml_
+		. _$HOME/.config/velacritty/velacritty.toml_
+		. _$HOME/.velacritty.toml_
+		. _/etc/velacritty/velacritty.toml_
 
 	On Windows, the config file will be looked for in:
 
-		. _%APPDATA%\\alacritty\\alacritty.toml_
+		. _%APPDATA%\\velacritty\\velacritty.toml_
 
 *--embed* _<PARENT>_
 

@@ -44,7 +44,7 @@ case $choice in
         echo "You will manually test the snap-back behavior."
         echo ""
         read -p "Press Enter to continue..."
-        
+
         RUST_LOG=warn ./target/release/alacritty -e bash -c '
 clear;
 echo "╔══════════════════════════════════════════════════════╗";
@@ -87,7 +87,7 @@ case $choice in
         echo ""
         echo "Checking implementation completeness..."
         echo ""
-        
+
         # Check 1: Config struct
         if rg -q "pub auto_scroll: bool" alacritty/src/config/scrolling.rs; then
             echo "✓ Config field exists: scrolling.auto_scroll"
@@ -95,7 +95,7 @@ case $choice in
             echo "✗ Config field missing!"
             exit 1
         fi
-        
+
         # Check 2: Display field
         if rg -q "auto_scroll_enabled:" alacritty/src/display/mod.rs; then
             echo "✓ Runtime state field exists: Display.auto_scroll_enabled"
@@ -103,7 +103,7 @@ case $choice in
             echo "✗ Display field missing!"
             exit 1
         fi
-        
+
         # Check 3: Initialization
         if rg -q "auto_scroll_enabled: config.scrolling.auto_scroll" alacritty/src/display/mod.rs; then
             echo "✓ Initialization correct: reads from config"
@@ -111,7 +111,7 @@ case $choice in
             echo "✗ Initialization broken!"
             exit 1
         fi
-        
+
         # Check 4: Snap-back logic
         if rg -q "self.display.auto_scroll_enabled && display_offset != 0" alacritty/src/event.rs; then
             echo "✓ Snap-back logic present"
@@ -119,7 +119,7 @@ case $choice in
             echo "✗ Snap-back logic missing!"
             exit 1
         fi
-        
+
         # Check 5: Toggle handler
         if rg -q "Action::ToggleAutoScroll.*auto_scroll_enabled = !old_value" alacritty/src/input/mod.rs -U 5; then
             echo "✓ Toggle handler implemented"
@@ -127,7 +127,7 @@ case $choice in
             echo "✗ Toggle handler missing!"
             exit 1
         fi
-        
+
         echo ""
         echo "✅ All implementation checks passed!"
         ;;
@@ -139,10 +139,10 @@ case $choice in
         echo "━━━ TEST 3: Debug Log Verification ━━━"
         echo ""
         echo "Testing config initialization..."
-        
+
         # Test with auto_scroll=false
         timeout 2 bash -c "RUST_LOG=alacritty=debug ./target/release/alacritty -o scrolling.auto_scroll=false 2>&1" > /tmp/alacritty_test.log || true
-        
+
         if rg -q "auto_scroll" /tmp/alacritty_test.log 2>/dev/null; then
             echo "✓ Debug logging present in output"
             echo ""

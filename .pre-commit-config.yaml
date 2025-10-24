@@ -1,0 +1,61 @@
+# Pre-commit configuration for Velacritty
+# Install: pip install pre-commit && pre-commit install
+# Run manually: pre-commit run --all-files
+
+repos:
+  # General file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-byte-order-marker
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-yaml
+      - id: end-of-file-fixer
+        exclude: '\.recording$'
+      - id: mixed-line-ending
+        exclude: '\.recording$'
+      - id: trailing-whitespace
+        exclude: '\.recording$'
+
+  # Rust linting and formatting
+  - repo: https://github.com/FeryET/pre-commit-rust
+    rev: v1.2.1
+    hooks:
+      # Format with rustfmt
+      - id: fmt
+        name: cargo fmt
+        description: Format Rust code with rustfmt
+        stages: [pre-commit]
+
+      # Run cargo check
+      - id: cargo-check
+        name: cargo check
+        description: Check Rust package for errors
+        stages: [pre-commit]
+
+      # Run clippy with strict warnings
+      - id: clippy
+        name: cargo clippy
+        description: Lint Rust code with clippy (deny warnings)
+        args: ["--all-targets", "--", "-D", "warnings"]
+        stages: [pre-commit]
+
+  # Pre-push validation (optional, uncomment to enable)
+  # Install with: pre-commit install --hook-type pre-push
+  # - repo: https://github.com/FeryET/pre-commit-rust
+  #   rev: v1.2.1
+  #   hooks:
+  #     - id: build
+  #       name: cargo build
+  #       description: Build Rust package
+  #       stages: [pre-push]
+  #
+  #     - id: test
+  #       name: cargo test
+  #       description: Run Rust tests
+  #       stages: [pre-push]
+
+# Optional: Skip pre-commit for specific commits
+# Use: git commit --no-verify

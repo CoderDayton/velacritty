@@ -47,11 +47,60 @@ and
 issues.
 
 You can find the minimum supported Rust version in Velacritty's manifest file
-(`cat alacritty/Cargo.toml | grep "rust-version"`). Velacritty **must** always
+(`cat velacritty/Cargo.toml | grep "rust-version"`). Velacritty **must** always
 build with the MSRV and bumping it should be avoided if possible.
 
 Since `alacritty_terminal`'s version always tracks the next release, make sure that the version is
 bumped according to semver when necessary.
+
+### Pre-Commit Setup
+
+Velacritty uses [pre-commit](https://pre-commit.com) to enforce code quality checks before commits. This ensures all contributions meet the project's style and quality standards.
+
+**Installation:**
+
+1. Install pre-commit if you don't have it:
+   ```bash
+   pip install pre-commit
+   ```
+
+2. Install the git hooks:
+   ```bash
+   pre-commit install
+   ```
+
+3. (Optional) Install pre-push hooks for additional validation:
+   ```bash
+   pre-commit install --hook-type pre-push
+   ```
+
+**What gets checked:**
+
+- **Code formatting** (rustfmt): Automatic formatting compliance
+- **Linting** (cargo clippy): Rust idioms and potential bugs (strict mode: all warnings denied)
+- **Build** (cargo check): Package compiles without errors
+- **General checks**: YAML, trailing whitespace, merge conflicts, etc.
+
+**Running manually:**
+
+To run checks on all files without committing:
+```bash
+pre-commit run --all-files
+```
+
+To run checks on staged files only:
+```bash
+pre-commit run
+```
+
+**Bypassing checks (not recommended):**
+
+If absolutely necessary, you can skip pre-commit checks with:
+```bash
+git commit --no-verify
+```
+
+This should only be used for emergency hotfixes. The checks exist to maintain code quality.
 
 ### Testing
 

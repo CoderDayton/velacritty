@@ -22,29 +22,29 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Install system dependencies (Linux)
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y cmake g++ pkg-config libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
-      
+
       - name: Stable
         run: cargo test
-      
+
       - name: CLI Platform-Specific Tests (${{ matrix.platform_name }})
         run: |
-          cargo test --bin alacritty cli::tests::help_text_tests::config_file_help_text_documents_platform_specific_paths -- --nocapture
-      
+          cargo test --bin velacritty cli::tests::help_text_tests::config_file_help_text_documents_platform_specific_paths -- --nocapture
+
       - name: Stable (no default features)
-        working-directory: alacritty_terminal
+        working-directory: velacritty_terminal
         run: cargo test --no-default-features
-      
+
       - name: Oldstable
         run: |
           rustup default $(cat Cargo.toml | grep "rust-version" | sed 's/.*"\(.*\)".*/\1/')
           cargo test
-      
+
       - name: Clippy
         run: |
           rustup component add clippy
@@ -57,7 +57,7 @@ jobs:
         run: rustup update && rustup target add x86_64-apple-darwin
       - name: Build
         run: cargo build --target=x86_64-apple-darwin
-  
+
   # Ensure all platform builds complete successfully before marking CI as passed
   ci-success:
     name: CI Success

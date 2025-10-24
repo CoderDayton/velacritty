@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Application
+TryExec=velacritty
+Exec=velacritty
+Icon=Velacritty
+Terminal=false
+Categories=System;TerminalEmulator;
+
+Name=Velacritty
+GenericName=Terminal
+Comment=A fast, cross-platform, OpenGL terminal emulator
+StartupNotify=true
+StartupWMClass=Velacritty
+Actions=New;
+
+[Desktop Action New]
+Name=New Terminal
+Exec=velacritty

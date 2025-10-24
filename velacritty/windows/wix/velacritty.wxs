@@ -1,0 +1,51 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+   <Package Name="Velacritty" UpgradeCode="87c21c74-dbd5-4584-89d5-46d9cd0c40a7" Language="1033" Codepage="1252" Version="0.17.0-dev" Manufacturer="Dayton Dunbar" InstallerVersion="200">
+      <MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+       <Icon Id="VelacrittyIco" SourceFile=".\velacritty\windows\velacritty.ico" />
+       <WixVariable Id="WixUILicenseRtf" Value=".\velacritty\windows\wix\license.rtf" />
+       <Property Id="ARPPRODUCTICON" Value="VelacrittyIco" />
+      <MediaTemplate EmbedCab="yes" />
+      <ui:WixUI Id="WixUI_Minimal" />
+       <Feature Id="ProductFeature" Title="ConsoleApp" Level="1">
+          <ComponentRef Id="VelacrittyExe" />
+          <ComponentRef Id="VelacrittyShortcut" />
+          <ComponentRef Id="ModifyPathEnv" />
+          <ComponentRef Id="ContextMenu" />
+       </Feature>
+       <!-- Application binaries -->
+       <DirectoryRef Id="VelacrittyProgramFiles">
+          <Component Id="VelacrittyExe">
+             <File Id="VelacrittyExeFile" Source=".\target\release\velacritty.exe" Name="velacritty.exe" KeyPath="yes" />
+          </Component>
+       </DirectoryRef>
+       <DirectoryRef Id="VelacrittyProgramMenu">
+          <!-- Application shortcut -->
+          <Component Id="VelacrittyShortcut" Guid="aa36e61a-23cd-4383-b744-2f78e912f0dc">
+             <Shortcut Id="VelacrittyShortcutFile" Name="Velacritty" Description="A fast, cross-platform, GPU-accelerated terminal emulator (Velacritty fork)" Target="[VelacrittyProgramFiles]velacritty.exe" />
+             <RemoveFolder Id="VelacrittyProgramMenu" On="uninstall" />
+             <RegistryValue Root="HKCU" Key="Software\Microsoft\Velacritty" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+          </Component>
+       </DirectoryRef>
+       <DirectoryRef Id="VelacrittyProgramFiles">
+          <!-- Add to PATH -->
+          <Component Id="ModifyPathEnv" Guid="edf0b679-9eb6-46f7-a5d1-5160f30acb34" KeyPath="yes">
+             <Environment Id="PathEnv" Value="[VelacrittyProgramFiles]" Name="PATH" Permanent="no" Part="first" Action="set" System="yes" />
+          </Component>
+       </DirectoryRef>
+       <StandardDirectory Id="ProgramFiles64Folder">
+          <Directory Id="VelacrittyProgramFiles" Name="Velacritty" />
+       </StandardDirectory>
+       <StandardDirectory Id="ProgramMenuFolder">
+          <Directory Id="VelacrittyProgramMenu" Name="Velacritty" />
+       </StandardDirectory>
+       <!-- Add context menu -->
+       <Component Id="ContextMenu" Guid="449f9121-f7b9-41fe-82da-52349ea8ff91" Directory="TARGETDIR">
+          <RegistryKey Root="HKCU" Key="Software\Classes\Directory\Background\shell\Open Velacritty here\command">
+             <RegistryValue Type="string" Value='[VelacrittyProgramFiles]velacritty.exe --working-directory "%v"' KeyPath="yes" />
+          </RegistryKey>
+          <RegistryKey Root="HKCU" Key="Software\Classes\Directory\Background\shell\Open Velacritty here">
+             <RegistryValue Type="string" Name="Icon" Value="[VelacrittyProgramFiles]velacritty.exe" />
+          </RegistryKey>
+       </Component>
+   </Package>
+</Wix>

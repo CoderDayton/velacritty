@@ -1,4 +1,4 @@
-TARGET = alacritty
+TARGET = velacritty
 
 ASSETS_DIR = extra
 RELEASE_DIR = target/release

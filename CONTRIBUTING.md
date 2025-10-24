@@ -47,7 +47,7 @@ and
 issues.
 
 You can find the minimum supported Rust version in Velacritty's manifest file
-(`cat alacritty/Cargo.toml | grep "rust-version"`). Velacritty **must** always
+(`cat velacritty/Cargo.toml | grep "rust-version"`). Velacritty **must** always
 build with the MSRV and bumping it should be avoided if possible.
 
 Since `alacritty_terminal`'s version always tracks the next release, make sure that the version is

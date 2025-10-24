@@ -34,17 +34,17 @@ pub struct Options {
     pub embed: Option<String>,
 
     /// Specify alternative configuration file [default:
-    /// $XDG_CONFIG_HOME/alacritty/alacritty.toml].
+    /// $XDG_CONFIG_HOME/velacritty/velacritty.toml].
     #[cfg(not(any(target_os = "macos", windows)))]
     #[clap(long, value_hint = ValueHint::FilePath)]
     pub config_file: Option<PathBuf>,
 
-    /// Specify alternative configuration file [default: %APPDATA%\alacritty\alacritty.toml].
+    /// Specify alternative configuration file [default: %APPDATA%\velacritty\velacritty.toml].
     #[cfg(windows)]
     #[clap(long, value_hint = ValueHint::FilePath)]
     pub config_file: Option<PathBuf>,
 
-    /// Specify alternative configuration file [default: $HOME/.config/alacritty/alacritty.toml].
+    /// Specify alternative configuration file [default: $HOME/.config/velacritty/velacritty.toml].
     #[cfg(target_os = "macos")]
     #[clap(long, value_hint = ValueHint::FilePath)]
     pub config_file: Option<PathBuf>,
@@ -676,21 +676,21 @@ mod tests {
             // Verify platform-specific default paths are documented
             #[cfg(not(any(target_os = "macos", windows)))]
             {
-                assert!(help_text.contains("$XDG_CONFIG_HOME/alacritty/alacritty.toml") ||
-                        help_text.contains("alacritty.toml"),
+                assert!(help_text.contains("$XDG_CONFIG_HOME/velacritty/velacritty.toml") ||
+                        help_text.contains("velacritty.toml"),
                     "CLI help must document XDG config path on Unix systems");
             }
 
             #[cfg(target_os = "macos")]
             {
-                assert!(help_text.contains("$HOME/.config/alacritty/alacritty.toml") ||
-                        help_text.contains("alacritty.toml"),
+                assert!(help_text.contains("$HOME/.config/velacritty/velacritty.toml") ||
+                        help_text.contains("velacritty.toml"),
                     "CLI help must document macOS config path");
             }
 
             #[cfg(windows)]
             {
-                assert!(help_text.contains("%APPDATA%") || help_text.contains("alacritty.toml"),
+                assert!(help_text.contains("%APPDATA%") || help_text.contains("velacritty.toml"),
                     "CLI help must document Windows config path");
             }
         }

@@ -73,7 +73,7 @@ Velacritty is designed to be **mostly compatible** with Alacritty, with minimal 
 
 #### Option B: Keep "Alacritty" Branding (Workaround)
 
-If you prefer to keep the original "Alacritty" branding, add this to your `~/.config/alacritty/alacritty.toml`:
+If you prefer to keep the original "Alacritty" branding, add this to your `~/.config/velacritty/velacritty.toml`:
 
 ```toml
 [window]
@@ -104,19 +104,31 @@ velacritty --title "MyTerminal" --class MyTerminal
 
 ### Configuration File Location
 
-✅ **No changes required!** Velacritty reads from the same locations as Alacritty:
+✅ **Migration required!** Velacritty uses its own configuration paths:
 
 **Linux/BSD/macOS:**
-1. `$XDG_CONFIG_HOME/alacritty/alacritty.toml`
-2. `$XDG_CONFIG_HOME/alacritty.toml`
-3. `$HOME/.config/alacritty/alacritty.toml`
-4. `$HOME/.alacritty.toml`
-5. `/etc/alacritty/alacritty.toml`
+1. `$XDG_CONFIG_HOME/velacritty/velacritty.toml`
+2. `$XDG_CONFIG_HOME/velacritty.toml`
+3. `$HOME/.config/velacritty/velacritty.toml`
+4. `$HOME/.velacritty.toml`
+5. `/etc/velacritty/velacritty.toml`
 
 **Windows:**
-- `%APPDATA%\alacritty\alacritty.toml`
+- `%APPDATA%\velacritty\velacritty.toml`
 
-Your existing Alacritty config will be automatically detected and used.
+**To migrate from Alacritty:**
+
+```bash
+# Linux/macOS
+mkdir -p ~/.config/velacritty
+cp ~/.config/alacritty/alacritty.toml ~/.config/velacritty/velacritty.toml
+
+# Windows (PowerShell)
+mkdir "$env:APPDATA\velacritty"
+copy "$env:APPDATA\alacritty\alacritty.toml" "$env:APPDATA\velacritty\velacritty.toml"
+```
+
+The configuration format remains compatible with Alacritty.
 
 > **Note:** Future versions may support `velacritty` config paths while maintaining backward compatibility.
 

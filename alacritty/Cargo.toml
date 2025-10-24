@@ -10,9 +10,8 @@ repository = "https://github.com/CoderDayton/velacritty"
 edition.workspace = true
 rust-version.workspace = true
 
-# Binary name preserved for backward compatibility with Alacritty configs
 [[bin]]
-name = "alacritty"
+name = "velacritty"
 path = "src/main.rs"
 
 [dependencies.velacritty_terminal]

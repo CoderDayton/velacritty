@@ -77,7 +77,10 @@ install-universal: $(INSTALL)-native ## Mount universal disk image
 $(INSTALL)-%: $(DMG_NAME)-%
 	@open $(DMG_DIR)/$(DMG_NAME)
 
-.PHONY: app binary clean dmg install $(TARGET) $(TARGET)-universal
+.PHONY: app binary clean dmg install $(TARGET) $(TARGET)-universal icons
 
 clean: ## Remove all build artifacts
 	@cargo clean
+
+icons: ## Generate platform icons from SVG sources
+	@./scripts/generate-icons.sh

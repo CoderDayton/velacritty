@@ -218,6 +218,9 @@ fn find_socket(socket_path: Option<PathBuf>) -> IoResult<UnixStream> {
 ///
 /// This prefix will include display server information to allow for environments with multiple
 /// display servers running for the same user.
+///
+/// The "Velacritty" namespace prefix isolates this fork from upstream Alacritty instances,
+/// enabling both to coexist safely on the same system without socket namespace collisions.
 #[cfg(not(target_os = "macos"))]
 fn socket_prefix() -> String {
     let display = env::var("WAYLAND_DISPLAY").or_else(|_| env::var("DISPLAY")).unwrap_or_default();
@@ -225,6 +228,9 @@ fn socket_prefix() -> String {
 }
 
 /// File prefix matching all available sockets.
+///
+/// The "Velacritty" namespace prefix isolates this fork from upstream Alacritty instances,
+/// enabling both to coexist safely on the same system without socket namespace collisions.
 #[cfg(target_os = "macos")]
 fn socket_prefix() -> String {
     String::from("Velacritty")

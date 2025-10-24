@@ -39,7 +39,7 @@ These are **transient errors** that resolve themselves, but the original code tr
 
 **Mechanism:**
 ```rust
-WindowEvent::Resized(size)
+WindowEvent::Resized(size) 
   → Cancel pending timer
   → Schedule EventType::Resize(size) after 16ms
   → (timer fires) → apply resize
@@ -174,7 +174,7 @@ for attempt in 0..3 {
 Fix WSL2 resize crash with three-phase resilience strategy
 
 Phase 1: Debounce resize events (16ms) to reduce ioctl call frequency
-Phase 2: Handle transient PTY errors (EPIPE/EBADF/EIO) gracefully
+Phase 2: Handle transient PTY errors (EPIPE/EBADF/EIO) gracefully  
 Phase 3: Prevent damage tracker integer overflow with saturating arithmetic
 
 Root causes:

@@ -22,8 +22,8 @@ Velacritty is a modern terminal emulator that builds upon the solid foundation o
 
 ## Attribution
 
-> **Velacritty is a derivative work based on [Alacritty](https://github.com/alacritty/alacritty)**
-> Original work Copyright © 2020 The Alacritty Project
+> **Velacritty is a derivative work based on [Alacritty](https://github.com/alacritty/alacritty)**  
+> Original work Copyright © 2020 The Alacritty Project  
 > Licensed under Apache License 2.0 and MIT License
 >
 > We are deeply grateful to the Alacritty maintainers and contributors for creating the exceptional terminal emulator that serves as the foundation for this project. All core terminal emulation, rendering, and cross-platform support comes from their brilliant work.

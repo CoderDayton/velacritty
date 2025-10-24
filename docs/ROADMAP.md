@@ -63,8 +63,8 @@
 
 ### Option A: Visual Enhancements 🎨
 
-**Priority**: High
-**Impact**: High (differentiates Velacritty from Alacritty)
+**Priority**: High  
+**Impact**: High (differentiates Velacritty from Alacritty)  
 **Complexity**: Medium-High (requires renderer knowledge)
 
 #### A.1 Gradient Title Bars
@@ -218,8 +218,8 @@ padding = [10, 5, 10, 5]  # [top, right, bottom, left]
 
 ### Option B: Performance Tuning ⚡
 
-**Priority**: Medium
-**Impact**: Medium (maintains Alacritty's performance edge)
+**Priority**: Medium  
+**Impact**: Medium (maintains Alacritty's performance edge)  
 **Complexity**: High (requires profiling expertise)
 
 #### B.1 GPU Batch Submission Analysis
@@ -302,8 +302,8 @@ pub struct CacheStats {
 
 ### Option C: Fork Maintenance 🔧
 
-**Priority**: High (enables long-term sustainability)
-**Impact**: High (automation reduces manual overhead)
+**Priority**: High (enables long-term sustainability)  
+**Impact**: High (automation reduces manual overhead)  
 **Complexity**: Low-Medium (GitHub Actions workflow development)
 
 #### C.1 Automatic Upstream Sync
@@ -344,7 +344,7 @@ jobs:
         run: |
           BEHIND=$(git rev-list --count HEAD..upstream/main)
           echo "commits_behind=$BEHIND" >> $GITHUB_OUTPUT
-
+          
       - name: Create sync branch
         if: steps.check.outputs.commits_behind > 0
         run: |
@@ -361,14 +361,14 @@ jobs:
           if [ "$CONFLICT" = "true" ]; then
             CONFLICT_TAG="⚠️ CONFLICTS - Manual resolution required"
           fi
-
+          
           gh pr create \
             --title "Sync upstream Alacritty changes ($(date +%Y-%m-%d)) $CONFLICT_TAG" \
             --body "Automated sync from alacritty/alacritty main branch.
-
+            
             **Commits behind**: ${{ steps.check.outputs.commits_behind }}
             **Upstream URL**: https://github.com/alacritty/alacritty
-
+            
             Review changes carefully to ensure no Velacritty-specific features are overwritten."
 ```
 
@@ -409,20 +409,20 @@ jobs:
             artifact_name: velacritty-windows-x86_64.exe
 
     runs-on: ${{ matrix.os }}
-
+    
     steps:
       - uses: actions/checkout@v4
-
+      
       - name: Install Rust target
         run: rustup target add ${{ matrix.target }}
-
+      
       - name: Build release binary
         run: cargo build --release --target ${{ matrix.target }}
-
+      
       - name: Package binary
         run: |
           cp target/${{ matrix.target }}/release/alacritty ${{ matrix.artifact_name }}
-
+          
       - name: Upload to release
         uses: softprops/action-gh-release@v1
         with:
@@ -467,7 +467,7 @@ git fetch upstream-check $UPSTREAM_BRANCH
 echo "## Modified Files"
 git diff --name-only upstream-check/$UPSTREAM_BRANCH...HEAD | while read file; do
     echo "- \`$file\`"
-
+    
     # Show commit that last modified this file
     LAST_COMMIT=$(git log -1 --format="%h - %s" -- "$file")
     echo "  - Last change: $LAST_COMMIT"
@@ -497,10 +497,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
+      
       - name: Generate report
         run: bash scripts/track-divergence.sh > divergence-report.md
-
+      
       - name: Create issue
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -517,8 +517,8 @@ jobs:
 
 ### Option D: Community Building 👥
 
-**Priority**: Medium
-**Impact**: High (attracts contributors and users)
+**Priority**: Medium  
+**Impact**: High (attracts contributors and users)  
 **Complexity**: Low (documentation and outreach)
 
 #### D.1 README Rewrite
@@ -837,5 +837,5 @@ bash scripts/track-divergence.sh
 
 ---
 
-**Document Status**: ✅ Complete
+**Document Status**: ✅ Complete  
 **Next Review**: After Phase 1 completion

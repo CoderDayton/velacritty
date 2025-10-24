@@ -18,7 +18,7 @@ This was **different** from the original EPIPE issue!
 
 ## Root Cause
 
-The damage tracker's `rect_for_line()` performs arithmetic to convert terminal
+The damage tracker's `rect_for_line()` performs arithmetic to convert terminal 
 line numbers to screen pixel coordinates:
 
 ```rust
@@ -66,7 +66,7 @@ let y = y_top.saturating_sub(line_offset);  // Clamps to 0 instead of panicking
 ## Testing Status
 
 - ✅ Phase 1: Debouncing implemented
-- ✅ Phase 2: PTY error handling implemented
+- ✅ Phase 2: PTY error handling implemented  
 - ✅ Phase 3: Overflow protection implemented
 - ⏳ Phase 3: Needs user testing (aggressive resize)
 

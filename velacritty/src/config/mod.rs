@@ -144,7 +144,7 @@ text = "#1e1e2e"        # Base
 cursor = "#f5e0dc"      # Rosewater
 
 [colors.vi_mode_cursor]
-text = "#1e1e2e"        # Base
+text = "#1e1e2e"        # Base  
 cursor = "#b4befe"      # Lavender
 
 [colors.search.matches]
@@ -223,7 +223,7 @@ save_to_clipboard = false
 # OSC 52 clipboard interaction (copy/paste via escape sequences)
 # - Disabled: Ignore OSC 52
 # - OnlyCopy: Allow copying only
-# - OnlyPaste: Allow pasting only
+# - OnlyPaste: Allow pasting only  
 # - CopyPaste: Allow both
 osc52 = "CopyPaste"
 

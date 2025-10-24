@@ -109,10 +109,10 @@ Add a configuration option `scrolling.auto_scroll` (default: `true`) that contro
 #[derive(ConfigDeserialize, Serialize, Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Scrolling {
     pub multiplier: u8,
-
+    
     #[serde(default = "default_auto_scroll")]
     pub auto_scroll: bool,
-
+    
     history: ScrollingHistory,
 }
 
@@ -122,16 +122,16 @@ fn default_auto_scroll() -> bool {
 
 impl Default for Scrolling {
     fn default() -> Self {
-        Self {
-            multiplier: 3,
+        Self { 
+            multiplier: 3, 
             auto_scroll: true,
-            history: Default::default()
+            history: Default::default() 
         }
     }
 }
 ```
 
-**Rationale**:
+**Rationale**: 
 - Places the option with related scrolling configuration
 - Uses `#[serde(default)]` to maintain backward compatibility
 - Default value of `true` preserves existing behavior
@@ -193,15 +193,15 @@ fn on_terminal_input_start(&mut self) {
     self.clear_selection();
 
     // Only auto-scroll if enabled in configuration
-    if self.terminal().config.auto_scroll
-        && self.terminal().grid().display_offset() != 0
+    if self.terminal().config.auto_scroll 
+        && self.terminal().grid().display_offset() != 0 
     {
         self.scroll(Scroll::Bottom);
     }
 }
 ```
 
-**Rationale**:
+**Rationale**: 
 - Conditional check prevents scroll when `auto_scroll` is `false`
 - Preserves existing behavior when `true`
 - Short-circuit evaluation for performance
@@ -230,7 +230,7 @@ fn on_terminal_input_start(&mut self) {
 fn handle_pty_output(&mut self, data: &[u8]) {
     // Process terminal sequences
     self.term.write(data);
-
+    
     // Only reset display offset if auto_scroll enabled
     if self.term.config.auto_scroll && self.term.grid().display_offset() != 0 {
         self.term.scroll_display(Scroll::Bottom);
@@ -323,7 +323,7 @@ auto_scroll = true
 
 ### 5.3 Edge Cases
 
-1. **Starting with scrollback visible**:
+1. **Starting with scrollback visible**: 
    - `auto_scroll = false`: Content updates at bottom, viewport stays at current position
    - User sees static view while terminal continues processing
 
@@ -395,19 +395,19 @@ fn auto_scroll_disabled_preserves_offset() {
         &size,
         Mock,
     );
-
+    
     // Fill terminal with content
     for _ in 0..20 {
         term.write("line\r\n");
     }
-
+    
     // Scroll up manually
     term.scroll_display(Scroll::Delta(5));
     let offset_before = term.grid().display_offset();
-
+    
     // Write new content (simulating PTY output)
     term.write("new content\r\n");
-
+    
     // Offset should remain unchanged
     assert_eq!(term.grid().display_offset(), offset_before);
 }
@@ -420,17 +420,17 @@ fn auto_scroll_enabled_resets_offset() {
         &size,
         Mock,
     );
-
+    
     // Fill and scroll up
     for _ in 0..20 {
         term.write("line\r\n");
     }
     term.scroll_display(Scroll::Delta(5));
     assert!(term.grid().display_offset() > 0);
-
+    
     // Simulate terminal input
     term.write("a");
-
+    
     // Should auto-scroll to bottom
     assert_eq!(term.grid().display_offset(), 0);
 }
@@ -444,7 +444,7 @@ fn auto_scroll_enabled_resets_offset() {
 
 1. **Test Case 1**: Default behavior (auto_scroll not specified)
    - Start Alacritty without `auto_scroll` configuration
-   - Run `yes "test"`
+   - Run `yes "test"` 
    - Scroll up with `Shift+PageUp`
    - **Expected**: Terminal auto-scrolls to bottom when new content arrives
 
@@ -618,7 +618,7 @@ Alacritty **does NOT auto-scroll on PTY output**! This dramatically simplifies t
    fn on_terminal_input_start(&mut self) {
        self.on_typing_start();
        self.clear_selection();
-
+       
        if self.terminal().grid().display_offset() != 0 {
            self.scroll(Scroll::Bottom);  // ← ONLY auto-scroll trigger
        }
@@ -680,7 +680,7 @@ Alacritty **does NOT auto-scroll on PTY output**! This dramatically simplifies t
      if self.terminal().grid().display_offset() != 0 {
          self.scroll(Scroll::Bottom);
      }
-
+     
      // After:
      if self.config.scrolling.auto_scroll
          && self.terminal().grid().display_offset() != 0
@@ -855,17 +855,17 @@ Following the Velacritty rebranding work, enhanced the test suite and CI infrast
 mod tests {
     /// Tests for configuration overrides and title behavior (2 tests)
     mod config_tests { ... }
-
+    
     /// Tests for TOML option parsing and value conversion (9 tests)
     mod parsing_tests { ... }
-
+    
     /// Tests for shell completion generation - Linux only (1 test)
     #[cfg(target_os = "linux")]
     mod completion_tests { ... }
-
+    
     /// Tests for default values and consistency (3 tests)
     mod default_tests { ... }
-
+    
     /// Tests for CLI help text documentation (1 test)
     mod help_text_tests { ... }
 }
@@ -912,7 +912,7 @@ matrix:
 steps:
   - name: Stable
     run: cargo test
-
+  
   - name: CLI Platform-Specific Tests (${{ matrix.platform_name }})
     run: |
       cargo test --bin alacritty \
@@ -988,7 +988,7 @@ The `config_file_help_text_documents_platform_specific_paths()` test contains th
 - ci-success job provides clear summary
 - Easier to identify platform-specific failures
 
-**Files Modified**:
+**Files Modified**: 
 - `.github/workflows/ci.yml` (30 insertions, 1 deletion)
 - `.builds/linux.yml` (4 insertions)
 
@@ -1050,8 +1050,8 @@ Implemented a **three-phase resilience strategy** to eliminate crashes during ra
 2. Transient compositor errors (Phase 2: Error handling)
 3. State synchronization races (Phase 3: Overflow protection)
 
-**Status**: ✅ Complete and validated
-**Impact**: Zero crashes in aggressive resize testing
+**Status**: ✅ Complete and validated  
+**Impact**: Zero crashes in aggressive resize testing  
 **Performance**: Negligible overhead (+0.1% CPU, +16ms latency)
 
 ---
@@ -1075,7 +1075,7 @@ Windows Compositor → WSLg Bridge → Wayland/X11 → OpenGL → Alacritty
 ```
 
 During rapid resize, the bridge becomes temporarily unstable, causing:
-- `EPIPE` (errno 32): Broken pipe
+- `EPIPE` (errno 32): Broken pipe  
 - `EBADF` (errno 9): Bad file descriptor
 - `EIO` (errno 5): I/O error
 
@@ -1109,7 +1109,7 @@ Subtraction overflow → panic!() → CRASH ❌
 
 **Mechanism**:
 ```rust
-WindowEvent::Resized(size)
+WindowEvent::Resized(size) 
   → Cancel pending ResizeDebounce timer
   → Schedule EventType::Resize(size) after 16ms
   → (Timer fires) → Apply resize via set_dimensions()
@@ -1250,10 +1250,10 @@ fn rect_for_line(&self, line_damage: LineDamageBounds) -> Rect {
     let size_info = &self.size_info;
     let y_top = size_info.height().saturating_sub(size_info.padding_y());
     let x = size_info.padding_x() + line_damage.left as u32 * size_info.cell_width();
-
+    
     let line_offset = (line_damage.line + 1) as u32 * size_info.cell_height();
     let y = y_top.saturating_sub(line_offset);  // ← Key change
-
+    
     let width = (line_damage.right - line_damage.left + 1) as u32 * size_info.cell_width();
     Rect::new(x as i32, y as i32, width as i32, size_info.cell_height() as i32)
 }
@@ -1370,7 +1370,7 @@ Created test infrastructure:
 
 - **Technical Details**: `/docs/WSL2_RESIZE_FIX.md` - Comprehensive fix explanation
 - **Discovery Notes**: `/PHASE3_DISCOVERY.md` - Phase 3 overflow discovery process
-- **Test Scripts**:
+- **Test Scripts**: 
   - `test_resize.sh` - Resize stress test
   - `verify_fix.sh` - Binary verification
   - `analyze_test_results.sh` - Log analysis
@@ -1429,7 +1429,7 @@ for attempt in 0..3 {
 Fix WSL2 resize crash with three-phase resilience strategy
 
 Phase 1: Debounce resize events (16ms) to reduce ioctl call frequency
-Phase 2: Handle transient PTY errors (EPIPE/EBADF/EIO) gracefully
+Phase 2: Handle transient PTY errors (EPIPE/EBADF/EIO) gracefully  
 Phase 3: Prevent damage tracker integer overflow with saturating arithmetic
 
 Root causes:
@@ -1700,8 +1700,8 @@ cargo build  # ✅ SUCCESS (3.23s)
 
 **Objective**: Automatically generate a comprehensive default configuration file (`velacritty.toml`) on first run when no user config exists.
 
-**Implementation Date**: 2025-10-23
-**Status**: ✅ Implementation Complete & Tested
+**Implementation Date**: 2025-10-23  
+**Status**: ✅ Implementation Complete & Tested  
 **Confidence**: 0.95
 
 ### 16.2 Problem Statement
@@ -1792,7 +1792,7 @@ Fallback:  $HOME/.config/velacritty/velacritty.toml
    fn get_default_config_dir() -> Option<PathBuf> {
        xdg::BaseDirectories::with_prefix("velacritty")
            .get_config_home()
-           .or_else(|| env::var("HOME").ok().map(|h|
+           .or_else(|| env::var("HOME").ok().map(|h| 
                PathBuf::from(h).join(".config/velacritty")
            ))
    }
@@ -1919,11 +1919,11 @@ wc -l ~/.config/velacritty/velacritty.toml
 
 #### 16.6.2 Verification Results
 
-✅ **Build**: `cargo build --release` successful
-✅ **Directory Creation**: `~/.config/velacritty/` created on first run
-✅ **File Generation**: `velacritty.toml` written (9.4 KB, 230 lines)
-✅ **Content Validation**: All sections present (fonts, colors, scrolling, keybindings)
-✅ **Hex Colors**: Raw string delimiter `##` allows `#` in color codes
+✅ **Build**: `cargo build --release` successful  
+✅ **Directory Creation**: `~/.config/velacritty/` created on first run  
+✅ **File Generation**: `velacritty.toml` written (9.4 KB, 230 lines)  
+✅ **Content Validation**: All sections present (fonts, colors, scrolling, keybindings)  
+✅ **Hex Colors**: Raw string delimiter `##` allows `#` in color codes  
 ✅ **Platform Support**: XDG-compliant on Linux (Windows logic untested but follows `dirs` spec)
 
 #### 16.6.3 Logging Output
@@ -2269,7 +2269,7 @@ cargo build --release  # ✅ Success
    ```yaml
    # Line 37: Test binary name
    cargo test --bin velacritty cli::tests::...
-
+   
    # Line 40: Working directory for platform tests
    working-directory: velacritty_terminal
    ```
@@ -2481,7 +2481,7 @@ install: build
 
 #### 17.9.2 Registry Path Collision
 
-**Old Path**: `HKCU\Software\Microsoft\Alacritty`
+**Old Path**: `HKCU\Software\Microsoft\Alacritty`  
 **New Path**: `HKCU\Software\Microsoft\Velacritty`
 
 **Behavior**: Separate registry keys (no collision).

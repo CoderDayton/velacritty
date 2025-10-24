@@ -15,5 +15,5 @@ serde = "1.0.163"
 toml.workspace = true
 
 [dev-dependencies]
-velacritty_config_derive = { version = "0.2.6-dev", path = "../alacritty_config_derive" }
+velacritty_config_derive = { version = "0.2.6-dev", path = "../velacritty_config_derive" }
 serde = { version = "1.0.163", features = ["derive"] }

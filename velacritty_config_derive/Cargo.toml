@@ -18,7 +18,7 @@ quote = "1.0.7"
 syn = { version = "2.0.16", features = ["derive", "parsing", "proc-macro", "printing"], default-features = false }
 
 [dev-dependencies.velacritty_config]
-path = "../alacritty_config"
+path = "../velacritty_config"
 version = "0.2.4-dev"
 
 [dev-dependencies]

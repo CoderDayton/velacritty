@@ -1,12 +1,10 @@
 [workspace]
 members = [
-    "alacritty",
-    "alacritty_terminal",
-    "alacritty_config",
-    "alacritty_config_derive",
+    "velacritty",
+    "velacritty_terminal",
+    "velacritty_config",
+    "velacritty_config_derive",
 ]
-# Note: Directory names remain unchanged for structural stability.
-# Cargo package names are updated to velacritty* within each Cargo.toml.
 resolver = "2"
 
 [workspace.package]

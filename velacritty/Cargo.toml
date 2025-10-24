@@ -15,15 +15,15 @@ name = "velacritty"
 path = "src/main.rs"
 
 [dependencies.velacritty_terminal]
-path = "../alacritty_terminal"
+path = "../velacritty_terminal"
 version = "0.25.2-dev"
 
 [dependencies.velacritty_config_derive]
-path = "../alacritty_config_derive"
+path = "../velacritty_config_derive"
 version = "0.2.6-dev"
 
 [dependencies.velacritty_config]
-path = "../alacritty_config"
+path = "../velacritty_config"
 version = "0.2.4-dev"
 
 [dependencies]

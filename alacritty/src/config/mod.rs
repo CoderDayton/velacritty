@@ -39,6 +39,239 @@ use crate::logging::LOG_TARGET_CONFIG;
 /// Maximum number of depth for the configuration file imports.
 pub const IMPORT_RECURSION_LIMIT: usize = 5;
 
+/// Default configuration template generated on first run.
+const DEFAULT_CONFIG_TEMPLATE: &str = r##"# Velacritty Configuration
+# This file was auto-generated on first run.
+# See: https://github.com/yourusername/velacritty for documentation.
+
+# ┌──────────────────────────────────────────────────────────────┐
+# │ FONT CONFIGURATION                                           │
+# └──────────────────────────────────────────────────────────────┘
+# Font family and size impact readability and performance.
+# Recommendation: Use a Nerd Font for icon/glyph support.
+# Popular choices: MesloLGM Nerd Font, FiraCode Nerd Font, JetBrainsMono Nerd Font
+
+[font]
+size = 18.0
+
+[font.normal]
+family = "MesloLGM Nerd Font"
+style = "Regular"
+
+[font.bold]
+family = "MesloLGM Nerd Font"
+style = "Bold"
+
+[font.italic]
+family = "MesloLGM Nerd Font"
+style = "Italic"
+
+[font.bold_italic]
+family = "MesloLGM Nerd Font"
+style = "Bold Italic"
+
+# ┌──────────────────────────────────────────────────────────────┐
+# │ WINDOW CONFIGURATION                                         │
+# └──────────────────────────────────────────────────────────────┘
+
+[window]
+# Window opacity (0.0 = fully transparent, 1.0 = opaque)
+opacity = 0.95
+
+# Padding around terminal content (in pixels)
+[window.padding]
+x = 10
+y = 10
+
+# Window decorations
+# - Full: Borders and title bar
+# - None: No borders or title bar
+# - Transparent: Title bar, transparent background
+# - Buttonless: Title bar, no minimize/close buttons
+decorations = "Full"
+
+# Startup mode
+# - Windowed
+# - Maximized
+# - Fullscreen
+# - SimpleFullscreen (macOS only)
+startup_mode = "Windowed"
+
+# ┌──────────────────────────────────────────────────────────────┐
+# │ SCROLLING CONFIGURATION                                      │
+# └──────────────────────────────────────────────────────────────┘
+
+[scrolling]
+# Maximum scrollback buffer lines (0 disables scrollback)
+history = 5000
+
+# Lines per scroll event (mouse wheel/touchpad)
+multiplier = 3
+
+# Auto-scroll to bottom on new output
+# Set to false to freeze viewport (useful for TUI apps like htop)
+# Toggle at runtime: Shift+Ctrl+A
+auto_scroll = true
+
+# ┌──────────────────────────────────────────────────────────────┐
+# │ CURSOR CONFIGURATION                                         │
+# └──────────────────────────────────────────────────────────────┘
+
+[cursor]
+# Cursor style options:
+# - Block, Underline, Beam
+[cursor.style]
+shape = "Block"
+blinking = "On"
+
+# Blink interval (milliseconds)
+blink_interval = 750
+
+# Cursor will stop blinking after being idle for this duration (seconds)
+# Set to 0 to never stop blinking
+blink_timeout = 0
+
+# ┌──────────────────────────────────────────────────────────────┐
+# │ COLOR SCHEME (Catppuccin-inspired Dark Theme)                │
+# └──────────────────────────────────────────────────────────────┘
+
+[colors.primary]
+background = "#1e1e2e"  # Base
+foreground = "#cdd6f4"  # Text
+
+[colors.cursor]
+text = "#1e1e2e"        # Base
+cursor = "#f5e0dc"      # Rosewater
+
+[colors.vi_mode_cursor]
+text = "#1e1e2e"        # Base  
+cursor = "#b4befe"      # Lavender
+
+[colors.search.matches]
+foreground = "#1e1e2e"  # Base
+background = "#a6adc8"  # Subtext0
+
+[colors.search.focused_match]
+foreground = "#1e1e2e"  # Base
+background = "#a6e3a1"  # Green
+
+[colors.hints.start]
+foreground = "#1e1e2e"  # Base
+background = "#f9e2af"  # Yellow
+
+[colors.hints.end]
+foreground = "#1e1e2e"  # Base
+background = "#a6adc8"  # Subtext0
+
+[colors.selection]
+text = "CellForeground"
+background = "#45475a"  # Surface1
+
+# Normal colors
+[colors.normal]
+black = "#45475a"       # Surface1
+red = "#f38ba8"         # Red
+green = "#a6e3a1"       # Green
+yellow = "#f9e2af"      # Yellow
+blue = "#89b4fa"        # Blue
+magenta = "#f5c2e7"     # Pink
+cyan = "#94e2d5"        # Teal
+white = "#bac2de"       # Subtext1
+
+# Bright colors
+[colors.bright]
+black = "#585b70"       # Surface2
+red = "#f38ba8"         # Red
+green = "#a6e3a1"       # Green
+yellow = "#f9e2af"      # Yellow
+blue = "#89b4fa"        # Blue
+magenta = "#f5c2e7"     # Pink
+cyan = "#94e2d5"        # Teal
+white = "#a6adc8"       # Subtext0
+
+# ┌──────────────────────────────────────────────────────────────┐
+# │ BELL CONFIGURATION                                           │
+# └──────────────────────────────────────────────────────────────┘
+
+[bell]
+# Visual bell animation
+# - Ease | EaseOut | EaseOutSine | EaseOutQuad | EaseOutCubic | EaseOutQuart | EaseOutQuint | EaseOutExpo | EaseOutCirc | Linear
+animation = "EaseOutExpo"
+
+# Duration of visual bell (milliseconds)
+duration = 0
+
+# Visual bell color
+color = "#f5e0dc"  # Rosewater
+
+# ┌──────────────────────────────────────────────────────────────┐
+# │ SELECTION CONFIGURATION                                      │
+# └──────────────────────────────────────────────────────────────┘
+
+[selection]
+# Characters considered part of a word for double-click selection
+semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
+
+# When enabled, selected text is automatically copied to clipboard
+save_to_clipboard = false
+
+# ┌──────────────────────────────────────────────────────────────┐
+# │ TERMINAL CONFIGURATION                                       │
+# └──────────────────────────────────────────────────────────────┘
+
+[terminal]
+# OSC 52 clipboard interaction (copy/paste via escape sequences)
+# - Disabled: Ignore OSC 52
+# - OnlyCopy: Allow copying only
+# - OnlyPaste: Allow pasting only  
+# - CopyPaste: Allow both
+osc52 = "CopyPaste"
+
+# ┌──────────────────────────────────────────────────────────────┐
+# │ MOUSE CONFIGURATION                                          │
+# └──────────────────────────────────────────────────────────────┘
+
+[mouse]
+# Hide mouse cursor when typing
+hide_when_typing = true
+
+# ┌──────────────────────────────────────────────────────────────┐
+# │ KEYBOARD HINTS (URL/PATH DETECTION)                          │
+# └──────────────────────────────────────────────────────────────┘
+
+[[hints.enabled]]
+# Regex for URLs
+regex = "(ipfs:|ipns:|magnet:|mailto:|gemini://|gopher://|https://|http://|news:|file:|git://|ssh:|ftp://)[^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+"
+
+# Open with default handler (xdg-open, open, start)
+[[hints.enabled.binding]]
+key = "U"
+mods = "Control|Shift"
+
+[hints.enabled.mouse]
+enabled = true
+
+# ┌──────────────────────────────────────────────────────────────┐
+# │ KEY BINDINGS (CUSTOM)                                        │
+# └──────────────────────────────────────────────────────────────┘
+# Uncomment and modify as needed. See documentation for available actions.
+
+# [[keyboard.bindings]]
+# key = "N"
+# mods = "Control|Shift"
+# action = "CreateNewWindow"
+
+# [[keyboard.bindings]]
+# key = "Plus"
+# mods = "Control"
+# action = "IncreaseFontSize"
+
+# [[keyboard.bindings]]
+# key = "Minus"
+# mods = "Control"
+# action = "DecreaseFontSize"
+"##;
+
 /// Result from config loading.
 pub type Result<T> = std::result::Result<T, Error>;
 
@@ -117,6 +350,50 @@ impl From<YamlError> for Error {
     }
 }
 
+/// Generate a default configuration file if none exists.
+///
+/// Returns the path to the generated config file, or `None` if generation failed.
+fn generate_default_config() -> Option<PathBuf> {
+    // Determine config directory based on platform
+    let config_dir = get_default_config_dir()?;
+    
+    // Create the directory if it doesn't exist
+    if let Err(err) = fs::create_dir_all(&config_dir) {
+        error!(target: LOG_TARGET_CONFIG, "Failed to create config directory {config_dir:?}: {err}");
+        return None;
+    }
+    
+    // Build path to velacritty.toml
+    let config_path = config_dir.join("velacritty.toml");
+    
+    // Write the default template
+    if let Err(err) = fs::write(&config_path, DEFAULT_CONFIG_TEMPLATE) {
+        error!(target: LOG_TARGET_CONFIG, "Failed to write default config to {config_path:?}: {err}");
+        return None;
+    }
+    
+    info!(target: LOG_TARGET_CONFIG, "Generated default configuration at: {config_path:?}");
+    Some(config_path)
+}
+
+/// Get the default configuration directory path based on platform.
+#[cfg(not(windows))]
+fn get_default_config_dir() -> Option<PathBuf> {
+    // Try XDG_CONFIG_HOME/velacritty first
+    let xdg = xdg::BaseDirectories::with_prefix("velacritty");
+    xdg.get_config_home()
+        .or_else(|| {
+            // Fallback to $HOME/.config/velacritty
+            env::var("HOME").ok().map(|home| PathBuf::from(home).join(".config").join("velacritty"))
+        })
+}
+
+#[cfg(windows)]
+fn get_default_config_dir() -> Option<PathBuf> {
+    // Use %APPDATA%\velacritty on Windows
+    dirs::config_dir().map(|path| path.join("velacritty"))
+}
+
 /// Load the configuration file.
 pub fn load(options: &mut Options) -> UiConfig {
     let config_path = options
@@ -128,7 +405,7 @@ pub fn load(options: &mut Options) -> UiConfig {
     // Load the config using the following fallback behavior:
     //  - Config path + CLI overrides
     //  - CLI overrides
-    //  - Default
+    //  - Default (with auto-generation)
     let mut config = config_path
         .as_ref()
         .and_then(|config_path| load_from(config_path).ok())
@@ -136,7 +413,14 @@ pub fn load(options: &mut Options) -> UiConfig {
             let mut config = UiConfig::default();
             match config_path {
                 Some(config_path) => config.config_paths.push(config_path),
-                None => info!(target: LOG_TARGET_CONFIG, "No config file found; using default"),
+                None => {
+                    info!(target: LOG_TARGET_CONFIG, "No config file found; using default");
+                    // Auto-generate default config file
+                    if let Some(generated_path) = generate_default_config() {
+                        info!(target: LOG_TARGET_CONFIG, "Generated default config at: {generated_path:?}");
+                        config.config_paths.push(generated_path);
+                    }
+                },
             }
             config
         });

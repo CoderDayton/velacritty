@@ -24,20 +24,20 @@ repos:
       - id: fmt
         name: cargo fmt
         description: Format Rust code with rustfmt
-        stages: [commit]
+        stages: [pre-commit]
 
       # Run cargo check
       - id: cargo-check
         name: cargo check
         description: Check Rust package for errors
-        stages: [commit]
+        stages: [pre-commit]
 
       # Run clippy with strict warnings
-      - id: cargo-clippy
+      - id: clippy
         name: cargo clippy
         description: Lint Rust code with clippy (deny warnings)
         args: ["--all-targets", "--", "-D", "warnings"]
-        stages: [commit]
+        stages: [pre-commit]
 
   # Pre-push validation (optional, uncomment to enable)
   # Install with: pre-commit install --hook-type pre-push
@@ -47,12 +47,12 @@ repos:
   #     - id: build
   #       name: cargo build
   #       description: Build Rust package
-  #       stages: [push]
+  #       stages: [pre-push]
   #
   #     - id: test
   #       name: cargo test
   #       description: Run Rust tests
-  #       stages: [push]
+  #       stages: [pre-push]
 
 # Optional: Skip pre-commit for specific commits
 # Use: git commit --no-verify

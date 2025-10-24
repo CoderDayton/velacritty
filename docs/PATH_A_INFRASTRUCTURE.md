@@ -49,7 +49,7 @@ windows:
     
     - name: Upload portable executable
       run: |
-        cp ./target/release/alacritty.exe ./Velacritty-${GITHUB_REF##*/}-portable.exe
+        cp ./target/release/velacritty.exe ./Velacritty-${GITHUB_REF##*/}-portable.exe
         ./.github/workflows/upload_asset.sh \
           ./Velacritty-${GITHUB_REF##*/}-portable.exe $GITHUB_TOKEN
     

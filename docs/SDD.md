@@ -2162,6 +2162,366 @@ Location (Windows): *%APPDATA%\\velacritty\\velacritty.toml*
 
 ---
 
+## 17. Complete Velacritty Rebrand (2025-10-23)
+
+### 17.1 Overview
+
+Complete rebrand from Alacritty to Velacritty across entire codebase, directory structure, CI/CD pipelines, and build systems.
+
+### 17.2 Implementation Phases
+
+#### Phase 1: Directory Structure & Workspace (Commit `80ca2eb5`)
+
+**Changes**:
+- Renamed 4 crates: `alacritty*` → `velacritty*`
+  - `alacritty/` → `velacritty/`
+  - `alacritty_config/` → `velacritty_config/`
+  - `alacritty_config_derive/` → `velacritty_config_derive/`
+  - `alacritty_terminal/` → `velacritty_terminal/`
+- 293 files affected via `git mv` (100% similarity preserved)
+- Updated workspace `Cargo.toml` dependencies
+
+**Modified Files**:
+- `Cargo.toml` (workspace-level): Updated 4 crate paths and dependency references
+- All files within renamed directories (moved, not content-changed)
+
+**Verification**:
+```bash
+cargo build --release  # ✅ Success
+./target/release/velacritty --version  # velacritty 0.17.0-dev (80ca2eb5)
+```
+
+#### Phase 2: Windows Assets & WiX Installer (Commit `d10cf759`)
+
+**Changes**:
+- Updated 8 Windows-specific files for rebrand
+- WiX installer component IDs preserved (no GUID regeneration needed)
+- Registry paths: `Software\Microsoft\Alacritty` → `Software\Microsoft\Velacritty`
+
+**Modified Files**:
+1. `velacritty/windows/alacritty.ico` → `velacritty.ico` (renamed reference)
+2. `velacritty/windows/alacritty.manifest` → `velacritty.manifest` (executable name)
+3. `velacritty/windows/alacritty.rc` (resource file metadata)
+4. `velacritty/windows/wix/alacritty.wxs` (WiX installer manifest)
+5. `velacritty/build.rs` (Windows build script resource compilation)
+
+**Key WiX Changes** (`wix/alacritty.wxs`):
+```xml
+<!-- Before -->
+<Package Name="Alacritty" ... />
+<File Source="../../../target/release/alacritty.exe" />
+
+<!-- After -->
+<Package Name="Velacritty" ... />
+<File Source="../../../target/release/velacritty.exe" />
+```
+
+**Registry Path Updates**:
+- Context menu: `HKEY_CURRENT_USER\Software\Classes\Directory\...`
+- Uninstall key: `HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Uninstall\...`
+- Product name visible in "Add/Remove Programs" → **Velacritty**
+
+#### Phase 3: CI/CD & Build Systems (Commit `c99ab089`)
+
+**Changes**:
+- Updated 3 CI/CD configuration files
+- Updated Makefile target variable
+- Preserved external upstream references (github.com/alacritty)
+
+**Modified Files**:
+
+1. **`.builds/linux.yml`** (11 path changes):
+   ```yaml
+   # Before: cd alacritty && cargo build
+   # After:  cd velacritty && cargo build
+   ```
+
+2. **`.builds/freebsd.yml`** (7 path changes):
+   ```yaml
+   # Similar path updates for FreeBSD CI
+   ```
+
+3. **`.github/workflows/release.yml`** (Binary names):
+   ```yaml
+   # Before: alacritty.exe, Alacritty.dmg
+   # After:  velacritty.exe, Velacritty.dmg (output names)
+   ```
+
+4. **`Makefile`** (TARGET variable):
+   ```makefile
+   # Before: TARGET = alacritty
+   # After:  TARGET = velacritty
+   ```
+
+**Preserved References**:
+- Upstream URLs: `github.com/alacritty/alacritty` (intentional - upstream credit)
+- Log targets: Internal identifiers like `"alacritty_log_window_config"` (not user-facing)
+
+#### Phase 4: CI Testing & Documentation (Commit `c99ab089` + pending)
+
+**Changes**:
+- `.github/workflows/ci.yml`: Test binary name and working directory
+- `docs/PATH_A_INFRASTRUCTURE.md`: Updated binary path reference (line 47)
+- `docs/SDD.md`: Added this section (Section 17)
+
+**Modified Files**:
+1. **`.github/workflows/ci.yml`** (lines 37, 40):
+   ```yaml
+   # Line 37: Test binary name
+   cargo test --bin velacritty cli::tests::...
+   
+   # Line 40: Working directory for platform tests
+   working-directory: velacritty_terminal
+   ```
+
+2. **`docs/PATH_A_INFRASTRUCTURE.md`** (line 52):
+   ```yaml
+   # Before: cp ./target/release/alacritty.exe
+   # After:  cp ./target/release/velacritty.exe
+   ```
+
+3. **`docs/SDD.md`**: Added Section 17 (this documentation)
+
+### 17.3 Files Modified Summary
+
+| Component | Files Changed | Key Changes |
+|-----------|---------------|-------------|
+| Workspace | 1 (`Cargo.toml`) | 4 crate renames, path dependencies |
+| Crates | 4 directories (293 files) | `alacritty*` → `velacritty*` (git mv) |
+| Windows | 8 files | Resources, WiX installer, build script |
+| CI/CD | 4 files | Build scripts (`.builds/`), release workflow |
+| Makefile | 1 file | `TARGET = velacritty` |
+| Documentation | 2 files | PATH_A infrastructure, SDD |
+
+**Total Files**: ~310 files affected across 4 commits
+
+### 17.4 Intentional Non-Changes
+
+#### 17.4.1 Preserved Alacritty References
+
+**Internal Log Targets** (kept as-is):
+```rust
+// These are internal identifiers, not user-facing paths
+const LOG_TARGET_CONFIG: &str = "alacritty_log_window_config";
+const LOG_TARGET_IPC_CONFIG: &str = "alacritty_log_ipc_config";
+```
+
+**Rationale**: Log targets are API contracts for structured logging; changing them would break log filtering/analysis tools.
+
+**Upstream URLs** (kept as-is):
+```yaml
+# Preserved in CI workflows, README, documentation
+upstream_repository: alacritty/alacritty
+```
+
+**Rationale**: Proper upstream credit and fork relationship transparency.
+
+**Config File Paths** (kept as-is for compatibility):
+```rust
+// Config still reads from ~/.config/alacritty/ for user compatibility
+let config_path = dirs::config_dir()
+    .map(|p| p.join("alacritty").join("alacritty.toml"));
+```
+
+**Rationale**: User config migration not yet implemented (planned for future release).
+
+### 17.5 Verification & Testing
+
+#### 17.5.1 Build Verification
+
+```bash
+# Clean build
+cargo clean
+cargo build --release
+
+# Expected output
+   Compiling velacritty_config v0.5.0
+   Compiling velacritty_config_derive v0.3.0
+   Compiling velacritty_terminal v0.25.0
+   Compiling velacritty v0.17.0-dev
+    Finished `release` profile [optimized] target(s)
+
+# Binary metadata
+./target/release/velacritty --version
+# Output: velacritty 0.17.0-dev (80ca2eb5)
+```
+
+#### 17.5.2 Runtime Verification
+
+**Linux/macOS**:
+```bash
+./target/release/velacritty
+# Expected: Window title "Velacritty"
+# Expected: --help shows "velacritty [OPTIONS]"
+```
+
+**Windows** (not yet tested):
+- MSI installer properties (needs Windows VM)
+- WiX upgrade GUID preserved (seamless updates)
+- Registry keys under `Velacritty` namespace
+
+#### 17.5.3 Git History Integrity
+
+```bash
+# Verify file similarity (should be 100%)
+git log --follow --stat velacritty/src/main.rs
+# Shows rename from alacritty/src/main.rs with 100% similarity
+
+# Check for orphaned references
+rg -g '!{.git,target,dist}' 'alacritty/' | \
+  grep -v 'github.com/alacritty' | \
+  grep -v 'alacritty_' | \
+  grep -v 'alacritty\.toml'
+# Should return minimal results (only internal logs, config paths)
+```
+
+### 17.6 Verification Checklist
+
+- [x] Workspace `Cargo.toml` updated (4 crate references)
+- [x] Directory renames complete (`git mv` preserves history)
+- [x] Windows resources rebranded (icons, manifests)
+- [x] WiX installer updated (package name, binary path)
+- [x] CI workflows updated (`.builds/`, `.github/workflows/`)
+- [x] Makefile `TARGET` updated
+- [x] Release build successful (`cargo build --release`)
+- [x] Binary metadata correct (`--version` shows `velacritty`)
+- [x] CI test paths updated (`.github/workflows/ci.yml`)
+- [x] Documentation updated (PATH_A, SDD Section 17)
+- [x] SDD documentation complete
+- [ ] Final commit and push (pending)
+- [ ] Windows MSI installer tested (requires Windows environment)
+
+### 17.7 Breaking Changes & Migration
+
+#### 17.7.1 User Impact
+
+**Binary Name**:
+- **Before**: `alacritty` command
+- **After**: `velacritty` command
+- **Mitigation**: Users must update shell scripts, aliases, and desktop launchers
+
+**Config Path** (no change yet):
+- Still reads from `~/.config/alacritty/alacritty.toml`
+- Future enhancement: Auto-migrate to `~/.config/velacritty/velacritty.toml`
+
+**Package Managers**:
+- Cargo install: `cargo install --git https://github.com/CoderDayton/velacritty`
+- System packages: Requires new package submissions (Chocolatey, AUR, Homebrew)
+
+#### 17.7.2 Developer Impact
+
+**Import Paths** (within codebase):
+```rust
+// Before
+use alacritty_terminal::Term;
+use alacritty_config::UiConfig;
+
+// After (unchanged - crate names updated but imports identical)
+use velacritty_terminal::Term;
+use velacritty_config::UiConfig;
+```
+
+**Build Commands**:
+```bash
+# Before
+cargo test --bin alacritty
+
+# After
+cargo test --bin velacritty
+```
+
+### 17.8 Future Enhancements
+
+#### 17.8.1 Config Migration Tool
+
+**Planned**: `velacritty migrate` subcommand
+
+```bash
+velacritty migrate --from alacritty
+# Copies ~/.config/alacritty/alacritty.toml → ~/.config/velacritty/velacritty.toml
+# Updates deprecated config keys
+# Backs up original file
+```
+
+#### 17.8.2 Symlink Compatibility
+
+**Planned**: Install `alacritty` → `velacritty` symlink for backward compatibility
+
+```bash
+# Makefile enhancement
+install: build
+    install -Dm755 target/release/velacritty $(DESTDIR)$(PREFIX)/bin/velacritty
+    ln -sf velacritty $(DESTDIR)$(PREFIX)/bin/alacritty  # Compatibility symlink
+```
+
+**Rationale**: Eases migration for users with existing scripts/configs.
+
+#### 17.8.3 Package Manager Submissions
+
+**Next Steps**:
+1. Update Arch AUR package (`velacritty-git`)
+2. Submit to Homebrew Cask (`velacritty`)
+3. Create Chocolatey package (`velacritty`)
+4. Update WinGet manifest (`CoderDayton.Velacritty`)
+
+### 17.9 Security & Privacy Considerations
+
+#### 17.9.1 WiX Installer GUID Stability
+
+**UpgradeCode** (preserved):
+```xml
+<Package UpgradeCode="87c21c74-dbd5-4584-89d5-46d9cd0c40a7" ... />
+```
+
+**Rationale**: Same GUID allows seamless upgrades from Alacritty→Velacritty installations.
+
+**Risk**: Users who installed original Alacritty MSI may have duplicate entries in "Add/Remove Programs".
+
+**Mitigation**: WiX `<MajorUpgrade>` automatically removes old installations.
+
+#### 17.9.2 Registry Path Collision
+
+**Old Path**: `HKCU\Software\Microsoft\Alacritty`  
+**New Path**: `HKCU\Software\Microsoft\Velacritty`
+
+**Behavior**: Separate registry keys (no collision).
+
+**Implication**: Users upgrading from Alacritty→Velacritty will have fresh settings (context menu, PATH, etc.).
+
+### 17.10 References
+
+- **Git mv best practices**: `git help mv` (preserves file history)
+- **WiX Toolset v4**: https://wixtoolset.org/docs/fourthree/
+- **Cargo workspace configuration**: https://doc.rust-lang.org/cargo/reference/workspaces.html
+- **GitHub Actions workflow syntax**: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+
+### 17.11 Commit Messages
+
+```
+Commit 1 (80ca2eb5): refactor: Rename alacritty crates to velacritty
+- Workspace-level directory renames (git mv)
+- Updated Cargo.toml workspace dependencies
+- 293 files moved, 100% similarity preserved
+
+Commit 2 (d10cf759): refactor: Update Windows assets and WiX installer for velacritty rebrand
+- WiX package name: Alacritty → Velacritty
+- Binary path: alacritty.exe → velacritty.exe
+- Registry keys updated to Velacritty namespace
+
+Commit 3 (c99ab089): refactor: Update CI/CD and build system paths for velacritty rebrand
+- .builds/linux.yml: 11 path changes
+- .builds/freebsd.yml: 7 path changes
+- .github/workflows/release.yml: Binary name updates
+- Makefile: TARGET = velacritty
+
+Commit 4 (pending): docs: Complete velacritty rebrand documentation and CI updates
+- .github/workflows/ci.yml: Test binary and working directory
+- docs/PATH_A_INFRASTRUCTURE.md: Updated binary path (line 47)
+- docs/SDD.md: Added Section 17 (rebrand documentation)
+```
+
+---
+
 ## Document Change History
 
 | Date | Version | Changes | Author |
@@ -2171,6 +2531,7 @@ Location (Windows): *%APPDATA%\\velacritty\\velacritty.toml*
 | 2025-10-22 | 1.2 | Added Section 14: WSL2 Resize Crash Fix (Three-Phase Resilience) | Lumen (流明) |
 | 2025-10-22 | 1.3 | Added Section 15: Auto-Scroll Keybind Toggle (Shift+Ctrl+A) | Lumen (流明) |
 | 2025-10-23 | 1.4 | Added Section 16: Default Configuration Auto-Generation | Rust Graphics Engineer |
+| 2025-10-23 | 1.5 | Added Section 17: Complete Velacritty Rebrand | Rust Graphics Engineer |
 
 ---
 

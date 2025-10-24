@@ -49,7 +49,7 @@ use crate::display::SizeInfo;
 #[cfg(all(feature = "x11", not(any(target_os = "macos", windows))))]
 const WINDOW_ICON: &[u8] = include_bytes!("../../extra/logo/compat/alacritty-term.png");
 
-/// This should match the definition of IDI_ICON from `alacritty.rc`.
+/// This should match the definition of IDI_ICON from `velacritty.rc`.
 #[cfg(windows)]
 const IDI_ICON: u16 = 0x101;
 

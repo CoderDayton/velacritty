@@ -219,7 +219,7 @@ where
             let mut events = Events::with_capacity(NonZeroUsize::new(1024).unwrap());
 
             let mut pipe = if self.ref_test {
-                Some(File::create("./alacritty.recording").expect("create alacritty recording"))
+                Some(File::create("./velacritty.recording").expect("create velacritty recording"))
             } else {
                 None
             };

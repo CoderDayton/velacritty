@@ -1,0 +1,26 @@
+name: 'Setup Linux Build Dependencies'
+description: 'Install system dependencies required for building Velacritty on Linux'
+runs:
+  using: "composite"
+  steps:
+    - name: Install system dependencies
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          cmake \
+          g++ \
+          pkg-config \
+          libfontconfig1-dev \
+          libxcb-xfixes0-dev \
+          libxkbcommon-dev \
+          python3
+      # Package justifications:
+      # - cmake: Build system for native dependencies
+      # - g++: C++ compiler for native code compilation
+      # - pkg-config: Dependency discovery tool
+      # - libfontconfig1-dev: Required by yeslogic-fontconfig-sys crate (crossfont dependency)
+      # - libxcb-xfixes0-dev: X11 XCB fixes extension (window compositor integration)
+      # - libxkbcommon-dev: Keyboard handling library (input processing)
+      # - python3: Required by some build scripts and code generation tools

@@ -17,6 +17,9 @@ jobs:
         with:
           components: rustfmt, clippy
 
+      - name: Install system dependencies
+        uses: ./.github/actions/setup-linux-deps
+
       - name: Set up pre-commit cache
         uses: actions/cache@v3
         with:

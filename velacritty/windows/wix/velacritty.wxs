@@ -1,5 +1,5 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
-   <Package Name="Velacritty" UpgradeCode="87c21c74-dbd5-4584-89d5-46d9cd0c40a7" Language="1033" Codepage="1252" Version="0.17.0-dev" Manufacturer="Dayton Dunbar" InstallerVersion="200">
+   <Package Name="Velacritty" UpgradeCode="ae4729c5-af19-4efe-a671-6f7ce06f4dad" Language="1033" Codepage="1252" Version="0.17.0-dev" Manufacturer="Dayton Dunbar" InstallerVersion="200">
       <MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
        <Icon Id="VelacrittyIco" SourceFile=".\velacritty\windows\velacritty.ico" />
        <WixVariable Id="WixUILicenseRtf" Value=".\velacritty\windows\wix\license.rtf" />

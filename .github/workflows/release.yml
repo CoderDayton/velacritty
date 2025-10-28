@@ -49,9 +49,15 @@ jobs:
             ./Velacritty-${GITHUB_REF##*/}-portable.exe $GITHUB_TOKEN
       - name: Install WiX
         run: dotnet tool install --global wix --version 4.0.5
+      - name: Add WiX extensions
+        run: wix extension add WixToolset.UI.wixext/4.0.5 WixToolset.Util.wixext/4.0.5
+      - name: Validate WiX configuration
+        run: |
+          wix build -nologo -arch "x64" -ext WixToolset.UI.wixext -ext WixToolset.Util.wixext \
+          "velacritty/windows/wix/velacritty.wxs" -o "./validate-test.msi"
+          rm -f ./validate-test.msi ./validate-test.wixpdb
       - name: Create msi installer
         run: |
-          wix extension add WixToolset.UI.wixext/4.0.5 WixToolset.Util.wixext/4.0.5
           wix build -arch "x64" -ext WixToolset.UI.wixext -ext WixToolset.Util.wixext \
           -out "./Velacritty-${GITHUB_REF##*/}-installer.msi" "velacritty/windows/wix/velacritty.wxs"
       - name: Upload msi installer

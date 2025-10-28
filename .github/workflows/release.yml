@@ -8,82 +8,167 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   CARGO_TERM_COLOR: always
 
+permissions:
+  contents: write
+  id-token: write  # Required for cosign keyless signing
+
 jobs:
   macos:
     runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Install dependencies
         run: brew install scdoc
-      - name: Install ARM target
+
+      - name: Install Rust targets
         run: rustup update && rustup target add aarch64-apple-darwin && rustup target add x86_64-apple-darwin
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3.5.0
+
       - name: Test
         run: cargo test --release --target=x86_64-apple-darwin
-      - name: Build ARM
-        run: cargo build --release --target=aarch64-apple-darwin
-      - name: Make DMG
-        run: make dmg-universal
-      - name: Upload Application
+
+      - name: Build release artifacts
+        run: ./scripts/build-macos-release.sh
+
+      - name: Sign artifacts with cosign
         run: |
-          mv ./target/release/osx/Alacritty.dmg ./Velacritty-${GITHUB_REF##*/}.dmg
-          ./.github/workflows/upload_asset.sh ./Velacritty-${GITHUB_REF##*/}.dmg $GITHUB_TOKEN
+          cd dist
+          for file in velacritty-*-universal-macos.dmg; do
+            if [ -f "$file" ]; then
+              echo "Signing $file"
+              cosign sign-blob --yes --bundle="${file}.cosign.bundle" "$file"
+            fi
+          done
+
+      - name: Upload artifacts
+        run: |
+          cd dist
+          for file in velacritty-*-universal-macos.dmg SHA256SUMS; do
+            if [ -f "$file" ]; then
+              ./.github/workflows/upload_asset.sh "$file" $GITHUB_TOKEN
+            fi
+          done
+          # Upload cosign bundles
+          for bundle in *.cosign.bundle; do
+            if [ -f "$bundle" ]; then
+              ./.github/workflows/upload_asset.sh "$bundle" $GITHUB_TOKEN
+            fi
+          done
 
   windows:
     runs-on: windows-latest
 
     defaults:
       run:
-        shell: bash
+        shell: pwsh
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3.5.0
+
       - name: Test
         run: cargo test --release
-      - name: Build
-        run: cargo build --release
-      - name: Upload portable executable
-        run: |
-          cp ./target/release/velacritty.exe ./Velacritty-${GITHUB_REF##*/}-portable.exe
-          ./.github/workflows/upload_asset.sh \
-            ./Velacritty-${GITHUB_REF##*/}-portable.exe $GITHUB_TOKEN
+
       - name: Install WiX
         run: dotnet tool install --global wix --version 4.0.5
+
       - name: Add WiX extensions
         run: wix extension add WixToolset.UI.wixext/4.0.5 WixToolset.Util.wixext/4.0.5
-      - name: Validate WiX configuration
+
+      - name: Build release artifacts
+        run: .\scripts\build-windows-release.ps1
+
+      - name: Sign artifacts with cosign
+        shell: bash
         run: |
-          wix build -nologo -arch "x64" -ext WixToolset.UI.wixext -ext WixToolset.Util.wixext \
-          "velacritty/windows/wix/velacritty.wxs" -o "./validate-test.msi"
-          rm -f ./validate-test.msi ./validate-test.wixpdb
-      - name: Create msi installer
+          cd dist/windows
+          for file in Velacritty-*.{exe,msi,zip}; do
+            if [ -f "$file" ]; then
+              echo "Signing $file"
+              cosign sign-blob --yes --bundle="${file}.cosign.bundle" "$file"
+            fi
+          done
+
+      - name: Upload artifacts
+        shell: bash
         run: |
-          wix build -arch "x64" -ext WixToolset.UI.wixext -ext WixToolset.Util.wixext \
-          -out "./Velacritty-${GITHUB_REF##*/}-installer.msi" "velacritty/windows/wix/velacritty.wxs"
-      - name: Upload msi installer
-        run: |
-          ./.github/workflows/upload_asset.sh \
-            ./Velacritty-${GITHUB_REF##*/}-installer.msi $GITHUB_TOKEN
+          cd dist/windows
+          for file in Velacritty-*.{exe,msi,zip} SHA256SUMS; do
+            if [ -f "$file" ]; then
+              ../../.github/workflows/upload_asset.sh "$file" $GITHUB_TOKEN
+            fi
+          done
+          # Upload cosign bundles
+          for bundle in *.cosign.bundle; do
+            if [ -f "$bundle" ]; then
+              ../../.github/workflows/upload_asset.sh "$bundle" $GITHUB_TOKEN
+            fi
+          done
 
   linux:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Install dependencies
         run: |
-          sudo apt-get install cmake pkg-config libfreetype6-dev libfontconfig1-dev \
+          sudo apt-get update
+          sudo apt-get install -y cmake pkg-config libfreetype6-dev libfontconfig1-dev \
             libxcb-xfixes0-dev libxkbcommon-dev python3 scdoc
+
+      - name: Install cargo-deb
+        run: cargo install cargo-deb
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3.5.0
+
       - name: Test
         run: cargo test --release
-      - name: Generate manpages
+
+      - name: Build release artifacts
+        run: ./scripts/build-linux-release.sh
+
+      - name: Sign artifacts with cosign
         run: |
+          cd dist/linux
+          for file in velacritty-*.tar.gz velacritty-*.deb; do
+            if [ -f "$file" ]; then
+              echo "Signing $file"
+              cosign sign-blob --yes --bundle="${file}.cosign.bundle" "$file"
+            fi
+          done
+
+      - name: Upload release artifacts
+        run: |
+          cd dist/linux
+          for file in velacritty-*.tar.gz velacritty-*.deb SHA256SUMS; do
+            if [ -f "$file" ]; then
+              ../../.github/workflows/upload_asset.sh "$file" $GITHUB_TOKEN
+            fi
+          done
+          # Upload cosign bundles
+          for bundle in *.cosign.bundle; do
+            if [ -f "$bundle" ]; then
+              ../../.github/workflows/upload_asset.sh "$bundle" $GITHUB_TOKEN
+            fi
+          done
+
+      - name: Upload supplementary assets
+        run: |
+          # Generate manpages in root for individual upload (legacy support)
           scdoc < extra/man/alacritty.1.scd | gzip -c > "./alacritty.1.gz"
           scdoc < extra/man/alacritty-msg.1.scd | gzip -c > "./alacritty-msg.1.gz"
           scdoc < extra/man/alacritty.5.scd | gzip -c > "./alacritty.5.gz"
           scdoc < extra/man/alacritty-bindings.5.scd | gzip -c > "./alacritty-bindings.5.gz"
-      - name: Upload Assets
-        run: |
+
+          # Upload logo and documentation files
           mv ./extra/logo/alacritty-term.svg ./Velacritty.svg
           ./.github/workflows/upload_asset.sh ./Velacritty.svg $GITHUB_TOKEN
           ./.github/workflows/upload_asset.sh ./alacritty.1.gz $GITHUB_TOKEN

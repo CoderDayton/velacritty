@@ -428,6 +428,137 @@ iconutil -c icns velacritty.iconset -o velacritty.icns
 
 ---
 
+## Signature Verification
+
+All release artifacts are signed using [cosign](https://github.com/sigstore/cosign) with keyless signing (GitHub OIDC).
+
+### Installing Cosign
+
+**Linux / macOS**:
+```bash
+# Using Homebrew
+brew install cosign
+
+# Or download directly
+curl -O -L "https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64"
+sudo mv cosign-linux-amd64 /usr/local/bin/cosign
+sudo chmod +x /usr/local/bin/cosign
+```
+
+**Windows**:
+```powershell
+# Using winget
+winget install Sigstore.Cosign
+
+# Or using Chocolatey
+choco install cosign
+```
+
+### Verifying Artifacts
+
+Each release artifact has a corresponding `.cosign.bundle` file containing the signature, certificate, and attestation.
+
+**Linux (tar.gz)**:
+```bash
+# Download artifact and bundle
+wget https://github.com/CoderDayton/velacritty/releases/download/v0.17.0/velacritty-v0.17.0-x86_64-unknown-linux-gnu.tar.gz
+wget https://github.com/CoderDayton/velacritty/releases/download/v0.17.0/velacritty-v0.17.0-x86_64-unknown-linux-gnu.tar.gz.cosign.bundle
+
+# Verify signature
+cosign verify-blob \
+  --bundle velacritty-v0.17.0-x86_64-unknown-linux-gnu.tar.gz.cosign.bundle \
+  --certificate-identity-regexp=".*" \
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
+  velacritty-v0.17.0-x86_64-unknown-linux-gnu.tar.gz
+```
+
+**Linux (.deb)**:
+```bash
+# Download artifact and bundle
+wget https://github.com/CoderDayton/velacritty/releases/download/v0.17.0/velacritty-v0.17.0.deb
+wget https://github.com/CoderDayton/velacritty/releases/download/v0.17.0/velacritty-v0.17.0.deb.cosign.bundle
+
+# Verify signature
+cosign verify-blob \
+  --bundle velacritty-v0.17.0.deb.cosign.bundle \
+  --certificate-identity-regexp=".*" \
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
+  velacritty-v0.17.0.deb
+```
+
+**macOS (DMG)**:
+```bash
+# Download artifact and bundle
+curl -LO https://github.com/CoderDayton/velacritty/releases/download/v0.17.0/velacritty-v0.17.0-universal-macos.dmg
+curl -LO https://github.com/CoderDayton/velacritty/releases/download/v0.17.0/velacritty-v0.17.0-universal-macos.dmg.cosign.bundle
+
+# Verify signature
+cosign verify-blob \
+  --bundle velacritty-v0.17.0-universal-macos.dmg.cosign.bundle \
+  --certificate-identity-regexp=".*" \
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
+  velacritty-v0.17.0-universal-macos.dmg
+```
+
+**Windows (Portable .exe)**:
+```powershell
+# Download artifact and bundle
+Invoke-WebRequest -Uri "https://github.com/CoderDayton/velacritty/releases/download/v0.17.0/Velacritty-v0.17.0-portable.exe" -OutFile "Velacritty-v0.17.0-portable.exe"
+Invoke-WebRequest -Uri "https://github.com/CoderDayton/velacritty/releases/download/v0.17.0/Velacritty-v0.17.0-portable.exe.cosign.bundle" -OutFile "Velacritty-v0.17.0-portable.exe.cosign.bundle"
+
+# Verify signature
+cosign verify-blob `
+  --bundle Velacritty-v0.17.0-portable.exe.cosign.bundle `
+  --certificate-identity-regexp=".*" `
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com" `
+  Velacritty-v0.17.0-portable.exe
+```
+
+**Windows (MSI Installer)**:
+```powershell
+# Download artifact and bundle
+Invoke-WebRequest -Uri "https://github.com/CoderDayton/velacritty/releases/download/v0.17.0/Velacritty-v0.17.0-installer.msi" -OutFile "Velacritty-v0.17.0-installer.msi"
+Invoke-WebRequest -Uri "https://github.com/CoderDayton/velacritty/releases/download/v0.17.0/Velacritty-v0.17.0-installer.msi.cosign.bundle" -OutFile "Velacritty-v0.17.0-installer.msi.cosign.bundle"
+
+# Verify signature
+cosign verify-blob `
+  --bundle Velacritty-v0.17.0-installer.msi.cosign.bundle `
+  --certificate-identity-regexp=".*" `
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com" `
+  Velacritty-v0.17.0-installer.msi
+```
+
+### Understanding the Output
+
+**Successful verification**:
+```
+Verified OK
+```
+
+**Failed verification** (tampered or incorrect bundle):
+```
+Error: signature verification failed
+```
+
+### Verification Details
+
+The keyless signing approach:
+- **No private keys**: Uses GitHub's OIDC token for identity verification
+- **Certificate transparency**: All signatures logged to public Rekor ledger
+- **Identity verification**: Ensures artifacts were built by official GitHub Actions workflow
+- **Tamper detection**: Any modification to the artifact invalidates the signature
+
+For stricter verification (checking specific GitHub repository):
+```bash
+cosign verify-blob \
+  --bundle <file>.cosign.bundle \
+  --certificate-identity-regexp="https://github.com/CoderDayton/velacritty/.*" \
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
+  <file>
+```
+
+---
+
 ## CI/CD Integration
 
 The build scripts are designed for both local development and CI/CD pipelines.
@@ -440,7 +571,9 @@ See `.github/workflows/release.yml` for the production release workflow.
 - Dependency caching for faster builds
 - Artifact upload to GitHub Releases
 - Cross-platform matrix builds (Linux, macOS, Windows)
-- Automatic checksum verification
+- Automatic checksum verification (SHA256SUMS)
+- **Cosign keyless signing** for all release artifacts
+- Signature bundles uploaded alongside artifacts
 
 ### Local CI Testing
 

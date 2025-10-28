@@ -143,6 +143,20 @@ try {
         $Size = [math]::Round($_.Length / 1MB, 2)
         Write-Host "  • $($_.Name) ($Size MB)" -ForegroundColor Cyan
     }
+
+    # Generate checksums
+    Write-Host "`n🔐 Generating checksums..." -ForegroundColor Cyan
+    $ChecksumFile = Join-Path $DistDir "SHA256SUMS"
+    $ChecksumContent = @()
+
+    Get-ChildItem $DistDir | Where-Object { $_.Name -like "$BuildName*" -and $_.PSIsContainer -eq $false } | ForEach-Object {
+        $Hash = (Get-FileHash -Path $_.FullName -Algorithm SHA256).Hash.ToLower()
+        $ChecksumContent += "$Hash  $($_.Name)"
+        Write-Host "  ✓ $($_.Name)" -ForegroundColor Green
+    }
+
+    $ChecksumContent | Out-File -FilePath $ChecksumFile -Encoding utf8
+    Write-Host "✓ Checksums saved to: $ChecksumFile" -ForegroundColor Green
     Write-Host ""
 
 } catch {

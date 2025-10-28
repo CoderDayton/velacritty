@@ -181,4 +181,21 @@ find "$DIST_DIR" -maxdepth 1 -type f -name "*$VERSION*" | while read -r file; do
     SIZE=$(du -h "$file" | cut -f1)
     echo -e "  ${CYAN}• $(basename "$file") ($SIZE)${NC}"
 done
+
+# Generate checksums
+echo ""
+echo -e "${CYAN}🔐 Generating checksums...${NC}"
+CHECKSUM_FILE="$DIST_DIR/SHA256SUMS"
+> "$CHECKSUM_FILE"  # Clear file
+
+find "$DIST_DIR" -maxdepth 1 -type f -name "*$VERSION*" | while read -r file; do
+    BASENAME=$(basename "$file")
+    SHA256=$(sha256sum "$file" | cut -d' ' -f1)
+    echo "$SHA256  $BASENAME" >> "$CHECKSUM_FILE"
+    echo -e "  ${GREEN}✓ $BASENAME${NC}"
+done
+
+if [[ -f "$CHECKSUM_FILE" ]]; then
+    echo -e "${GREEN}✓ Checksums saved to: $CHECKSUM_FILE${NC}"
+fi
 echo ""

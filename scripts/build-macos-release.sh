@@ -257,6 +257,23 @@ find "$DIST_DIR" -maxdepth 1 -type f -name "*$VERSION*" -o -name "*.app" | while
         echo -e "  ${CYAN}• $(basename "$file") (app bundle)${NC}"
     fi
 done
+
+# Generate checksums
+echo ""
+echo -e "${CYAN}🔐 Generating checksums...${NC}"
+CHECKSUM_FILE="$DIST_DIR/SHA256SUMS"
+> "$CHECKSUM_FILE"  # Clear file
+
+find "$DIST_DIR" -maxdepth 1 -type f -name "*$VERSION*" | while read -r file; do
+    BASENAME=$(basename "$file")
+    SHA256=$(shasum -a 256 "$file" | cut -d' ' -f1)
+    echo "$SHA256  $BASENAME" >> "$CHECKSUM_FILE"
+    echo -e "  ${GREEN}✓ $BASENAME${NC}"
+done
+
+if [[ -f "$CHECKSUM_FILE" ]]; then
+    echo -e "${GREEN}✓ Checksums saved to: $CHECKSUM_FILE${NC}"
+fi
 echo ""
 echo -e "${GRAY}Note: For App Store or production distribution:${NC}"
 echo -e "${GRAY}  1. Convert SVG icon to .icns format${NC}"
